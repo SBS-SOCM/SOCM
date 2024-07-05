@@ -11,7 +11,8 @@ public class MonsterCtrl : MonoBehaviour
 
 
     [SerializeField] private GameObject targetTr;
-    [SerializeField] private float checkRange;
+    [SerializeField] private float soundRange;
+    [SerializeField] private float viewRange;
 
     private void Start()
     {
@@ -21,25 +22,32 @@ public class MonsterCtrl : MonoBehaviour
 
     private void Update()
     {
-        CheckPlayer();
+        CheckView();
+        CheckSound();
     }
 
 
-    private void CheckPlayer()
+    private void CheckView()
     {
         Vector3 monsterRay = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         Vector3 targetRay = new Vector3(targetTr.transform.position.x,
             targetTr.transform.position.y + 1.0f, targetTr.transform.position.z);
 
-        if (Physics.Raycast(monsterRay, targetRay - monsterRay, out monsterHitInfo, checkRange + 5.0f))
+        if (Physics.Raycast(monsterRay, targetRay - monsterRay, out monsterHitInfo, viewRange))
         {
-            if (monsterHitInfo.transform.name == "Player")
+            if (monsterHitInfo.transform.tag == "Player")
             {
-                
+                nav.SetDestination(targetTr.transform.position);
             }
         }
-
-        nav.SetDestination(targetTr.transform.position);
+    }
+    private void CheckSound()
+    {
+        float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
+        if (targetDist <= viewRange)
+        {
+            nav.SetDestination(targetTr.transform.position);
+        }
     }
 
 }
