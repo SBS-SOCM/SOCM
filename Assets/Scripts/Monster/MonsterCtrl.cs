@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AI;
 
 public class MonsterCtrl : MonoBehaviour
@@ -9,10 +10,15 @@ public class MonsterCtrl : MonoBehaviour
     private NavMeshAgent nav;
     private RaycastHit monsterHitInfo;
 
+    //Monster State
+    private bool isPlayerChecked = false;
+    private bool isWarning = false;
 
     [SerializeField] private GameObject targetTr;
     [SerializeField] private float soundRange;
     [SerializeField] private float viewRange;
+    [SerializeField] private Text stateText;
+
 
     private void Start()
     {
@@ -24,9 +30,25 @@ public class MonsterCtrl : MonoBehaviour
     {
         CheckView();
         CheckSound();
+        CheckState();
     }
-
-
+    private void CheckState()
+    {
+        if (isPlayerChecked) 
+        {
+            stateText.text = "!";
+            stateText.color = Color.red;
+        }
+        else if (isWarning)
+        {
+            stateText.text = "?";
+            stateText.color = Color.yellow;
+        }
+        else
+        {
+            stateText.text = "";
+        }
+    }
     private void CheckView()
     {
         Vector3 monsterRay = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
@@ -38,6 +60,8 @@ public class MonsterCtrl : MonoBehaviour
             if (monsterHitInfo.transform.tag == "Player")
             {
                 nav.SetDestination(targetTr.transform.position);
+                isWarning = false;
+                isPlayerChecked = true;
             }
         }
     }
@@ -47,6 +71,10 @@ public class MonsterCtrl : MonoBehaviour
         if (targetDist <= viewRange)
         {
             nav.SetDestination(targetTr.transform.position);
+            if (!isPlayerChecked)
+            {
+                isWarning = true;
+            }
         }
     }
 
