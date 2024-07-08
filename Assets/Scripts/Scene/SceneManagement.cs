@@ -24,13 +24,20 @@ public class SceneManagement : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// 로딩을 포함한 씬 이등
+    /// </summary>
+    /// <param name="scene"></param>
     public void LoadScene(SceneList scene)
     {
         nextScene = (int) scene;
 
         SceneManager.LoadScene(1);
     }
-
+    /// <summary>
+    /// 로딩을 포함한 씬 이등
+    /// </summary>
+    /// <param name="scene"></param>
     public void LoadScene(int scene)
     {
         nextScene = scene;
@@ -38,11 +45,19 @@ public class SceneManagement : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+    /// <summary>
+    /// 로딩을 포함하지 않는 씬 이등
+    /// </summary>
+    /// <param name="scene"></param>
+    /// 
     public void LoadSceneDirect(SceneList scene)
     {
         SceneManager.LoadScene((int)scene);
     }
-
+    /// <summary>
+    /// 로딩을 포함하지 않는 씬 이등
+    /// </summary>
+    /// <param name="scene"></param>
     public void LoadSceneDirect(int scene)
     {
         SceneManager.LoadScene(scene);

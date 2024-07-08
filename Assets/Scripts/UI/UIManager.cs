@@ -7,16 +7,19 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     /// <summary>
-    /// UI Panelµé / 0 : Setting
+    /// UI Panelë“¤ / 0 : Setting
     /// </summary>
     public GameObject[] UIPanels;
 
     /// <summary>
-    /// ÀÎ°ÔÀÓ ³»ÀÇ UI / 0 : hp bar , 1 : mp bar
+    /// ì¸ê²Œì„ UI / 0 : hp bar , 1 : mp bar
     /// </summary>
     public GameObject[] ingameUIPanels;
 
-    Stack<int> userInterfaceStack = new Stack<int>();
+    /// <summary>
+    /// í˜„ì¬ ì—´ë ¤ìˆëŠ” UIë“¤
+    /// </summary>
+    public Stack<int> userInterfaceStack = new Stack<int>();
 
     void Start()
     {
@@ -25,7 +28,10 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            EscapeUI();
+        }
     }
 
     public void EscapeUI()
@@ -49,7 +55,7 @@ public class UIManager : MonoBehaviour
 
     public void RenewIngameUI()
     {
-        
+
     }
 
     public void OpenSettingUI()
