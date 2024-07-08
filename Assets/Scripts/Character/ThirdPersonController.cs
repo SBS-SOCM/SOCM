@@ -16,7 +16,9 @@ namespace StarterAssets
     {
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
-        public float MoveSpeed = 2.0f;
+        private float MoveSpeed = 2.0f;
+        public float basicSpeed = 2.0f;
+        public float silenceSpeed = 0.5f;
 
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
@@ -159,6 +161,10 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+
+            //if Character in Silence mode
+            if (!CharacterManager.instance.isSilence) MoveSpeed = basicSpeed;
+            else MoveSpeed = silenceSpeed;
         }
 
         private void LateUpdate()
