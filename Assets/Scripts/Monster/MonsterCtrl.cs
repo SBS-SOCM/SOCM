@@ -11,8 +11,8 @@ public class MonsterCtrl : MonoBehaviour
     private RaycastHit monsterHitInfo;
 
     //Monster State
-    private bool isPlayerChecked = false;
-    private bool isWarning = false;
+    public bool isPlayerChecked = false;
+    public bool isWarning = false;
 
     [SerializeField] private GameObject targetTr;
     [SerializeField] private float soundRange;
@@ -25,11 +25,10 @@ public class MonsterCtrl : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
     }
 
-
     private void Update()
     {
-        CheckView();
         CheckSound();
+        CheckView();
         CheckState();
     }
     private void CheckState()
@@ -44,7 +43,7 @@ public class MonsterCtrl : MonoBehaviour
             stateText.text = "?";
             stateText.color = Color.yellow;
         }
-        else
+        else if(!isPlayerChecked && !isWarning)
         {
             stateText.text = "";
         }
@@ -62,13 +61,22 @@ public class MonsterCtrl : MonoBehaviour
                 nav.SetDestination(targetTr.transform.position);
                 isWarning = false;
                 isPlayerChecked = true;
+            }else if (monsterHitInfo.transform.tag !="Player" && isWarning)
+            {
+                isWarning = true;
+                isPlayerChecked = false;
+            }
+            else
+            {
+                isWarning = false;
+                isPlayerChecked = false;
             }
         }
     }
     private void CheckSound()
     {
         float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
-        if (targetDist <= viewRange)
+        if (targetDist <= soundRange)
         {
             nav.SetDestination(targetTr.transform.position);
             if (!isPlayerChecked)
