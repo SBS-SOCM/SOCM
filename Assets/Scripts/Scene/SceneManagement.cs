@@ -1,7 +1,10 @@
-    using System.Collections;
+using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor.Validation;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class SceneManagement : MonoBehaviour
@@ -21,7 +24,6 @@ public class SceneManagement : MonoBehaviour
 
     void Update()
     {
-        
     }
 
     /// <summary>
