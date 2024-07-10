@@ -5,12 +5,15 @@ using UnityEngine.UI;
 using UnityEngine.AI;
 using UnityEngine.Rendering.UI;
 using UnityEditor;
+using UnityEngine.UIElements;
+using StarterAssets;
 
 public class MonsterCtrl : MonoBehaviour
 {
     //Monster AI
     private NavMeshAgent nav;
     private RaycastHit monsterHitInfo;
+    private Animator _animator;
 
     //Monster State
     public bool isPlayerChecked = false;
@@ -28,10 +31,15 @@ public class MonsterCtrl : MonoBehaviour
     public LayerMask targetMask; // 적을 검색하기 위한 레이어마스크
     public LayerMask walllMask; // 장애물 마스크
     public List<Transform> Enemies = new List<Transform>(); // 범위안에있는 적들
+    private StarterAssetsInputs _input;
+
+    
+    private float outRangeTime = 5.0f;
 
 
-    private void Start()
+    private void Awake()
     {
+        _animator = GetComponent<Animator>();
         nav = GetComponent<NavMeshAgent>();
     }
 
@@ -57,33 +65,17 @@ public class MonsterCtrl : MonoBehaviour
         else if(!isPlayerChecked && !isWarning)
         {
             stateText.text = "";
+            StartCoroutine(StopAnimator());
         }
     }
-    /*private void CheckView()
-    {
-        Vector3 monsterRay = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
-        Vector3 targetRay = new Vector3(targetTr.transform.position.x,
-            targetTr.transform.position.y + 1.0f, targetTr.transform.position.z);
 
-        if (Physics.Raycast(monsterRay, targetRay - monsterRay, out monsterHitInfo, viewRange))
-        {
-            if (monsterHitInfo.transform.tag == "Player")
-            {
-                nav.SetDestination(targetTr.transform.position);
-                isWarning = false;
-                isPlayerChecked = true;
-            }else if (monsterHitInfo.transform.tag !="Player" && isWarning)
-            {
-                isWarning = true;
-                isPlayerChecked = false;
-            }
-            else
-            {
-                isWarning = false;
-                isPlayerChecked = false;
-            }
-        }
-    }*/
+    IEnumerator StopAnimator()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _animator.SetBool("Run",false);
+        _animator.SetBool("Walk", false);
+        nav.ResetPath();
+    }
     private void CheckSound()
     {
         float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
@@ -93,6 +85,17 @@ public class MonsterCtrl : MonoBehaviour
             if (!isPlayerChecked)
             {
                 isWarning = true;
+                outRangeTime = 5.0f;
+                _animator.SetBool("Run", false);
+                _animator.SetBool("Walk", true);
+            }
+        }else if(targetDist >= soundRange)
+        {
+            outRangeTime -= Time.deltaTime;
+            if(outRangeTime <= 0.0f)
+            {
+                isWarning = false;
+                outRangeTime = 5.0f;
             }
         }
     }
@@ -127,6 +130,8 @@ public class MonsterCtrl : MonoBehaviour
             isWarning = false;
             isPlayerChecked = true;
             nav.SetDestination(targetTr.transform.position);
+            _animator.SetBool("Walk" , false);
+            _animator.SetBool("Run", true);
         }
         else if(Enemies.Count == 0 && isWarning)
         {
@@ -140,9 +145,11 @@ public class MonsterCtrl : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
-        CheckView();
+        Gizmos.DrawWireSphere(transform.position, soundRange);
+
+
         Handles.DrawWireArc(transform.position, Vector3.up, Vector3.forward, 360, viewRange);
         float angle = -Angle * 0.5f + transform.eulerAngles.y;
         float angle2 = Angle * 0.5f + transform.eulerAngles.y;

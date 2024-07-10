@@ -21,9 +21,13 @@ public class ThirdPersonShooterController : MonoBehaviour
         if (starterAssetsInputs.aim)
         {
             aimVirtualCamera.gameObject.SetActive(true);
-        }else
+            //thirdPersonController.SetRotateOnMove(false);
+        }
+        else
         {
             aimVirtualCamera.gameObject.SetActive(false);
+            //thirdPersonController.SetRotateOnMove(false);
         }
     }
+
 }
