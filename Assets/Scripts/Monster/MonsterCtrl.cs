@@ -35,6 +35,8 @@ public class MonsterCtrl : MonoBehaviour
 
     
     private float outRangeTime = 5.0f;
+    private float attackRange = 1.5f;
+    private bool isAttacking = false;
 
 
     private void Awake()
@@ -65,21 +67,23 @@ public class MonsterCtrl : MonoBehaviour
         else if(!isPlayerChecked && !isWarning)
         {
             stateText.text = "";
-            StartCoroutine(StopAnimator());
+            StopAnimator();
         }
     }
 
-    IEnumerator StopAnimator()
+    private void StopAnimator()
     {
-        yield return new WaitForSeconds(5.0f);
         _animator.SetBool("Run",false);
         _animator.SetBool("Walk", false);
         nav.ResetPath();
     }
     private void CheckSound()
     {
+        float soundCheckRange;
+        if (CharacterManager.instance.isSilence) soundCheckRange = soundRange / 2;
+        else soundCheckRange = soundRange;
         float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
-        if (targetDist <= soundRange && !CharacterManager.instance.isSilence)
+        if (targetDist <= soundCheckRange)
         {
             nav.SetDestination(targetTr.transform.position);
             if (!isPlayerChecked)
@@ -89,7 +93,7 @@ public class MonsterCtrl : MonoBehaviour
                 _animator.SetBool("Run", false);
                 _animator.SetBool("Walk", true);
             }
-        }else if(targetDist >= soundRange)
+        }else if(targetDist >= soundCheckRange)
         {
             outRangeTime -= Time.deltaTime;
             if(outRangeTime <= 0.0f)
@@ -102,9 +106,12 @@ public class MonsterCtrl : MonoBehaviour
 
     void CheckView()
     {
+        float checkViewRange;
+        if (CharacterManager.instance.isVisible) checkViewRange = viewRange;
+        else checkViewRange = 2f;
         Enemies.Clear();
         Collider[] results = new Collider[10];
-        var size = Physics.OverlapSphereNonAlloc(transform.position, viewRange, results, targetMask);
+        var size = Physics.OverlapSphereNonAlloc(transform.position, checkViewRange, results, targetMask);
 
         for (int i = 0; i < size; ++i)
         {

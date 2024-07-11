@@ -221,9 +221,11 @@ namespace StarterAssets
 
         private void Move()
         {
+            
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
-
+            if (_input.sprint) CharacterManager.instance.isSilence = true;
+            else CharacterManager.instance.isSilence = false;
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
@@ -307,7 +309,6 @@ namespace StarterAssets
             // update animator if using character
             if (_hasAnimator)
             {
-                Debug.Log(_animationBlend + ":" + inputMagnitude);
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
