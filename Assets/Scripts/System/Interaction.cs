@@ -55,7 +55,8 @@ public class Interaction : MonoBehaviour
                 Inventory.Item item2 = new Inventory.Item("Pistol");
                 inventory.GetItem(item2);
 
-
+                Inventory.Item item3 = new Inventory.Item("Coin");
+                inventory.GetItem(item3);
                 break;
         }
     }

@@ -18,15 +18,20 @@ public class Inventory : MonoBehaviour
             this.name = name;
             switch (name)
             {
-                case "knife":
+                case "Knife":
                     id = 0;
                     explain = "짧은 단검";
                     break;
 
-                case "pistol":
+                case "Pistol":
                     id = 1;
                     explain = "권총";
                     break;
+                case "Coin":
+                    id = 2;
+                    explain = "동전";
+                    break;
+
             }
         }
 
@@ -36,11 +41,10 @@ public class Inventory : MonoBehaviour
 
     public Item[] inventory;
 
-    public GameObject inventoryPanel;
-    public Button[] inventoryItemButtons;
-    public Text explainText;
+    public Image[] itemImages;
 
-    public int nowWeapon;
+    public int nowItem;
+    public int ItemCount;
 
     private void Start()
     {
@@ -55,7 +59,7 @@ public class Inventory : MonoBehaviour
             if (inventory[i] == null)
             {
                 inventory[i] = item;
-                inventoryItemButtons[i].interactable = true;
+                ItemCount++;
                 SortInventory();
                 break;
             }
@@ -71,6 +75,23 @@ public class Inventory : MonoBehaviour
 
     public void SortInventory()
     {
+        int startMax = ItemCount;
+        int startLot = 0;
+
+        while (startLot < startMax)
+        {
+            int idMin = inventory[startLot].id;
+    
+
+            for (int i = startLot + 1; i < inventoryCount; i++)
+            {
+                if (idMin > inventory[i].id)
+                {
+                }
+            }
+        }
+        
+
         for (int i = 0; i < inventoryCount - 1; i++)
         {
             if (inventory[i] == null)
@@ -87,19 +108,13 @@ public class Inventory : MonoBehaviour
 
                 if (inventory[i].id > inventory[j].id)
                 {
-                     Item temp = inventory[i];
+                    Item temp = inventory[i];
                     inventory[i] = inventory[j];
                     inventory[j] = temp;
                 }
             }
         }
     }
-
-    public void ClickItem(int index)
-    {
-        explainText.text = inventory[index].explain;
-    }
-
     public void ClickUseButton()
     {
         // !! 아이템 사용
@@ -129,6 +144,20 @@ public class Inventory : MonoBehaviour
         RenewInventoryUI();
     }
 
+    public void DropItem(int itemId)
+    {
+        for (int i = 0; i < ItemCount; i++)
+        {
+            if (inventory[i].id == itemId)
+            {
+                inventory[i] = null;
+                SortInventory();
+
+                return;
+            }
+        }
+    }
+
     public  Item FindItem(int itemId)
     {
         foreach ( Item item in inventory)
@@ -149,13 +178,19 @@ public class Inventory : MonoBehaviour
             {
                 return;
             }
-            switch (inventory[i].name)
+            
+            itemImages[i].sprite = Resources.Load<Sprite>("Item/" + inventory[i].name);
+
+            if (i == nowItem)
             {
-                // 이미지 불러오기
-                case "":
-                    inventoryItemButtons[i].image.sprite = Resources.Load<Sprite>("");
-                    break;
+                itemImages[i].transform.localScale = new Vector3(1.5f, 1.5f, 1);
             }
+            else
+            {
+                itemImages[i].transform.localScale = new Vector3(1, 1, 1);
+            }
+            
         }
     }
+
 }
