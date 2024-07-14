@@ -48,12 +48,12 @@ public class UIManager : MonoBehaviour
         }
         else if (wheelValue != 0)
         {
-            if (inventory.ItemCount == 0)
+            if (inventory.itemCount == 0)
             {
                 return;
             }
 
-            inventory.nowItem = mod(inventory.nowItem + (int) wheelValue, inventory.ItemCount);
+            inventory.nowItem = mod(inventory.nowItem + (int) wheelValue, inventory.itemCount);
 
             if (inventory.gameObject.transform.GetChild(0).gameObject.activeSelf)
             {
@@ -148,9 +148,9 @@ public class UIManager : MonoBehaviour
     public void RenewItemUI()
     {
         
-        int nowItem = mod(inventory.nowItem , inventory.ItemCount);
-        int beforeItem = mod(inventory.nowItem - 1, inventory.ItemCount);
-        int afterItem = mod(inventory.nowItem + 1, inventory.ItemCount);
+        int nowItem = mod(inventory.nowItem , inventory.itemCount);
+        int beforeItem = mod(inventory.nowItem - 1, inventory.itemCount);
+        int afterItem = mod(inventory.nowItem + 1, inventory.itemCount);
 
         Debug.Log("now : " + nowItem.ToString() + " before : " + beforeItem.ToString() + " after : " + afterItem.ToString());
 

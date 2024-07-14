@@ -1,6 +1,7 @@
 using DG.Tweening.Core.Easing;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,29 +38,33 @@ public class Inventory : MonoBehaviour
 
     }
 
-    public int inventoryCount;
+    public int inventorySize;
 
     public Item[] inventory;
 
     public Image[] itemImages;
 
     public int nowItem;
-    public int ItemCount;
+    public int itemCount;
+
+    public float diameter;
 
     private void Start()
     {
-        inventory = new Item[inventoryCount];
+        inventory = new Item[inventorySize];
+
+        diameter = Vector3.Distance(itemImages[0].gameObject.transform.position, transform.GetChild(0).position);
 }
     public void GetItem(Item item)
     {
         Debug.Log(item.name);
 
-        for (int i = 0; i < inventoryCount; i++)
+        for (int i = 0; i < inventorySize; i++)
         {
             if (inventory[i] == null)
             {
                 inventory[i] = item;
-                ItemCount++;
+                itemCount++;
                 SortInventory();
                 break;
             }
@@ -67,7 +72,10 @@ public class Inventory : MonoBehaviour
             else if (inventory[i].name == item.name)
             {
                 inventory[i].count++;
+                // break;
+
             }
+            
         }
 
         RenewInventoryUI();
@@ -75,31 +83,55 @@ public class Inventory : MonoBehaviour
 
     public void SortInventory()
     {
-        int startMax = ItemCount;
+        int startMax = itemCount;
         int startLot = 0;
 
         while (startLot < startMax)
         {
+            if (inventory[startLot] == null)
+            {
+                for (int i = startLot + 1; i < inventorySize; i++)
+                {
+                    if (inventory[i] != null)
+                    {
+                        inventory[startLot] = inventory[i];
+                        inventory[i] = null;
+                    }
+                }
+            }
+
             int idMin = inventory[startLot].id;
     
 
-            for (int i = startLot + 1; i < inventoryCount; i++)
+            for (int i = startLot + 1; i < inventorySize; i++)
             {
+                if (inventory[i] == null)
+                {
+                    continue;
+                }
+
                 if (idMin > inventory[i].id)
                 {
+                    Item temp = inventory[i];
+                    inventory[i] = inventory[startLot];
+                    inventory[startLot] = temp;
+
+                    idMin = inventory[startLot].id;
                 }
             }
+
+            startLot++;
         }
         
 
-        for (int i = 0; i < inventoryCount - 1; i++)
+        for (int i = 0; i < inventorySize - 1; i++)
         {
             if (inventory[i] == null)
             {
                 break;
             }
 
-            for (int j = i + 1; j < inventoryCount; j++)
+            for (int j = i + 1; j < inventorySize; j++)
             {
                 if (inventory[j] == null)
                 {
@@ -134,7 +166,7 @@ public class Inventory : MonoBehaviour
 
     public void Test()
     {
-        for (int i = 0; i < inventoryCount; i++)
+        for (int i = 0; i < inventorySize; i++)
         {
             if (inventory[i] != null)
             {
@@ -146,7 +178,7 @@ public class Inventory : MonoBehaviour
 
     public void DropItem(int itemId)
     {
-        for (int i = 0; i < ItemCount; i++)
+        for (int i = 0; i < itemCount; i++)
         {
             if (inventory[i].id == itemId)
             {
@@ -172,11 +204,11 @@ public class Inventory : MonoBehaviour
 
     public void RenewInventoryUI()
     {
-        for (int i = 0; i < inventoryCount; i++)
+        for (int i = 0; i < inventorySize; i++)
         {
             if (inventory[i] == null)
             {
-                return;
+                break;
             }
             
             itemImages[i].sprite = Resources.Load<Sprite>("Item/" + inventory[i].name);
@@ -191,6 +223,26 @@ public class Inventory : MonoBehaviour
             }
             
         }
+
+        Vector3 center = new Vector3(transform.parent.position.x, transform.parent.position.y, transform.parent.position.z);
+
+        for (int i = 0; i < inventorySize; i++)
+        {
+            if (i < itemCount)
+            {
+                itemImages[i].gameObject.SetActive(true);
+
+                float angle = (360 / itemCount) * i;
+
+                Vector3 addLot = new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), Mathf.Cos(angle * Mathf.Deg2Rad), 0) * diameter;
+                itemImages[i].gameObject.transform.position = addLot + center;
+            }
+            else
+            {
+                itemImages[i].gameObject.SetActive(false);
+            }
+        }
     }
+
 
 }

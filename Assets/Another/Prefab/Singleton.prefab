@@ -1949,7 +1949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa610409a444bb4ea6ab5bccdad63f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryCount: 10
+  inventorySize: 8
   itemImages:
   - {fileID: 2864874165172442862}
   - {fileID: 7211859851493403982}
@@ -1962,7 +1962,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   nowItem: 0
-  ItemCount: 0
+  itemCount: 0
+  diameter: 0
 --- !u!1 &4267621747249505042
 GameObject:
   m_ObjectHideFlags: 0
