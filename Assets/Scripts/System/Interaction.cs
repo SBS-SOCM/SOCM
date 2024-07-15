@@ -18,7 +18,7 @@ public class Interaction : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "Ingame_Test_SJM")
+        if (scene.name.StartsWith("Ingame"))
         {
             player = GameObject.Find("PlayerArmature");
         }
@@ -30,7 +30,6 @@ public class Interaction : MonoBehaviour
         {
             SendInteraction();
         }
-        
     }
 
     public void SendInteraction()
@@ -39,16 +38,17 @@ public class Interaction : MonoBehaviour
 
         if (hits.Length > 0)
         {
-            string interactionName = hits[0].gameObject.name;
-            ReceiveInteraction(interactionName);
+            ReceiveInteraction(hits[0]);
         }
     }
 
-    public void ReceiveInteraction(string interactionName)
+    public void ReceiveInteraction(Collider interactionObject)
     {
+        string interactionName = interactionObject.name;
+
         switch (interactionName)
         {
-            case "startItem":
+            case "StartItem":
                 Inventory.Item item1 = new Inventory.Item("Knife");
                 inventory.GetItem(item1);
 
@@ -57,6 +57,10 @@ public class Interaction : MonoBehaviour
 
                 Inventory.Item item3 = new Inventory.Item("Coin");
                 inventory.GetItem(item3);
+                break;
+
+            case "Map":
+                interactionObject.GetComponent<Clue>().ClueOn();
                 break;
         }
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GraphiccManager : MonoBehaviour
+public class GraphicManager : MonoBehaviour
 {
     public Toggle toggle;
     public Dropdown dropdown;

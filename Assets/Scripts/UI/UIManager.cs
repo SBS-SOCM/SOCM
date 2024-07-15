@@ -1,36 +1,77 @@
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
-public class UIManager : MonoBehaviour
+    
+public class UIManager : SerializedMonoBehaviour
 {
+
     /// <summary>
     /// UI Panel들 / 0 : Setting / 1 : Inventory / 2 : Pause
     /// </summary>
-    public GameObject[] UIPanels;
+    [TabGroup("System")] public GameObject[] UIPanels;
+    [TabGroup("System")] public Inventory inventory;
+
+    [TabGroup("System"), OdinSerialize] public Stack<int> UIStack = new Stack<int>();
 
     /// <summary>
-    /// 인게임 내의 UI / 0 : now Item , 1 : before Item , 2 : next Item
+    /// 인게임 내의 UI / 0 : now Item / 1 : before Item / 2 : next Item / 3 : HP Image / 4 : MP Image / 5 : MP Text
     /// </summary>
-    public GameObject[] ingameUIPanels;
+    [TabGroup("Ingame")] public GameObject[] ingameUIObjects;
 
-    Stack<int> UIStack = new Stack<int>();
+    /// <summary>
+    /// 인게임 내의 패널들
+    /// </summary>
+    [TabGroup("Ingame")] public GameObject[] ingameUIPanels;
 
-    public Inventory inventory;
+    [TabGroup("Ingame")] public Image hpImage;
+    [TabGroup("Ingame")] public Image mpImage;
+
+    [Range(0.0f, 0.75f), TabGroup("Ingame")] public float hpTest;
+    [Range(0.0f, 0.75f), TabGroup("Ingame")] public float mpTest;
+
+    
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name.StartsWith("Ingame"))
+        {
+            for (int i = 0; i < ingameUIPanels.Length; i++)
+            {
+                ingameUIPanels[i].SetActive(true);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < ingameUIPanels.Length; i++)
+            {
+                ingameUIPanels[i].SetActive(false);
+            }
+        }
+    }
+
     void Start()
     {
-#if !UNITY_EDITOR
-        // disable WebGLInput.stickyCursorLock so if the browser unlocks the cursor (with the ESC key) the cursor will unlock in Unity
-        WebGLInput.stickyCursorLock = false;
-#endif
+
     }
     void Update()
     {
         GetKeyboadInput();
+
+        RenewConditionUI();
     }
 
     public void GetKeyboadInput()
@@ -67,8 +108,6 @@ public class UIManager : MonoBehaviour
 
     public void ESC()
     {
-        Debug.Log(UIStack.Count);
-
         if (UIStack.Count == 0)
         {
             UIPanels[2].SetActive(true);
@@ -156,8 +195,24 @@ public class UIManager : MonoBehaviour
 
         Debug.Log("Item/" + inventory.inventory[nowItem].name);
 
-        ingameUIPanels[0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[nowItem].name);
-        ingameUIPanels[1].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[beforeItem].name);
-        ingameUIPanels[2].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[afterItem].name);
+        ingameUIObjects[0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[nowItem].name);
+        ingameUIObjects[1].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[beforeItem].name);
+        ingameUIObjects[2].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[afterItem].name);
+    }
+
+    public void RenewConditionUI()
+    {
+        ingameUIObjects[3].GetComponent<Image>().fillAmount = hpTest;
+        ingameUIObjects[4].GetComponent<Image>().fillAmount = mpTest;
+        ingameUIObjects[5].GetComponent<Text>().text = ((int) (mpTest / 3 * 400)).ToString();
+
+        if (mpTest < 0.225 )
+        {
+
+        }
+        else if (mpTest < 0.075)
+        {
+
+        }
     }
 }
