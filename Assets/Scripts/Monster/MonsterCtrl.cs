@@ -26,11 +26,11 @@ public class MonsterCtrl : MonoBehaviour
 
 
     //Search Player
-    [Range(0, 360)] //인스펙터에서 슬라이더로 표시 
-    public float Angle = 90f; //기본값 90도
-    public LayerMask targetMask; // 적을 검색하기 위한 레이어마스크
-    public LayerMask walllMask; // 장애물 마스크
-    public List<Transform> Enemies = new List<Transform>(); // 범위안에있는 적들
+    [Range(0, 360)]
+    public float Angle = 135.0f;
+    public LayerMask targetMask;
+    public LayerMask walllMask;
+    public List<Transform> Enemies = new List<Transform>();
     private StarterAssetsInputs _input;
 
     
@@ -123,10 +123,7 @@ public class MonsterCtrl : MonoBehaviour
                 float dstToTarget = Vector3.Distance(transform.position, enemy.position);
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, walllMask)) 
                 {
-                    if (CharacterManager.instance.isVisible)
-                    {
-                        Enemies.Add(enemy);
-                    }
+                    Enemies.Add(enemy);
                 }
             }
         }
