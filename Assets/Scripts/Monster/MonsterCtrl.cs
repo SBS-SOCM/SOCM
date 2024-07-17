@@ -52,6 +52,9 @@ public class MonsterCtrl : MonoBehaviour
         if (isWarning || isPlayerChecked) Angle = normalAngle * 2f;
         else Angle = normalAngle;
         Debug.DrawRay(transform.position, Vector3.forward, Color.red, 10.5f);
+
+        //Ontrigger로 player가 들어왔을떄만 실행 -> 최적화
+
         CheckSound();
         CheckView();
         CheckState();
@@ -93,7 +96,7 @@ public class MonsterCtrl : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, targetTr.transform.position - transform.position, out hit))
         {
-            if(hit.transform.tag == "Wall")
+            if(hit.transform.CompareTag("Wall"))
             {
                 soundCheckRange *= 0.1f;
             }
