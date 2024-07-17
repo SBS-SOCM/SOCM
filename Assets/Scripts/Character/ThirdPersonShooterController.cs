@@ -6,13 +6,12 @@ using Cinemachine;
 public class ThirdPersonShooterController : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
+    private float aimingTime = 5.0f;
 
-    private StarterAssets.ThirdPersonController thirdPersonController;
     private StarterAssets.StarterAssetsInputs starterAssetsInputs;
 
     private void Awake()
     {
-        thirdPersonController = GetComponent<StarterAssets.ThirdPersonController>();
         starterAssetsInputs = GetComponent<StarterAssets.StarterAssetsInputs>();
     }
 
@@ -21,12 +20,18 @@ public class ThirdPersonShooterController : MonoBehaviour
         if (starterAssetsInputs.aim)
         {
             aimVirtualCamera.gameObject.SetActive(true);
-            //thirdPersonController.SetRotateOnMove(false);
+            aimingTime -= Time.deltaTime;
+            if(aimingTime <= 0.0f)
+            {
+                // Decrease WillPower
+                CharacterManager.instance.willPower -= 1.0f;
+                aimingTime = 5.0f;
+            }
         }
         else
         {
             aimVirtualCamera.gameObject.SetActive(false);
-            //thirdPersonController.SetRotateOnMove(false);
+            aimingTime = 5.0f;
         }
     }
 

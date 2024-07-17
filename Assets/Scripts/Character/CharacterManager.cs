@@ -11,9 +11,11 @@ public class CharacterManager : MonoBehaviour
     public bool isVisible = true;
     public bool isSilence = false;
     private float visibleModeTime = 10.0f;
-    private float willPower = 100.0f;
+    public float willPower = 100.0f;
     private float visibleSKillCool = 5.0f;
     private float visibleReturnTime = 2.0f;
+    private float characterHP = 100.0f;
+
  
     public List<Transform> Enemies = new List<Transform>();
     public LayerMask targetMask; // 적을 검색하기 위한 레이어마스크

@@ -7,6 +7,7 @@ using UnityEngine.Rendering.UI;
 using UnityEditor;
 using UnityEngine.UIElements;
 using StarterAssets;
+using System.Runtime.CompilerServices;
 
 public class MonsterCtrl : MonoBehaviour
 {
@@ -27,7 +28,8 @@ public class MonsterCtrl : MonoBehaviour
 
     //Search Player
     [Range(0, 360)]
-    public float Angle = 135.0f;
+    public float Angle;
+    private float normalAngle = 65.0f;
     public LayerMask targetMask;
     public LayerMask walllMask;
     public List<Transform> Enemies = new List<Transform>();
@@ -47,6 +49,8 @@ public class MonsterCtrl : MonoBehaviour
 
     private void Update()
     {
+        if (isWarning || isPlayerChecked) Angle = normalAngle * 2f;
+        else Angle = normalAngle;
         Debug.DrawRay(transform.position, Vector3.forward, Color.red, 10.5f);
         CheckSound();
         CheckView();
@@ -80,9 +84,23 @@ public class MonsterCtrl : MonoBehaviour
     private void CheckSound()
     {
         float soundCheckRange;
-        if (CharacterManager.instance.isSilence) soundCheckRange = soundRange / 2;
+        if (CharacterManager.instance.isSilence) soundCheckRange = 0.0f;
         else soundCheckRange = soundRange;
+        if(isWarning || isPlayerChecked)
+        {
+            soundCheckRange *= 1.3f;
+        }
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, targetTr.transform.position - transform.position, out hit))
+        {
+            if(hit.transform.tag == "Wall")
+            {
+                soundCheckRange *= 0.1f;
+            }
+        }
         float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
+        Debug.Log(targetDist + " : " + soundCheckRange);
+
         if (targetDist <= soundCheckRange)
         {
             nav.SetDestination(targetTr.transform.position);

@@ -167,6 +167,7 @@ namespace StarterAssets
             //if Character in Silence mode
             if (!CharacterManager.instance.isSilence) MoveSpeed = basicSpeed;
             else MoveSpeed = silenceSpeed;
+            if (CharacterManager.instance.willPower <= 30.0f) MoveSpeed *= 0.7f;
         }
 
         private void LateUpdate()
