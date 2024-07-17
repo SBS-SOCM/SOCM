@@ -14,9 +14,12 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
+        [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
-        public float MoveSpeed = 2.0f;
+        private float MoveSpeed = 2.0f;
+        public float basicSpeed = 2.0f;
+        public float silenceSpeed = 0.5f;
 
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
@@ -105,6 +108,7 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
+        private bool _rotateOnMove = false;
 
         private const float _threshold = 0.01f;
 
@@ -159,6 +163,11 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+
+            //if Character in Silence mode
+            if (!CharacterManager.instance.isSilence) MoveSpeed = basicSpeed;
+            else MoveSpeed = silenceSpeed;
+            if (CharacterManager.instance.willPower <= 30.0f) MoveSpeed *= 0.7f;
         }
 
         private void LateUpdate()
@@ -213,9 +222,11 @@ namespace StarterAssets
 
         private void Move()
         {
+            
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
-
+            if (_input.sprint) CharacterManager.instance.isSilence = true;
+            else CharacterManager.instance.isSilence = false;
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
@@ -247,10 +258,20 @@ namespace StarterAssets
 
             _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
             if (_animationBlend < 0.01f) _animationBlend = 0f;
+            if (_input.move.y == -1) _animationBlend = -2.0f;
 
             // normalise input direction
             Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 
+
+            Vector3 mouseWorldPosition = Vector3.zero;
+
+            Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+            Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
+            {
+                mouseWorldPosition = raycastHit.point;
+            }
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
             if (_input.move != Vector2.zero)
@@ -261,7 +282,22 @@ namespace StarterAssets
                     RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+
+                //BackKey 
+                if(_input.move.y == -1)
+                {
+                    Vector3 worldAimTarget = mouseWorldPosition;
+                    worldAimTarget.y = transform.position.y;
+                    Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
+
+                    transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
+                    //transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                }
+                else
+                {
+                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                }
+                
             }
 
 
@@ -388,5 +424,11 @@ namespace StarterAssets
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
         }
+
+        public void SetRotateOnMove(bool newRotateOnMove)
+        {
+            _rotateOnMove = newRotateOnMove;
+        }
+
     }
 }
