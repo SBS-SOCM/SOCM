@@ -71,7 +71,10 @@ public class UIManager : SerializedMonoBehaviour
     {
         GetKeyboadInput();
 
-        RenewConditionUI();
+        if (SceneManager.GetActiveScene().name.StartsWith("Ingame"))
+        {
+            RenewConditionUI();
+        }
     }
 
     public void GetKeyboadInput()
@@ -110,6 +113,11 @@ public class UIManager : SerializedMonoBehaviour
     {
         if (UIStack.Count == 0)
         {
+            if (!SceneManager.GetActiveScene().name.StartsWith("Ingame"))
+            {
+                return;
+            }
+
             UIPanels[2].SetActive(true);
             OpenUI();
             UIStack.Push(2);
@@ -149,6 +157,8 @@ public class UIManager : SerializedMonoBehaviour
 
     public void OpenInventory()
     {
+        Debug.Log(1);
+
         if (UIPanels[1].activeSelf)
         {
             ESC();
