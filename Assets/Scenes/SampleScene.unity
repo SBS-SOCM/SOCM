@@ -10895,9 +10895,9 @@ MonoBehaviour:
   checkRange: 10
   willPowerImage: {fileID: 1715754952}
   visibleSkillImage: {fileID: 905023727}
-  characterGO: {fileID: 1033649080528553}
-  originMat: {fileID: 2100000, guid: a74066172cf19cd4bacae3c6600a7217, type: 2}
+  characterMat: {fileID: 2100000, guid: a74066172cf19cd4bacae3c6600a7217, type: 2}
   invisibleMat: {fileID: 2100000, guid: a4dc2b6ea8da30646ba5e2a57038f293, type: 2}
+  characterGO: {fileID: 1033649080528553}
 --- !u!4 &8002264679640585692
 Transform:
   m_ObjectHideFlags: 0

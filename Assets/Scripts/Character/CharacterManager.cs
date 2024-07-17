@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,7 +29,9 @@ public class CharacterManager : MonoBehaviour
 
     //
     [SerializeField] private Material characterMat;
-
+    [SerializeField] private Material invisibleMat;
+    [SerializeField] private GameObject characterGO;
+    
 
     private void Awake()
     {
@@ -72,8 +75,8 @@ public class CharacterManager : MonoBehaviour
         }
         else visibleModeTime = 10.0f;
 
-        if (isVisible) characterMat.color = originColor;
-        else characterMat.color = invisibleColor;
+        if (isVisible) characterGO.GetComponent<SkinnedMeshRenderer>().material = characterMat;
+        else characterGO.GetComponent<SkinnedMeshRenderer>().material = invisibleMat;
     }
 
     private void CheckEnemy()
