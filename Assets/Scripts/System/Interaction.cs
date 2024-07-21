@@ -46,6 +46,8 @@ public class Interaction : MonoBehaviour
     {
         string interactionName = interactionObject.name;
 
+        Debug.Log("상호작용 : "+ interactionName);
+
         switch (interactionName)
         {
             case "StartItem":
@@ -61,6 +63,10 @@ public class Interaction : MonoBehaviour
 
             case "Map":
                 interactionObject.GetComponent<Clue>().ClueOn();
+                break;
+
+            case "Labber":
+                interactionObject.GetComponent<Labber>().InteractionOn();
                 break;
         }
     }
