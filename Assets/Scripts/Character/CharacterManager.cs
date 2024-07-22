@@ -15,6 +15,7 @@ public class CharacterManager : MonoBehaviour
     private float visibleSKillCool = 5.0f;
     private float visibleReturnTime = 2.0f;
     private float characterHP = 100.0f;
+    private float increaseWillPowerTime = 60.0f;
 
  
     public List<Transform> Enemies = new List<Transform>();
@@ -44,22 +45,34 @@ public class CharacterManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R) && isVisible && visibleSKillCool <= 0.0f)
         {
-            isVisible = false;
-            visibleReturnTime = 2.0f;
+            OffVisible();
         }
         if (Input.GetKeyDown(KeyCode.R) && !isVisible && visibleReturnTime <= 0.0f)
         {
             visibleSKillCool = 20.0f;
-            isVisible = true;
+            OnVisible();
         }
+
 
         CheckEnemy();
         SkillUiUpdate();
         VisibleModeChheck();
         willPowerImage.fillAmount = willPower / 100.0f;
-
-
-
+        increaseWillPowerTime -= Time.deltaTime;
+        if (increaseWillPowerTime <= 0.0f)
+        {
+            willPower += 10.0f;
+            increaseWillPowerTime = 60.0f;
+        }
+    }
+    public void OnVisible()
+    {
+        isVisible = true;
+    }
+    public void OffVisible()
+    {
+        isVisible = false;
+        visibleReturnTime = 2.0f;
     }
     private void SkillUiUpdate()
     {
@@ -104,7 +117,6 @@ public class CharacterManager : MonoBehaviour
                 }
             }
         }
-
         if(Enemies.Count > 0)
         {
             willPower -= Time.deltaTime * Enemies.Count * 0.5f;
