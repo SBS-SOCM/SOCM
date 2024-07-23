@@ -34,7 +34,7 @@ public class Interaction : MonoBehaviour
 
     public void SendInteraction()
     {
-        hits = Physics.OverlapSphere(player.transform.position, interactionDistance, 1<<6);
+        hits = Physics.OverlapSphere(player.transform.position, interactionDistance, 1<<9);
 
         if (hits.Length > 0)
         {
