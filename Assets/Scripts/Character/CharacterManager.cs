@@ -8,6 +8,7 @@ public class CharacterManager : MonoBehaviour
 {
     public static CharacterManager instance;
     //Character State
+    public int hp = 5;
     public bool isVisible = true;
     public bool isSilence = false;
     private float visibleModeTime = 10.0f;

@@ -46,9 +46,11 @@ public class MonsterCtrl : MonoBehaviour
     //Check Enemy
     public float enemyCheckRange = 30.0f;
     public LayerMask enemyMask;
-
     private float outRangeTime = 5.0f;
-    private float attackRange = 1.5f;
+
+    //Battle
+    public float attackRange = 2.0f;
+    public float attackTerm = 1.0f;
     private bool isAttacking = false;
 
 
@@ -83,7 +85,20 @@ public class MonsterCtrl : MonoBehaviour
         }
         
     }
+    void CheckAttack()
+    {
+        float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
+        if (targetDist <= attackRange && !isAttacking) //Attack
+        {
+            nav.enabled = false;
+            _animator.SetBool("Walk", false);
+            _animator.SetBool("Run", false);
+            _animator.SetTrigger("Attack");
+            CharacterManager.instance.hp -= 1;
 
+            nav.enabled = true;
+        }
+    }
     void CheckRandomMove()
     {
         timeSinceLastUpdate += Time.deltaTime; // 시간 값을 갱신합니다.
@@ -247,6 +262,7 @@ public class MonsterCtrl : MonoBehaviour
 
                 //Character isVisible
                 CharacterManager.instance.OnVisible();
+                CheckAttack();
             }
         }
         else if(Enemies.Count == 0 && isWarning)
@@ -274,7 +290,7 @@ public class MonsterCtrl : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, soundRange);
 
@@ -294,5 +310,5 @@ public class MonsterCtrl : MonoBehaviour
         {
             Handles.DrawLine(transform.position, enemy.position);
         }
-    }
+    }*/
 }
