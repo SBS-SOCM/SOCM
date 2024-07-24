@@ -72,8 +72,10 @@ namespace StarterAssets
 		}
 		public void AimInput(bool newAimState)
 		{
+			if (CharacterManager.instance.willPower <= 10.0f) newAimState = false;
 			aim = newAimState;
-		}
+
+        }
 
 		private void OnApplicationFocus(bool hasFocus)
 		{

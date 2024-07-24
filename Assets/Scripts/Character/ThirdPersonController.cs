@@ -101,6 +101,7 @@ namespace StarterAssets
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
 
+
 #if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
 #endif
@@ -291,13 +292,11 @@ namespace StarterAssets
                     Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
 
                     transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
-                    //transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
                 }
                 else
                 {
                     transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
                 }
-                
             }
 
 
