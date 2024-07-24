@@ -123,6 +123,67 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &219105300
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3598558339659074851, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3598558339659074851, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+    - target: {fileID: 7236833567911579439, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+      propertyPath: m_Name
+      value: Singleton
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959790376312625766, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 821.7287
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959790376312625766, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 298.55188
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959790376312625766, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 402.54666
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959790376312625766, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959790376312625766, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959790376312625766, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959790376312625766, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959790376312625766, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959790376312625766, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959790376312625766, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
 --- !u!1001 &278658136
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -134,6 +195,10 @@ PrefabInstance:
     - target: {fileID: 4725292429189880921, guid: 1b97204aa2f97754c9dedebc5984feef, type: 3}
       propertyPath: m_Name
       value: StartItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 4725292429189880921, guid: 1b97204aa2f97754c9dedebc5984feef, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6264083147317207337, guid: 1b97204aa2f97754c9dedebc5984feef, type: 3}
       propertyPath: m_LocalPosition.x
@@ -335,7 +400,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1015
 --- !u!114 &451087297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -721,8 +786,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52d671ee56b9f204c91378464d35752a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  updateInterval: 12
+  timeSinceLastUpdate: 0
+  canRandomMoveTime: 5
   isPlayerChecked: 0
   isWarning: 0
+  isSleeping: 0
+  canRandomMove: 1
   targetTr: {fileID: 4416926082115898292}
   soundRange: 10
   viewRange: 10
@@ -735,6 +805,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   Enemies: []
+  Allys: []
+  notInViewTime: 3
+  enemyCheckRange: 30
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 0
+  attackRange: 2
+  attackTerm: 1
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1657,8 +1735,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52d671ee56b9f204c91378464d35752a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  updateInterval: 12
+  timeSinceLastUpdate: 0
+  canRandomMoveTime: 5
   isPlayerChecked: 0
   isWarning: 0
+  isSleeping: 0
+  canRandomMove: 1
   targetTr: {fileID: 4416926082115898292}
   soundRange: 10
   viewRange: 10
@@ -1671,6 +1754,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   Enemies: []
+  Allys: []
+  notInViewTime: 3
+  enemyCheckRange: 30
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 0
+  attackRange: 2
+  attackTerm: 1
 --- !u!195 &1209781761
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1835,7 +1926,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1567972303
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11114,6 +11205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73df9d571b5323847812e55df8e15970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 5
   isVisible: 1
   isSilence: 0
   willPower: 100
@@ -11192,3 +11284,4 @@ SceneRoots:
   - {fileID: 1791216309}
   - {fileID: 907475973}
   - {fileID: 278658136}
+  - {fileID: 219105300}

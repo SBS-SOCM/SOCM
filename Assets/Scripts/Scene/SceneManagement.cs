@@ -9,13 +9,11 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagement : MonoBehaviour
 {
+    /// <summary>
+    /// 0 : SampleScene / 1 : TitleScene / 2 : MainScene / 3 : LoadingScene / 4 : IntroScene / 5 : Ingame_test
+    /// </summary>
+
     public static int nextScene;
-
-    public enum SceneList
-    {
-        SampleScene, TestScene1, TestScene2
-    }
-
 
     void Start()
     {
@@ -30,32 +28,13 @@ public class SceneManagement : MonoBehaviour
     /// 로딩을 포함한 씬 이등
     /// </summary>
     /// <param name="scene"></param>
-    public void LoadScene(SceneList scene)
-    {
-        nextScene = (int) scene;
-
-        SceneManager.LoadScene(1);
-    }
-    /// <summary>
-    /// 로딩을 포함한 씬 이등
-    /// </summary>
-    /// <param name="scene"></param>
     public void LoadScene(int scene)
     {
         nextScene = scene;
 
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(3);
     }
 
-    /// <summary>
-    /// 로딩을 포함하지 않는 씬 이등
-    /// </summary>
-    /// <param name="scene"></param>
-    /// 
-    public void LoadSceneDirect(SceneList scene)
-    {
-        SceneManager.LoadScene((int)scene);
-    }
     /// <summary>
     /// 로딩을 포함하지 않는 씬 이등
     /// </summary>

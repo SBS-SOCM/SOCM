@@ -70,7 +70,7 @@ public class IntroSceneManager : MonoBehaviour
         else
         {
             codename = txt;
-            sceneManagement.LoadScene(4);
+            sceneManagement.LoadScene(2);
         }
     }
 

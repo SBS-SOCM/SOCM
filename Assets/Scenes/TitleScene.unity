@@ -403,6 +403,7 @@ GameObject:
   m_Component:
   - component: {fileID: 671169400}
   - component: {fileID: 671169399}
+  - component: {fileID: 671169401}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -487,6 +488,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &671169401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671169398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &922518037
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,7 +734,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1421,21 +1445,13 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3598558339659074851, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
-      propertyPath: ingameUIPanels.Array.size
-      value: 2
-      objectReference: {fileID: 0}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3598558339659074851, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
     - target: {fileID: 3598558339659074851, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
       propertyPath: ingameUIObjects.Array.size
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 3598558339659074851, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
-      propertyPath: ingameUIPanels.Array.data[0]
-      value: 
-      objectReference: {fileID: 8720250973430955555}
-    - target: {fileID: 3598558339659074851, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
-      propertyPath: ingameUIPanels.Array.data[1]
-      value: 
-      objectReference: {fileID: 8720250973430955559}
     - target: {fileID: 3598558339659074851, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
       propertyPath: ingameUIObjects.Array.data[0]
       value: 
@@ -1497,11 +1513,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
---- !u!1 &8720250973430955555 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7621243935980247237, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
-  m_PrefabInstance: {fileID: 8720250973430955554}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8720250973430955556 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2047056190271083812, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
@@ -1515,11 +1526,6 @@ GameObject:
 --- !u!1 &8720250973430955558 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2589297812439189726, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
-  m_PrefabInstance: {fileID: 8720250973430955554}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8720250973430955559 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5882637649757081596, guid: 1ac5db209c1eb0f4e9e7ae16503d0491, type: 3}
   m_PrefabInstance: {fileID: 8720250973430955554}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807

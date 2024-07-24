@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,19 +6,22 @@ using UnityEngine.UI;
 
 public class MainSceneManager : MonoBehaviour
 {
-    Color[] tempColor;
-
     public GameObject[] chapters;
+    public string[] missionMapRoot;
+    public string[] missionExplain;
 
     public GameObject chapterSelectPanel;
+    public Text missonExplainText;
+    public Text chapText;
+
+    [HideInInspector]
+    public int nowChap;
 
     void Start()
     {
-        tempColor = new Color[3];
+        // chapters[0].transform.Find("Map").GetComponent<Image>().sprite = "";
+        missonExplainText.text = missionExplain[nowChap];
 
-        tempColor[0] = chapters[0].GetComponent<Image>().color; 
-        tempColor[1] = chapters[1].GetComponent<Image>().color; 
-        tempColor[2] = chapters[2].GetComponent<Image>().color; 
     }
 
     private void Update()
@@ -27,19 +31,19 @@ public class MainSceneManager : MonoBehaviour
 
     public void NextChpater()
     {
-        Color temp = chapters[0].GetComponent<Image>().color;
-        chapters[0].GetComponent<Image>().color = chapters[1].GetComponent<Image>().color;
-        chapters[1].GetComponent<Image>().color = chapters[2].GetComponent<Image>().color;
-        chapters[2].GetComponent<Image>().color = temp;
+        nowChap = mod(nowChap+1, missionExplain.Length);
+
+        missonExplainText.text = missionExplain[nowChap];
+        chapText.text = String.Format("Chapter {0:D2}.",nowChap+1);
     }
 
 
     public void BeforeChpater()
     {
-        Color temp = chapters[1].GetComponent<Image>().color;
-        chapters[1].GetComponent<Image>().color = chapters[0].GetComponent<Image>().color;
-        chapters[0].GetComponent<Image>().color = chapters[2].GetComponent<Image>().color;
-        chapters[2].GetComponent<Image>().color = temp;
+        nowChap = mod(nowChap - 1, missionExplain.Length);
+
+        missonExplainText.text = missionExplain[nowChap];
+        chapText.text = String.Format("Chapter {0:D2}.", nowChap + 1);
     }
 
     public void OpenChapterSelectPanel()
@@ -63,4 +67,19 @@ public class MainSceneManager : MonoBehaviour
         }
     }
 
+    public void StartGame()
+    {
+        GetComponent<SceneManagement>().LoadScene(5);
+    }
+    int mod(int x, int m)
+    {
+        if (m == 0)
+        {
+            Debug.Log("Error : Devide with Zero");
+            return 0;
+        }
+
+        int r = x % m;
+        return r < 0 ? r + m : r;
+    }
 }

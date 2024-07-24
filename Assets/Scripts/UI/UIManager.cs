@@ -23,7 +23,8 @@ public class UIManager : SerializedMonoBehaviour
     [TabGroup("System"), OdinSerialize] public Stack<int> UIStack = new Stack<int>();
 
     /// <summary>
-    /// 인게임 내의 UI / 0 : now Item / 1 : before Item / 2 : next Item / 3 : HP Image / 4 : MP Image / 5 : MP Text
+    /// 인게임 내의 UI / 0 : now Item / 1 : before Item / 2 : next Item / 3 : HP Image / 4 : MP Image / 5 : MP Text / 6 : before 2 item / 7 : after 2 item
+    ///                  8,9 : SkillIcon
     /// </summary>
     [TabGroup("Ingame")] public GameObject[] ingameUIObjects;
 
@@ -199,15 +200,27 @@ public class UIManager : SerializedMonoBehaviour
         
         int nowItem = mod(inventory.nowItem , inventory.itemCount);
         int beforeItem = mod(inventory.nowItem - 1, inventory.itemCount);
+        int before2Item = mod(inventory.nowItem - 2, inventory.itemCount);
         int afterItem = mod(inventory.nowItem + 1, inventory.itemCount);
+        int after2Item = mod(inventory.nowItem + 2, inventory.itemCount);
 
         Debug.Log("now : " + nowItem.ToString() + " before : " + beforeItem.ToString() + " after : " + afterItem.ToString());
 
         Debug.Log("Item/" + inventory.inventory[nowItem].name);
 
         ingameUIObjects[0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[nowItem].name);
-        ingameUIObjects[1].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[beforeItem].name);
         ingameUIObjects[2].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[afterItem].name);
+        ingameUIObjects[1].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[beforeItem].name);
+
+        if (inventory.itemCount > 3)
+        {
+            ingameUIObjects[7].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[after2Item].name);
+        }
+        
+        if (inventory.itemCount > 4)
+        {
+            ingameUIObjects[6].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[before2Item].name);
+        }
     }
 
     public void RenewConditionUI()
@@ -216,13 +229,19 @@ public class UIManager : SerializedMonoBehaviour
         ingameUIObjects[4].GetComponent<Image>().fillAmount = mpTest;
         ingameUIObjects[5].GetComponent<Text>().text = ((int) (mpTest / 3 * 400)).ToString();
 
-        if (mpTest < 0.225 )
-        {
+        Debug.Log(mpTest);
 
+        if (mpTest < 0.075 )
+        {
+            ingameUIObjects[4].GetComponent<Image>().color = new Color(180/255f, 88 / 255f, 0);
         }
-        else if (mpTest < 0.075)
+        else if (mpTest < 0.225)
         {
-
+            ingameUIObjects[4].GetComponent<Image>().color = new Color(215 / 255f, 150 / 255f, 0);
+        }
+        else
+        {
+            ingameUIObjects[4].GetComponent<Image>().color = new Color(255 / 255f, 212 / 255f, 0);
         }
     }
 }

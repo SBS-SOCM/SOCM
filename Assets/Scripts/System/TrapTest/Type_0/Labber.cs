@@ -26,7 +26,7 @@ public class Labber : MonoBehaviour
         while (interactionTime < needTime)
         {
             interactionTime += Time.deltaTime;
-            gauge.fillAmount = interactionTime;
+            gauge.fillAmount = interactionTime / needTime;
             yield return null;
         }
 
