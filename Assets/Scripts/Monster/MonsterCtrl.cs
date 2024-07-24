@@ -23,6 +23,8 @@ public class MonsterCtrl : MonoBehaviour
     public bool isWarning = false;
     public bool isSleeping = false;
     public bool canRandomMove = true;
+    private bool isDie = false;
+    public float monsterHP = 100.0f;
 
     [SerializeField] private GameObject targetTr;
     [SerializeField] private float soundRange;
@@ -67,7 +69,7 @@ public class MonsterCtrl : MonoBehaviour
         Debug.DrawRay(transform.position, Vector3.forward, Color.red, 10.5f);
 
         //Ontrigger로 player가 들어왔을떄만 실행 -> 최적화
-        if (!isSleeping)
+        if (!isSleeping && !isDie)
         {
             CheckSound();
             CheckView();
@@ -83,7 +85,35 @@ public class MonsterCtrl : MonoBehaviour
         {
             stateText.text = "";
         }
-        
+
+        CheckSleeping();
+        CheckDie();
+
+
+
+    }
+    void CheckSleeping()
+    {
+        if (isSleeping)
+        {
+            _animator.SetBool("Sleeping", true);
+        }
+        else
+        {
+            _animator.SetBool("Sleeping", false);
+        }
+    }
+    void CheckDie()
+    {
+        if(monsterHP <= 0.0f && !isDie)
+        {
+            isDie = true;
+            nav.ResetPath();
+            StopAllCoroutines();
+            _animator.SetBool("Walk", false);
+            _animator.SetBool("Run", false);
+            _animator.SetTrigger("Die");
+        }
     }
     void CheckAttack()
     {

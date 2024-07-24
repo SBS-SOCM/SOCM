@@ -3008,6 +3008,7 @@ MonoBehaviour:
   isWarning: 0
   isSleeping: 0
   canRandomMove: 0
+  monsterHP: 100
   targetTr: {fileID: 4416926082115898292}
   soundRange: 10
   viewRange: 10
@@ -4848,6 +4849,7 @@ MonoBehaviour:
   isWarning: 0
   isSleeping: 0
   canRandomMove: 0
+  monsterHP: 100
   targetTr: {fileID: 4416926082115898292}
   soundRange: 10
   viewRange: 10
@@ -6100,6 +6102,7 @@ MonoBehaviour:
   isWarning: 0
   isSleeping: 0
   canRandomMove: 0
+  monsterHP: 100
   targetTr: {fileID: 4416926082115898292}
   soundRange: 10
   viewRange: 10
@@ -7501,8 +7504,9 @@ MonoBehaviour:
   canRandomMoveTime: 5
   isPlayerChecked: 0
   isWarning: 0
-  isSleeping: 0
+  isSleeping: 1
   canRandomMove: 0
+  monsterHP: 100
   targetTr: {fileID: 4416926082115898292}
   soundRange: 10
   viewRange: 10

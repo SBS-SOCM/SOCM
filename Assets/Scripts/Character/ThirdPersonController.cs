@@ -1,4 +1,5 @@
-﻿ using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
@@ -100,6 +101,8 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
+        private int _animIDX;
+        private int _animIDY;
 
 
 #if ENABLE_INPUT_SYSTEM 
@@ -183,6 +186,8 @@ namespace StarterAssets
             _animIDJump = Animator.StringToHash("Jump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+            _animIDX = Animator.StringToHash("X");
+            _animIDY = Animator.StringToHash("Y");
         }
 
         private void GroundedCheck()
@@ -295,7 +300,7 @@ namespace StarterAssets
                 }
                 else
                 {
-                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                    transform.rotation = Quaternion.Euler(0.0f, _cinemachineTargetYaw, 0.0f);
                 }
             }
 
@@ -310,7 +315,9 @@ namespace StarterAssets
             if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
-                _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+                _animator.SetFloat(_animIDMotionSpeed, _speed  * 0.15f);
+                _animator.SetFloat(_animIDX, _input.move.x);
+                _animator.SetFloat(_animIDY, _input.move.y);
             }
         }
 
