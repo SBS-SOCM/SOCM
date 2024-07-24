@@ -171,7 +171,9 @@ namespace StarterAssets
             //if Character in Silence mode
             if (!CharacterManager.instance.isSilence) MoveSpeed = basicSpeed;
             else MoveSpeed = silenceSpeed;
+            if (_input.aim) MoveSpeed = silenceSpeed;
             if (CharacterManager.instance.willPower <= 30.0f) MoveSpeed *= 0.7f;
+            Debug.Log(MoveSpeed);
         }
 
         private void LateUpdate()
@@ -315,6 +317,10 @@ namespace StarterAssets
             if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
+                if (_input.aim)
+                {
+                    _speed = 1.0f;
+                }
                 _animator.SetFloat(_animIDMotionSpeed, _speed  * 0.15f);
                 _animator.SetFloat(_animIDX, _input.move.x);
                 _animator.SetFloat(_animIDY, _input.move.y);
@@ -415,7 +421,7 @@ namespace StarterAssets
         {
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
-                if (FootstepAudioClips.Length > 0)
+                if (FootstepAudioClips.Length > 0 && !CharacterManager.instance.isSilence)
                 {
                     var index = Random.Range(0, FootstepAudioClips.Length);
                     AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume);

@@ -24,9 +24,6 @@ public class CharacterManager : MonoBehaviour
     public LayerMask walllMask; // 장애물 마스크
     public float checkRange = 10.0f;
 
-    private Color originColor = new Color (1.0f,1.0f,1.0f,1.0f);
-    private Color invisibleColor = new Color(1.0f, 1.0f, 1.0f, 0.3f);
-
     //UI
     [SerializeField] private Image willPowerImage;
     [SerializeField] private Image visibleSkillImage;
