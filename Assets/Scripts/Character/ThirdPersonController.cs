@@ -171,9 +171,8 @@ namespace StarterAssets
             //if Character in Silence mode
             if (!CharacterManager.instance.isSilence) MoveSpeed = basicSpeed;
             else MoveSpeed = silenceSpeed;
-            if (_input.aim) MoveSpeed = silenceSpeed;
+            //if (_input.aim) MoveSpeed = silenceSpeed;
             if (CharacterManager.instance.willPower <= 30.0f) MoveSpeed *= 0.7f;
-            Debug.Log(MoveSpeed);
         }
 
         private void LateUpdate()
@@ -234,6 +233,7 @@ namespace StarterAssets
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
             if (_input.sprint) CharacterManager.instance.isSilence = true;
+            else if (_input.aim) CharacterManager.instance.isSilence = true;
             else CharacterManager.instance.isSilence = false;
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 

@@ -25,11 +25,16 @@ public class MonsterCtrl : MonoBehaviour
     public bool canRandomMove = true;
     private bool isDie = false;
     public float monsterHP = 100.0f;
+    private bool isMoveing = false;
+    public bool courseMove = false;
+    private float courMoveTiem = 5.0f;
 
     [SerializeField] private GameObject targetTr;
     [SerializeField] private float soundRange;
     [SerializeField] private float viewRange;
     [SerializeField] private Text stateText;
+    [SerializeField] private Transform movePos1;
+    [SerializeField] private Transform movePos2;
 
 
     //Search Player
@@ -64,6 +69,8 @@ public class MonsterCtrl : MonoBehaviour
 
     private void Update()
     {
+        courMoveTiem -= Time.deltaTime;
+
         if (isWarning || isPlayerChecked) Angle = normalAngle * 2f;
         else Angle = normalAngle;
         Debug.DrawRay(transform.position, Vector3.forward, Color.red, 10.5f);
@@ -76,21 +83,59 @@ public class MonsterCtrl : MonoBehaviour
             CheckState();
             if (!isWarning && !isPlayerChecked)
             {
-                canRandomMoveTime -= Time.deltaTime;
-                if (canRandomMoveTime <= 0.0f) CheckRandomMove();
+                if (canRandomMove)
+                {
+                    canRandomMoveTime -= Time.deltaTime;
+                    if (canRandomMoveTime <= 0.0f) CheckRandomMove();
+                }
+                else if(courseMove)
+                {
+                    if (courMoveTiem <= 0.0f && courseMove)
+                    {
+                        courMoveTiem = 60.0f;
+                        StartCoroutine(CourseMove());
+                    }
+                }
+                
             }
             else canRandomMoveTime = 6.0f;
+            
         }
         else
         {
             stateText.text = "";
         }
-
+        if (courseMove)
+        {
+            StopCourseMove();
+        }
+        
         CheckSleeping();
         CheckDie();
 
+    }
+    IEnumerator CourseMove()
+    {
+        nav.SetDestination(movePos1.position);
+        _animator.SetBool("Walk", true);
+        Debug.Log(Vector3.Distance(this.transform.position, movePos1.position));
+        yield return new WaitForSeconds(5.0f);
 
 
+        yield return new WaitForSeconds(5.0f);
+        nav.SetDestination(movePos2.position);
+        _animator.SetBool("Walk", true);
+
+
+    }
+    private void StopCourseMove()
+    {
+        if(Vector3.Distance(this.transform.position, movePos2.position) <= 1.0f ||
+            Vector3.Distance(this.transform.position, movePos1.position) <= 1.0f)
+        {
+            nav.ResetPath();
+            _animator.SetBool("Walk",false);
+        }
     }
     void CheckSleeping()
     {
@@ -201,7 +246,7 @@ public class MonsterCtrl : MonoBehaviour
 
     private void StopAnimator()
     {
-        if (!canRandomMove)
+        if (!canRandomMove && !courseMove)
         {
             _animator.SetBool("Run", false);
             _animator.SetBool("Walk", false);
@@ -286,11 +331,12 @@ public class MonsterCtrl : MonoBehaviour
                 notInViewTime = 3.0f;
                 isWarning = false;
                 isPlayerChecked = true;
+                canRandomMove = false;
+                courseMove = false;
                 nav.SetDestination(targetTr.transform.position);
                 _animator.SetBool("Walk", false);
                 _animator.SetBool("Run", true);
 
-                //Character isVisible
                 CharacterManager.instance.OnVisible();
                 CheckAttack();
             }
