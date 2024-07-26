@@ -76,7 +76,7 @@ public class MonsterCtrl : MonoBehaviour
         Debug.DrawRay(transform.position, Vector3.forward, Color.red, 10.5f);
 
         //Ontrigger로 player가 들어왔을떄만 실행 -> 최적화
-        if (!isSleeping && !isDie)
+        if (!isSleeping && !isDie && !isAttacking)
         {
             CheckSound();
             CheckView();
@@ -118,7 +118,6 @@ public class MonsterCtrl : MonoBehaviour
     {
         nav.SetDestination(movePos1.position);
         _animator.SetBool("Walk", true);
-        Debug.Log(Vector3.Distance(this.transform.position, movePos1.position));
         yield return new WaitForSeconds(5.0f);
 
 
@@ -165,14 +164,29 @@ public class MonsterCtrl : MonoBehaviour
         float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
         if (targetDist <= attackRange && !isAttacking) //Attack
         {
-            nav.enabled = false;
-            _animator.SetBool("Walk", false);
-            _animator.SetBool("Run", false);
-            _animator.SetTrigger("Attack");
-            CharacterManager.instance.hp -= 1;
-
-            nav.enabled = true;
+            StartCoroutine(Attack());
         }
+    }
+    IEnumerator Attack()
+    {
+        Debug.Log("Called");
+        isAttacking = true;
+        float tempSpeed = nav.speed;
+        nav.speed = 0.0f;
+        _animator.SetBool("Walk", false);
+        _animator.SetBool("Run", false);
+        _animator.SetTrigger("Attack");
+        yield return new WaitForSeconds(0.2f);
+
+        float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
+        if (targetDist <= 2.2f)
+        {
+            CharacterManager.instance.hp -= 1;
+        }
+        yield return new WaitForSeconds(2.0f);
+        nav.speed = tempSpeed;
+        isAttacking = false;
+
     }
     void CheckRandomMove()
     {

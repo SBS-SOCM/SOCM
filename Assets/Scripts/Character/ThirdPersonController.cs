@@ -164,6 +164,7 @@ namespace StarterAssets
         {
             _hasAnimator = TryGetComponent(out _animator);
 
+            CharacterDie();
             JumpAndGravity();
             GroundedCheck();
             Move();
@@ -190,7 +191,14 @@ namespace StarterAssets
             _animIDX = Animator.StringToHash("X");
             _animIDY = Animator.StringToHash("Y");
         }
-
+        private void CharacterDie()
+        {
+            if (CharacterManager.instance.isCharacterDie)
+            {
+                _animator.SetTrigger("Die");
+            }
+            
+        }
         private void GroundedCheck()
         {
             // set sphere position, with offset
