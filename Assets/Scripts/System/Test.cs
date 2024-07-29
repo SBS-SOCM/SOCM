@@ -6,21 +6,19 @@ using UnityEngine.UI;
 
 public class Test : MonoBehaviour
 {
-    public MeshRenderer meshRenderer;
-
-    public float fadeCount = 1;
+    public Renderer objectRenderer;
+    public float objectMinHeight;
+    public float objectMaxHeight;
 
     void Start()
     {
-            Color targetColor = meshRenderer.material.color;
-        targetColor.a = 0;
-
-        meshRenderer.material.DOColor(targetColor, 2f);
+        ApplyHeightSettings();
     }
 
-    // Update is called once per frame
-    void Update()
+    void ApplyHeightSettings()
     {
-        
+        Material material = objectRenderer.material;
+        material.SetFloat("_ObjectMinHeight", objectMinHeight);
+        material.SetFloat("_ObjectMaxHeight", objectMaxHeight);
     }
 }
