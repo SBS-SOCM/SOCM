@@ -21,7 +21,7 @@ public class Inventory : MonoBehaviour
             {
                 case "Knife":
                     id = 0;
-                    explain = "ÂªÀº ´Ü°Ë";
+                    explain = "ÂªÀº ´Ü °Ë";
                     break;
 
                 case "Pistol":
@@ -244,5 +244,14 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void UseItem(Item item)
+    {
+
+    }
+
+    public void UseItem(int itemId)
+    {
+
+    }
 
 }

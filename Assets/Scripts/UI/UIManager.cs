@@ -195,6 +195,13 @@ public class UIManager : SerializedMonoBehaviour
         UIPanels[0].SetActive(true);
     }
 
+    public void RenewSkillIcon()
+    {
+        // 8 ,9
+
+
+    }
+
     public void RenewItemUI()
     {
         
