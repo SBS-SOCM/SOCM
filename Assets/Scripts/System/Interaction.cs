@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Interaction : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class Interaction : MonoBehaviour
     public float interactionDistance;
 
     Collider[] hits;
+
+    public Image interactionImage;
 
     private void OnEnable()
     {
@@ -26,6 +29,8 @@ public class Interaction : MonoBehaviour
 
     private void Update()
     {
+        CheckInteraction();
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             SendInteraction();
@@ -39,6 +44,20 @@ public class Interaction : MonoBehaviour
         if (hits.Length > 0)
         {
             ReceiveInteraction(hits[0]);
+        }
+    }
+
+    public void CheckInteraction()
+    {
+        hits = Physics.OverlapSphere(player.transform.position, interactionDistance, 1 << 9);
+
+        if (hits.Length > 0)
+        {
+            interactionImage.gameObject.SetActive(true);
+        }
+        else
+        {
+            interactionImage.gameObject.SetActive(false);
         }
     }
 
