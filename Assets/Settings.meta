@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/System/TrapTest.meta
+guid: 9cb5f7422f98b3748b0a63e2ea8e81bc
+========
 guid: 2313335db7deca749a9471058066bbb4
+>>>>>>>> Middle:Assets/Settings.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
