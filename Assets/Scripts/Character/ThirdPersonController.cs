@@ -290,7 +290,9 @@ namespace StarterAssets
             }
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (_input.move != Vector2.zero)
+
+            //추후 Alt 누를시 화면만 이동하도록 수정 // 캐릭터 몸체 이동 x 
+            if (!Input.GetKeyDown(KeyCode.LeftAlt))
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   _mainCamera.transform.eulerAngles.y;
