@@ -5,6 +5,8 @@ using Cinemachine;
 
 public class ThirdPersonShooterController : MonoBehaviour
 {
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform bulletSpawnPos;
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
     private float aimingTime = 5.0f;
 
@@ -17,6 +19,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Update()
     {
+        Shoot();
         if (starterAssetsInputs.aim)
         {
             aimVirtualCamera.gameObject.SetActive(true);
@@ -35,4 +38,19 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
     }
 
+    private void Shoot()
+    {
+        if (starterAssetsInputs.aim)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Fire();
+            }
+        }
+    }
+    private void Fire()
+    {
+        Debug.Log("Fire");
+        Instantiate(bulletPrefab, bulletSpawnPos.position, Quaternion.identity);
+    }
 }
