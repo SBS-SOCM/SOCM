@@ -236,8 +236,6 @@ public class UIManager : SerializedMonoBehaviour
         ingameUIObjects[4].GetComponent<Image>().fillAmount = mpTest;
         ingameUIObjects[5].GetComponent<Text>().text = ((int) (mpTest / 3 * 400)).ToString();
 
-        Debug.Log(mpTest);
-
         if (mpTest < 0.075 )
         {
             ingameUIObjects[4].GetComponent<Image>().color = new Color(180/255f, 88 / 255f, 0);
