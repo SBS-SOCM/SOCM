@@ -8,15 +8,15 @@ public class CharacterManager : MonoBehaviour
 {
     public static CharacterManager instance;
     //Character State
-    public int hp = 5;
+    public float hp = 100.0f;
     public bool isVisible = true;
     public bool isSilence = false;
     private float visibleModeTime = 10.0f;
     public float willPower = 100.0f;
     private float visibleSKillCool = 5.0f;
     private float visibleReturnTime = 2.0f;
-    private float characterHP = 100.0f;
     private float increaseWillPowerTime = 60.0f;
+    public bool isCharacterDie = false;
 
  
     public List<Transform> Enemies = new List<Transform>();
@@ -24,12 +24,12 @@ public class CharacterManager : MonoBehaviour
     public LayerMask walllMask; // 장애물 마스크
     public float checkRange = 10.0f;
 
-    private Color originColor = new Color (1.0f,1.0f,1.0f,1.0f);
-    private Color invisibleColor = new Color(1.0f, 1.0f, 1.0f, 0.3f);
-
     //UI
     [SerializeField] private Image willPowerImage;
+    [SerializeField] private Image hpImage;
     [SerializeField] private Image visibleSkillImage;
+    [SerializeField] private Text willPowerText;
+
 
     //
     [SerializeField] private Material characterMat;
@@ -44,6 +44,8 @@ public class CharacterManager : MonoBehaviour
 
     private void Update()
     {
+        if (hp <= 0) CharacterDie();
+
         if (Input.GetKeyDown(KeyCode.R) && isVisible && visibleSKillCool <= 0.0f)
         {
             OffVisible();
@@ -58,13 +60,23 @@ public class CharacterManager : MonoBehaviour
         CheckEnemy();
         SkillUiUpdate();
         VisibleModeChheck();
-        willPowerImage.fillAmount = willPower / 100.0f;
+
+        willPowerText.text = Mathf.RoundToInt(willPower).ToString();
+        willPowerImage.fillAmount = (willPower / 100.0f) * 0.75f;
+        hpImage.fillAmount = (hp / 100.0f) * 0.75f;
+
+
         increaseWillPowerTime -= Time.deltaTime;
         if (increaseWillPowerTime <= 0.0f)
         {
             willPower += 10.0f;
             increaseWillPowerTime = 60.0f;
         }
+    }
+    private void CharacterDie()
+    {
+        Debug.Log("Die");
+        isCharacterDie = true;
     }
     public void OnVisible()
     {

@@ -8,6 +8,7 @@ public class ActionCtrl : MonoBehaviour
 {
     [SerializeField] RuntimeAnimatorController noWeaponAnim;
     [SerializeField] RuntimeAnimatorController weaponAnim;
+    [SerializeField] private GameObject aimingCrossHair;
 
     private StarterAssets.StarterAssetsInputs starterAssetsInputs;
     private ThirdPersonController thirdPersonController;

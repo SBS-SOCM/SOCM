@@ -1,4 +1,5 @@
-﻿ using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
@@ -100,6 +101,8 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
+        private int _animIDX;
+        private int _animIDY;
 
 
 #if ENABLE_INPUT_SYSTEM 
@@ -161,6 +164,7 @@ namespace StarterAssets
         {
             _hasAnimator = TryGetComponent(out _animator);
 
+            CharacterDie();
             JumpAndGravity();
             GroundedCheck();
             Move();
@@ -168,6 +172,7 @@ namespace StarterAssets
             //if Character in Silence mode
             if (!CharacterManager.instance.isSilence) MoveSpeed = basicSpeed;
             else MoveSpeed = silenceSpeed;
+            //if (_input.aim) MoveSpeed = silenceSpeed;
             if (CharacterManager.instance.willPower <= 30.0f) MoveSpeed *= 0.7f;
         }
 
@@ -183,8 +188,17 @@ namespace StarterAssets
             _animIDJump = Animator.StringToHash("Jump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+            _animIDX = Animator.StringToHash("X");
+            _animIDY = Animator.StringToHash("Y");
         }
-
+        private void CharacterDie()
+        {
+            if (CharacterManager.instance.isCharacterDie)
+            {
+                _animator.SetTrigger("Die");
+            }
+            
+        }
         private void GroundedCheck()
         {
             // set sphere position, with offset
@@ -227,6 +241,7 @@ namespace StarterAssets
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
             if (_input.sprint) CharacterManager.instance.isSilence = true;
+            else if (_input.aim) CharacterManager.instance.isSilence = true;
             else CharacterManager.instance.isSilence = false;
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -275,7 +290,9 @@ namespace StarterAssets
             }
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (_input.move != Vector2.zero)
+
+            //추후 Alt 누를시 화면만 이동하도록 수정 // 캐릭터 몸체 이동 x 
+            if (!Input.GetKeyDown(KeyCode.LeftAlt))
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   _mainCamera.transform.eulerAngles.y;
@@ -295,7 +312,7 @@ namespace StarterAssets
                 }
                 else
                 {
-                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                    transform.rotation = Quaternion.Euler(0.0f, _cinemachineTargetYaw, 0.0f);
                 }
             }
 
@@ -310,7 +327,13 @@ namespace StarterAssets
             if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
-                _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+                if (_input.aim)
+                {
+                    _speed = 1.0f;
+                }
+                _animator.SetFloat(_animIDMotionSpeed, _speed  * 0.15f);
+                _animator.SetFloat(_animIDX, _input.move.x);
+                _animator.SetFloat(_animIDY, _input.move.y);
             }
         }
 
@@ -408,7 +431,7 @@ namespace StarterAssets
         {
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
-                if (FootstepAudioClips.Length > 0)
+                if (FootstepAudioClips.Length > 0 && !CharacterManager.instance.isSilence)
                 {
                     var index = Random.Range(0, FootstepAudioClips.Length);
                     AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume);
