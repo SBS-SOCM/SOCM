@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class Interaction : MonoBehaviour
 {
-    public GameObject player;
     public Inventory inventory;
     public float interactionDistance;
 
@@ -14,18 +13,7 @@ public class Interaction : MonoBehaviour
 
     public Image interactionImage;
 
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name.StartsWith("Ingame"))
-        {
-            player = GameObject.Find("PlayerArmature");
-        }
-    }
+    
 
     private void Update()
     {
@@ -39,7 +27,7 @@ public class Interaction : MonoBehaviour
 
     public void SendInteraction()
     {
-        hits = Physics.OverlapSphere(player.transform.position, interactionDistance, 1<<9);
+        hits = Physics.OverlapSphere(Singleton.instance.player.transform.position, interactionDistance, 1<<9);
 
         if (hits.Length > 0)
         {
@@ -49,7 +37,7 @@ public class Interaction : MonoBehaviour
 
     public void CheckInteraction()
     {
-        hits = Physics.OverlapSphere(player.transform.position, interactionDistance, 1 << 9);
+        hits = Physics.OverlapSphere(Singleton.instance.player.transform.position, interactionDistance, 1 << 9);
 
         if (hits.Length > 0)
         {

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    // 아이템 id / 0 : 단검 / 1 : 권총 / 2 : 동전
     public class Item
     {
         public string name;
