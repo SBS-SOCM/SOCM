@@ -254,4 +254,9 @@ public class Inventory : MonoBehaviour
 
     }
 
+    public string GetItemInfo()
+    {
+        return inventory[nowItem].name;
+    }
+
 }
