@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Interaction : MonoBehaviour
 {
-    public GameObject player;
+
     public Inventory inventory;
 
     public float detectionRadius = 5f;  // 감지 반경
@@ -18,18 +18,6 @@ public class Interaction : MonoBehaviour
 
     public Image interactionImage;
 
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name.StartsWith("Ingame"))
-        {
-            player = GameObject.Find("PlayerArmature");
-        }
-    }
 
     private void Update()
     {
@@ -43,16 +31,16 @@ public class Interaction : MonoBehaviour
 
     public void SendInteraction()
     {
-        Collider[] hits = Physics.OverlapSphere(player.transform.position, detectionRadius, targetLayerMask);
+        Collider[] hits = Physics.OverlapSphere(Singleton.instance.player.transform.position, detectionRadius, targetLayerMask);
 
         foreach (Collider hit in hits)
         {
             // 오브젝트의 방향 벡터를 계산
-            Vector3 directionToTarget = hit.transform.transform.position - player.transform.position;
+            Vector3 directionToTarget = hit.transform.transform.position - Singleton.instance.player.transform.position;
             directionToTarget.Normalize();
 
             // 오브젝트와 플레이어의 앞방향 벡터 간의 각도를 계산
-            float angleToTarget = Vector3.Angle(player.transform.forward, directionToTarget);
+            float angleToTarget = Vector3.Angle(Singleton.instance.player.transform.forward, directionToTarget);
 
             // 감지 각도 내에 있는지 확인
             if (angleToTarget <= detectionAngle)
@@ -67,16 +55,16 @@ public class Interaction : MonoBehaviour
     {
         bool isInteractive = false;
 
-        Collider[] hits = Physics.OverlapSphere(player.transform.position, detectionRadius, targetLayerMask);
+        Collider[] hits = Physics.OverlapSphere(Singleton.instance.player.transform.position, detectionRadius, targetLayerMask);
 
         foreach (Collider hit in hits)
         {
             // 오브젝트의 방향 벡터를 계산
-            Vector3 directionToTarget = hit.transform.transform.position - player.transform.position;
+            Vector3 directionToTarget = hit.transform.transform.position - Singleton.instance.player.transform.position;
             directionToTarget.Normalize();
 
             // 오브젝트와 플레이어의 앞방향 벡터 간의 각도를 계산
-            float angleToTarget = Vector3.Angle(player.transform.forward, directionToTarget);
+            float angleToTarget = Vector3.Angle(Singleton.instance.player.transform.forward, directionToTarget);
 
             // 감지 각도 내에 있는지 확인
             if (angleToTarget <= detectionAngle)
@@ -131,8 +119,8 @@ public class Interaction : MonoBehaviour
         Gizmos.color = gizmoColor;
 
         // 플레이어 위치를 기준으로 원뿔을 그리기 위해 루프를 사용
-        Vector3 forward = player.transform.forward * detectionRadius;
-        Vector3 start = player.transform.position;
+        Vector3 forward = Singleton.instance.player.transform.forward * detectionRadius;
+        Vector3 start = Singleton.instance.player.transform.position;
 
         for (float i = -detectionAngle; i <= detectionAngle; i += 5.0f) // 5도씩 간격을 둬서 원뿔형 범위를 그립니다.
         {
@@ -142,6 +130,6 @@ public class Interaction : MonoBehaviour
         }
         
         // 감지 반경을 시각화하기 위해 구를 그림
-        Gizmos.DrawWireSphere(player.transform.position, detectionRadius);
+        Gizmos.DrawWireSphere(Singleton.instance.player.transform.position, detectionRadius);
     }
 }

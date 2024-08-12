@@ -10,10 +10,10 @@ public class CoinTest : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && Singleton.instance.GetComponent<CharacterManager>().itemType == 2)
         {
-            GameObject coinObj = Instantiate(coin, Singleton.instance.GetComponentInChildren<Interaction>().player.transform.position + new Vector3(0, 2f, 0), Quaternion.identity);
-            coinObj.GetComponent<Rigidbody>().AddForce(Singleton.instance.GetComponentInChildren<Interaction>().player.transform.forward * power, ForceMode.Impulse);
+            GameObject coinObj = Instantiate(coin, Singleton.instance.player.transform.position + new Vector3(0, 2f, 0), Quaternion.identity);
+            coinObj.GetComponent<Rigidbody>().AddForce(Singleton.instance.player.transform.forward * power, ForceMode.Impulse);
         }
     }
 }

@@ -2855,13 +2855,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ebdd49a97607ac44bb2033a6c0f5fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   inventory: {fileID: 8376507712704632878}
   detectionRadius: 5
   detectionAngle: 45
   targetLayerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 512
   gizmoColor: {r: 0, g: 1, b: 0, a: 1}
   interactionImage: {fileID: 3037417510785981476}
 --- !u!1 &5184890008878209276
@@ -2881,7 +2880,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7298885174237781249
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3269,7 +3268,6 @@ MonoBehaviour:
   - {fileID: 1692946206229153622}
   ingameUIPanels:
   - {fileID: 5882637649757081596}
-  - {fileID: 7621243935980247237}
   - {fileID: 7989790531806512906}
   hpImage: {fileID: 6654744968367305136}
   mpImage: {fileID: 4540381680400889302}
@@ -4959,6 +4957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f908e8146a6bb04187f7955373432b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
 --- !u!1 &7293104247801434644
 GameObject:
   m_ObjectHideFlags: 0
@@ -5509,7 +5508,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6621030022146451359
 RectTransform:
   m_ObjectHideFlags: 0

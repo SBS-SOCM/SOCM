@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CharacterManager : MonoBehaviour
+public partial class CharacterManager : MonoBehaviour
 {
     public static CharacterManager instance;
     //Character State
