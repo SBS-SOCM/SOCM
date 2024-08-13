@@ -105,10 +105,8 @@ public class UIManager : SerializedMonoBehaviour
                 inventory.RenewInventoryUI();
             }
 
-            Singleton.instance.GetComponent<CharacterManager>().SetItemType(inventory.inventory[inventory.nowItem].id);
-
+            Singleton.instance.player.GetComponent<CharacterManager>().SetItemType(inventory.inventory[inventory.nowItem].id);
             RenewItemUI();
-
         }
     }
 

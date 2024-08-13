@@ -1,0 +1,9 @@
+diff a/Assets/Scripts/System/Inventory.cs b/Assets/Scripts/System/Inventory.cs	(rejected hunks)
+@@ -7,6 +7,7 @@
+ 
+ public class Inventory : MonoBehaviour
+ {
++    // ������ id / 0 : �ܰ� / 1 : ���� / 2 : ����
+     public class Item
+     {
+         public string name;

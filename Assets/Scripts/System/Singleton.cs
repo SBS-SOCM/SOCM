@@ -8,6 +8,8 @@ public class Singleton : MonoBehaviour
     public static Singleton instance;
     public GameObject player;
 
+    public GameObject player;
+
     private void Awake()
     {
         if (instance == null)
@@ -22,6 +24,24 @@ public class Singleton : MonoBehaviour
             Destroy(gameObject);
         }
 
+
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (player != null)
+        {
+            return;
+        }
+
+        if (scene.name.StartsWith("Ingame") || scene.name.StartsWith("SampleScene"))
+        {
+            player = GameObject.Find("PlayerArmature");
+        }
     }
 
     private void OnEnable()
