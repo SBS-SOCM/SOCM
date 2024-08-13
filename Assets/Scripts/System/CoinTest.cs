@@ -14,8 +14,6 @@ public class CoinTest : MonoBehaviour
         {
             if(Singleton.instance.GetComponentInChildren<Inventory>().GetItemInfo().Equals("coin"))
             {
-                GameObject coinObj = Instantiate(coin, Singleton.instance.GetComponentInChildren<Interaction>().player.transform.position + new Vector3(0, 2f, 0), Quaternion.identity);
-                coinObj.GetComponent<Rigidbody>().AddForce(Singleton.instance.GetComponentInChildren<Interaction>().player.transform.forward * power, ForceMode.Impulse);
 
             }
 

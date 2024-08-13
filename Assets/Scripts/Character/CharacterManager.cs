@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CharacterManager : MonoBehaviour
+public partial class CharacterManager : MonoBehaviour
 {
     public static CharacterManager instance;
     //Character State
@@ -75,7 +75,6 @@ public class CharacterManager : MonoBehaviour
     }
     private void CharacterDie()
     {
-        Debug.Log("Die");
         isCharacterDie = true;
     }
     public void OnVisible()

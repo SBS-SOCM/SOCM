@@ -6,8 +6,10 @@ using Cinemachine;
 public class ThirdPersonShooterController : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
-    private float aimingTime = 5.0f;
+    [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
+    [SerializeField] private Transform debugTransform;
 
+    private float aimingTime = 5.0f;
     private StarterAssets.StarterAssetsInputs starterAssetsInputs;
 
     private void Awake()
@@ -17,7 +19,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Update()
     {
-        if (starterAssetsInputs.aim)
+        if (starterAssetsInputs.aim && CharacterManager.instance.hp > 0)
         {
             aimVirtualCamera.gameObject.SetActive(true);
             aimingTime -= Time.deltaTime;
@@ -32,6 +34,16 @@ public class ThirdPersonShooterController : MonoBehaviour
         {
             aimVirtualCamera.gameObject.SetActive(false);
             aimingTime = 5.0f;
+        }
+        AimIK();
+    }
+    private void AimIK()
+    {
+        Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
+        {
+            debugTransform.position = raycastHit.point;
         }
     }
 
