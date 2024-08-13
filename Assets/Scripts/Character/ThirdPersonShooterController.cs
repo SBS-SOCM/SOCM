@@ -8,8 +8,11 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
     [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
     [SerializeField] private Transform debugTransform;
+    [SerializeField] private GameObject bulletGO;
+    [SerializeField] private Transform bulletSpawnPos;
 
     private float aimingTime = 5.0f;
+    private float fireTerm = 0.5f;
     private StarterAssets.StarterAssetsInputs starterAssetsInputs;
 
     private void Awake()
@@ -19,6 +22,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Update()
     {
+        fireTerm -= Time.deltaTime;
         if (starterAssetsInputs.aim && CharacterManager.instance.hp > 0)
         {
             aimVirtualCamera.gameObject.SetActive(true);
@@ -36,6 +40,8 @@ public class ThirdPersonShooterController : MonoBehaviour
             aimingTime = 5.0f;
         }
         AimIK();
+
+        if(Input.GetMouseButtonDown(0) && fireTerm <= 0.0f && starterAssetsInputs.aim) Shoot();
     }
     private void AimIK()
     {
@@ -45,6 +51,11 @@ public class ThirdPersonShooterController : MonoBehaviour
         {
             debugTransform.position = raycastHit.point;
         }
+    }
+    private void Shoot()
+    {
+        fireTerm = 0.5f;
+        Instantiate(bulletGO, bulletSpawnPos.position, bulletSpawnPos.rotation);
     }
 
 }
