@@ -69,7 +69,7 @@ public class MainSceneManager : MonoBehaviour
 
     public void StartGame()
     {
-        GetComponent<SceneManagement>().LoadScene(5);
+        GetComponent<SceneManagement>().LoadScene(0);
     }
     int mod(int x, int m)
     {
