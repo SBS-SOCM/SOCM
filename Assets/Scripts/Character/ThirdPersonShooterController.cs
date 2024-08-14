@@ -10,7 +10,9 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private Transform debugTransform;
     [SerializeField] private GameObject bulletGO;
     [SerializeField] private Transform bulletSpawnPos;
+    [SerializeField] private AudioClip fireSound;
 
+    private AudioSource audioSource;
     private float aimingTime = 5.0f;
     private float fireTerm = 0.5f;
     private StarterAssets.StarterAssetsInputs starterAssetsInputs;
@@ -18,6 +20,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     private void Awake()
     {
         starterAssetsInputs = GetComponent<StarterAssets.StarterAssetsInputs>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -55,6 +58,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     private void Shoot()
     {
         fireTerm = 0.5f;
+        audioSource.PlayOneShot(fireSound);
         Instantiate(bulletGO, bulletSpawnPos.position, bulletSpawnPos.rotation);
     }
 

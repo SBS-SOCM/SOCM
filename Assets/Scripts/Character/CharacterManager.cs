@@ -64,7 +64,7 @@ public partial class CharacterManager : MonoBehaviour
         willPowerText.text = Mathf.RoundToInt(willPower).ToString();
         willPowerImage.fillAmount = (willPower / 100.0f) * 0.75f;
         hpImage.fillAmount = (hp / 100.0f) * 0.75f;
-
+        if (willPower >= 100.0f) willPower = 100.0f;
 
         increaseWillPowerTime -= Time.deltaTime;
         if (increaseWillPowerTime <= 0.0f)

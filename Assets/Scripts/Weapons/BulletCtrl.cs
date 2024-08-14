@@ -23,6 +23,11 @@ public class BulletCtrl : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("Player"))
+        {
+            CharacterManager.instance.hp -= 30.0f;
+        }
+
         Destroy(this.gameObject);
     }
 }
