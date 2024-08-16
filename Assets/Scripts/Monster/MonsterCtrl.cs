@@ -59,6 +59,9 @@ public class MonsterCtrl : MonoBehaviour
     public float attackRange = 2.0f;
     public float attackTerm = 1.0f;
     private bool isAttacking = false;
+    public bool isLongRange = false;
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform bulletSpawnPos;
 
 
     private void Awake()
@@ -100,6 +103,9 @@ public class MonsterCtrl : MonoBehaviour
             }
             else canRandomMoveTime = 6.0f;
             
+        }else if (isSleeping)
+        {
+            CheckSound();
         }
         else
         {
@@ -169,20 +175,31 @@ public class MonsterCtrl : MonoBehaviour
     }
     IEnumerator Attack()
     {
-        Debug.Log("Called");
         isAttacking = true;
         float tempSpeed = nav.speed;
         nav.speed = 0.0f;
         _animator.SetBool("Walk", false);
         _animator.SetBool("Run", false);
-        _animator.SetTrigger("Attack");
-        yield return new WaitForSeconds(0.2f);
-
-        float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
-        if (targetDist <= 2.2f)
+        if (!isLongRange)
         {
-            CharacterManager.instance.hp -= 1;
+            _animator.SetTrigger("Attack");
+            yield return new WaitForSeconds(0.2f);
+
+            float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
+            if (targetDist <= 2.2f)
+            {
+                CharacterManager.instance.hp -= 1;
+            }
         }
+        else //Long Range Attack
+        {
+            _animator.SetTrigger("");
+            Vector3 dir = targetTr.transform.position - bulletSpawnPos.position; dir.y = 0f;
+            Quaternion rot = Quaternion.LookRotation(dir.normalized);
+            Instantiate(bulletPrefab, bulletSpawnPos.position, rot);
+            
+        }
+        
         yield return new WaitForSeconds(2.0f);
         nav.speed = tempSpeed;
         isAttacking = false;
@@ -272,9 +289,11 @@ public class MonsterCtrl : MonoBehaviour
     {
         float soundCheckRange;
         if (CharacterManager.instance.isSilence) soundCheckRange = 0.0f;
+        else if (isSleeping) soundCheckRange = soundRange / 2;
         else soundCheckRange = soundRange;
         if(isWarning || isPlayerChecked)
         {
+            isSleeping = false;
             soundCheckRange *= 1.3f;
         }
         RaycastHit hit;
