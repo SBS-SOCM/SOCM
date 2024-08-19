@@ -35,7 +35,7 @@ public partial class CharacterManager : MonoBehaviour
     [SerializeField] private Material characterMat;
     [SerializeField] private Material invisibleMat;
     [SerializeField] private GameObject characterGO;
-    
+     
 
     private void Awake()
     {

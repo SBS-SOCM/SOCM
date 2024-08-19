@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletCtrl : MonoBehaviour
+public class EnemyBulletCtrl : MonoBehaviour
 {
+    public int damage = 20;
     public float speed = 70.0f;
 
     private Rigidbody bulletRigid;
@@ -22,9 +23,9 @@ public class BulletCtrl : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Player"))
         {
-            other.GetComponent<MonsterCtrl>().monsterHP -= 1;
+            CharacterManager.instance.hp -= 30.0f;
         }
 
         Destroy(this.gameObject);

@@ -24,12 +24,12 @@ public class MonsterCtrl : MonoBehaviour
     public bool isSleeping = false;
     public bool canRandomMove = true;
     private bool isDie = false;
-    public float monsterHP = 100.0f;
+    public int monsterHP = 2;
     private bool isMoveing = false;
     public bool courseMove = false;
     private float courMoveTiem = 5.0f;
 
-    [SerializeField] private GameObject targetTr;
+    private Transform targetTr;
     [SerializeField] private float soundRange;
     [SerializeField] private float viewRange;
     [SerializeField] private Text stateText;
@@ -42,6 +42,7 @@ public class MonsterCtrl : MonoBehaviour
     public float Angle;
     private float normalAngle = 65.0f;
     public LayerMask targetMask;
+    public LayerMask allyMask;
     public LayerMask walllMask;
     public List<Transform> Enemies = new List<Transform>();
     public List<Transform> Allys = new List<Transform>();
@@ -68,6 +69,7 @@ public class MonsterCtrl : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         nav = GetComponent<NavMeshAgent>();
+        targetTr = GameObject.Find("Geometry").transform;
     }
 
     private void Update()
@@ -155,7 +157,7 @@ public class MonsterCtrl : MonoBehaviour
     }
     void CheckDie()
     {
-        if(monsterHP <= 0.0f && !isDie)
+        if(monsterHP <= 0 && !isDie)
         {
             isDie = true;
             nav.ResetPath();
@@ -167,7 +169,7 @@ public class MonsterCtrl : MonoBehaviour
     }
     void CheckAttack()
     {
-        float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
+        float targetDist = Vector3.Distance(targetTr.position, this.transform.position);
         if (targetDist <= attackRange && !isAttacking) //Attack
         {
             StartCoroutine(Attack());
@@ -185,7 +187,7 @@ public class MonsterCtrl : MonoBehaviour
             _animator.SetTrigger("Attack");
             yield return new WaitForSeconds(0.2f);
 
-            float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
+            float targetDist = Vector3.Distance(targetTr.position, this.transform.position);
             if (targetDist <= 2.2f)
             {
                 CharacterManager.instance.hp -= 1;
@@ -194,7 +196,7 @@ public class MonsterCtrl : MonoBehaviour
         else //Long Range Attack
         {
             _animator.SetTrigger("");
-            Vector3 dir = targetTr.transform.position - bulletSpawnPos.position; dir.y = 0f;
+            Vector3 dir = targetTr.position - bulletSpawnPos.position; dir.y = 0f;
             Quaternion rot = Quaternion.LookRotation(dir.normalized);
             Instantiate(bulletPrefab, bulletSpawnPos.position, rot);
             
@@ -297,18 +299,18 @@ public class MonsterCtrl : MonoBehaviour
             soundCheckRange *= 1.3f;
         }
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, targetTr.transform.position - transform.position, out hit))
+        if (Physics.Raycast(transform.position, targetTr.position - transform.position, out hit))
         {
             if(hit.transform.CompareTag("Wall"))
             {
                 soundCheckRange *= 0.1f;
             }
         }
-        float targetDist = Vector3.Distance(targetTr.transform.position, this.transform.position);
+        float targetDist = Vector3.Distance(targetTr.position, this.transform.position);
 
         if (targetDist <= soundCheckRange)
         {
-            nav.SetDestination(targetTr.transform.position);
+            nav.SetDestination(targetTr.position);
             if (!isPlayerChecked)
             {
                 isWarning = true;
@@ -354,6 +356,28 @@ public class MonsterCtrl : MonoBehaviour
             }
         }
 
+        Collider[] allyResults = new Collider[10];
+        var allySize = Physics.OverlapSphereNonAlloc(transform.position, checkViewRange, allyResults, allyMask);
+        for (int j = 0; j < allySize; ++j)
+        {
+            Transform dieAlly = allyResults[j].transform;
+            Vector3 dirToTarget = (dieAlly.position - transform.position).normalized;
+            if(Vector3.Angle(transform.forward, dirToTarget) < Angle / 2)
+            {
+                float distToTarget = Vector3.Distance(transform.position, dieAlly.position);
+                if(!Physics.Raycast(transform.position, dirToTarget,distToTarget, walllMask))
+                {
+                    if (dieAlly.GetComponent<MonsterCtrl>().isDie)
+                    {
+                        SpreadWarning();
+                    }
+                }
+            }
+        }
+
+
+
+
         // 3 State
         if (Enemies.Count > 0) //Player in View Range
         {
@@ -366,7 +390,7 @@ public class MonsterCtrl : MonoBehaviour
                 isPlayerChecked = true;
                 canRandomMove = false;
                 courseMove = false;
-                nav.SetDestination(targetTr.transform.position);
+                nav.SetDestination(targetTr.position);
                 _animator.SetBool("Walk", false);
                 _animator.SetBool("Run", true);
 
