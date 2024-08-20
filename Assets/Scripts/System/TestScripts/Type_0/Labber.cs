@@ -10,8 +10,11 @@ public class Labber : MonoBehaviour
 
     public Image gauge;
     public Image gaugeBackGround;
+    public Image darkBG;
 
     public GameObject[] traps;
+
+    public float holdingTime;
 
     public void InteractionOn()
     {
@@ -33,9 +36,21 @@ public class Labber : MonoBehaviour
         gauge.gameObject.SetActive(false);
         gaugeBackGround.gameObject.SetActive(false);
 
-        for (int i = 0; i < traps.Length; i++)
+        
+        // 주변 적에게 전달 (위치 유도)
+
+        // 주변 어둡게
+        darkBG.gameObject.SetActive(true);
+
+
+        float holdingTimeRemain = holdingTime;
+
+        while(holdingTimeRemain > 0)
         {
-            traps[i].GetComponent<GroundTrapTest>().TrapOff();
+            holdingTimeRemain -= Time.deltaTime;
+            yield return null;
         }
+
+        darkBG.gameObject.SetActive(false);
     }
 }

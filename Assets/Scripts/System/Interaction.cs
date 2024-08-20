@@ -8,12 +8,12 @@ public class Interaction : MonoBehaviour
 {
     public Inventory inventory;
     public float interactionDistance;
+    public float interactionAngle = 45f; // 상호작용 가능한 각도 (45도로 설정)
 
     Collider[] hits;
 
     public Image interactionImage;
 
-    
 
     private void Update()
     {
@@ -27,11 +27,17 @@ public class Interaction : MonoBehaviour
 
     public void SendInteraction()
     {
-        hits = Physics.OverlapSphere(Singleton.instance.player.transform.position, interactionDistance, 1<<9);
+        hits = Physics.OverlapSphere(Singleton.instance.player.transform.position, interactionDistance, 1 << 9);
 
         if (hits.Length > 0)
         {
-            ReceiveInteraction(hits[0]);
+            Collider validHit = GetValidHit(hits);
+            if (validHit != null)
+            {
+                Debug.Log("test");
+
+                ReceiveInteraction(validHit);
+            }
         }
     }
 
@@ -39,7 +45,9 @@ public class Interaction : MonoBehaviour
     {
         hits = Physics.OverlapSphere(Singleton.instance.player.transform.position, interactionDistance, 1 << 9);
 
-        if (hits.Length > 0)
+        Collider validHit = GetValidHit(hits);
+
+        if (validHit != null)
         {
             interactionImage.gameObject.SetActive(true);
         }
@@ -53,7 +61,7 @@ public class Interaction : MonoBehaviour
     {
         string interactionName = interactionObject.name;
 
-        Debug.Log("상호작용 : "+ interactionName);
+        Debug.Log("상호작용 : " + interactionName);
 
         switch (interactionName)
         {
@@ -75,6 +83,26 @@ public class Interaction : MonoBehaviour
             case "Labber":
                 interactionObject.GetComponent<Labber>().InteractionOn();
                 break;
+
+            case "Door":
+                interactionObject.GetComponent<DoorTest>().Open();
+                break;
         }
+    }
+
+    private Collider GetValidHit(Collider[] hitsColl)
+    {
+        foreach (var hit in hitsColl)
+        {
+            Vector3 directionToTarget = (hit.transform.position - Singleton.instance.player.transform.position).normalized;
+            float angle = Vector3.Angle(Singleton.instance.player.transform.forward, directionToTarget);
+
+            if (angle < interactionAngle)
+            {
+                return hit;
+            }
+        }
+
+        return null;
     }
 }
