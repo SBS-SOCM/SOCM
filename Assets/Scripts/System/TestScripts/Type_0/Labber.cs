@@ -16,6 +16,8 @@ public class Labber : MonoBehaviour
 
     public float holdingTime;
 
+    public float findEnemyRange;
+
     public void InteractionOn()
     {
         StartCoroutine(Interaction());
@@ -42,7 +44,11 @@ public class Labber : MonoBehaviour
         // 주변 어둡게
         darkBG.gameObject.SetActive(true);
 
+        // 주변 ENPC 시야 감소
+        Collider[] hits = FindEnemy();
+        DecreaseSight(hits);
 
+        // 분전반 복구에 걸리는 시간 or Event
         float holdingTimeRemain = holdingTime;
 
         while(holdingTimeRemain > 0)
@@ -51,6 +57,41 @@ public class Labber : MonoBehaviour
             yield return null;
         }
 
+        // 분전반 복구
         darkBG.gameObject.SetActive(false);
+
+        // 주변 ENPC 시야 복구
+        rollbackSight(hits);
+    }
+
+    public Collider[] FindEnemy()
+    {
+        Collider[] hits;
+
+        hits = Physics.OverlapSphere(Singleton.instance.player.transform.position, findEnemyRange, LayerMask.NameToLayer("Enemy"));
+
+        return(hits);
+    }
+
+    public void DecreaseSight(Collider[] hits)
+    {
+        foreach (Collider hit in hits)
+        {
+            if (hit != null)
+            {
+                // hit.GetComponent<MonsterCtrl>().SetViewRange();
+            }
+        }
+    }
+
+    public void rollbackSight(Collider[] hits)
+    {
+        foreach (Collider hit in hits)
+        {
+            if (hit != null)
+            {
+                // hit.GetComponent<MonsterCtrl>().SetViewRange();
+            }
+        }
     }
 }
