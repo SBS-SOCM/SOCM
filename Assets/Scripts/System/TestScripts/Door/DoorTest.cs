@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
 public class DoorTest : MonoBehaviour
 {
+    public float rootY;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        rootY = transform.rotation.eulerAngles.y;
     }
 
     // Update is called once per frame
@@ -18,20 +20,16 @@ public class DoorTest : MonoBehaviour
 
     public void Open()
     {
-        if (transform.GetChild(0).gameObject.activeSelf)
+        if (transform.rotation.eulerAngles.y == rootY)
         {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                transform.GetChild(i).gameObject.SetActive(false);
-            }
+            
+            transform.DORotate(new Vector3(0, rootY + 120, 0), 1f);
+            // transform.GetChild(i).gameObject.SetActive(false);
         }
 
         else
         {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                transform.GetChild(i).gameObject.SetActive(true);
-            }
+            transform.DORotate(new Vector3(0, rootY, 0), 1f);
         }
         
     }

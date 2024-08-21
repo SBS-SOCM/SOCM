@@ -80,6 +80,7 @@ public class Labber : MonoBehaviour
             if (hit != null)
             {
                 // hit.GetComponent<MonsterCtrl>().SetViewRange();
+                // hit.GetComponent<MonsterCtrl>().isWarning = true;
             }
         }
     }

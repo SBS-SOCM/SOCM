@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public bool isLight;
+
 
     public void ExitGame()
     {
