@@ -105,7 +105,7 @@ namespace StarterAssets
         private int _animIDY;
 
         private float footSoundTerm = 0.5f;
-        private bool isProne = false;
+        public static bool isProne = false;
 
 
 #if ENABLE_INPUT_SYSTEM 

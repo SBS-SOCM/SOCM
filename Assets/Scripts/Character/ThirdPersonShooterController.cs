@@ -17,6 +17,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     private float fireTerm = 0.5f;
     private StarterAssets.StarterAssetsInputs starterAssetsInputs;
 
+    public bool isForceAim;
+
     private void Awake()
     {
         starterAssetsInputs = GetComponent<StarterAssets.StarterAssetsInputs>();
@@ -25,6 +27,11 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Update()
     {
+        if (isForceAim)
+        {
+            starterAssetsInputs.aim = true;
+        }
+
         fireTerm -= Time.deltaTime;
         if (starterAssetsInputs.aim && CharacterManager.instance.hp > 0)
         {
@@ -44,7 +51,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
         AimIK();
 
-        if(Input.GetMouseButtonDown(0) && fireTerm <= 0.0f && starterAssetsInputs.aim) Shoot();
+        if(Input.GetMouseButtonDown(0) && fireTerm <= 0.0f && starterAssetsInputs.aim) StartCoroutine(Shoot());
     }
     private void AimIK()
     {
@@ -55,11 +62,20 @@ public class ThirdPersonShooterController : MonoBehaviour
             debugTransform.position = raycastHit.point;
         }
     }
-    private void Shoot()
+    /*private void Shoot()
     {
         fireTerm = 0.5f;
         audioSource.PlayOneShot(fireSound);
         Instantiate(bulletGO, bulletSpawnPos.position, bulletSpawnPos.rotation);
+    }*/
+    private IEnumerator Shoot()
+    {
+        CharacterManager.instance.isFire = true;
+        fireTerm = 0.5f;
+        audioSource.PlayOneShot(fireSound);
+        Instantiate(bulletGO, bulletSpawnPos.position, bulletSpawnPos.rotation);
+        yield return new WaitForSeconds(0.1f);
+        CharacterManager.instance.isFire = false;
     }
 
 }

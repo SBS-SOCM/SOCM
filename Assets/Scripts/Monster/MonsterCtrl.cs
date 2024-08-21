@@ -46,15 +46,16 @@ public class MonsterCtrl : MonoBehaviour
     public LayerMask walllMask;
     public List<Transform> Enemies = new List<Transform>();
     public List<Transform> Allys = new List<Transform>();
-    private StarterAssetsInputs _input;
     public float notInViewTime = 3.0f;
     private float playerChaseTime = 0.5f;
+    
 
 
     //Check Enemy
     public float enemyCheckRange = 30.0f;
     public LayerMask enemyMask;
     private float outRangeTime = 5.0f;
+    private float playerY = 1.0f;
 
     //Battle
     public float attackRange = 2.0f;
@@ -78,12 +79,17 @@ public class MonsterCtrl : MonoBehaviour
 
         if (isWarning || isPlayerChecked) Angle = normalAngle * 2f;
         else Angle = normalAngle;
-        Debug.DrawRay(transform.position, Vector3.forward, Color.red, 10.5f);
+
+        if (ThirdPersonController.isProne) playerY = 0.2f;
+        else playerY = 1.0f;
 
         //Ontrigger로 player가 들어왔을떄만 실행 -> 최적화
         if (!isSleeping && !isDie && !isAttacking)
         {
-            CheckSound();
+            if(CharacterManager.instance.isMoving)
+            {
+                CheckSound();
+            }
             CheckView();
             CheckState();
             if (!isWarning && !isPlayerChecked)
@@ -292,6 +298,7 @@ public class MonsterCtrl : MonoBehaviour
         float soundCheckRange;
         if (CharacterManager.instance.isSilence) soundCheckRange = 0.0f;
         else if (isSleeping) soundCheckRange = soundRange / 2;
+        else if (CharacterManager.instance.isFire) soundCheckRange = soundRange * 3.0f;
         else soundCheckRange = soundRange;
         if(isWarning || isPlayerChecked)
         {
@@ -299,7 +306,9 @@ public class MonsterCtrl : MonoBehaviour
             soundCheckRange *= 1.3f;
         }
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, targetTr.position - transform.position, out hit))
+        if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z),
+            new Vector3(targetTr.position.x, targetTr.position.y + playerY, targetTr.position.z) - new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z)
+            , out hit))
         {
             if(hit.transform.CompareTag("Wall"))
             {
@@ -343,15 +352,22 @@ public class MonsterCtrl : MonoBehaviour
 
         for (int i = 0; i < size; ++i)
         {
-            Transform enemy = results[i].transform;
+            RaycastHit hit;
 
+            Transform enemy = results[i].transform;
             Vector3 dirToTarget = (enemy.position - transform.position).normalized;
             if (Vector3.Angle(transform.forward, dirToTarget) < Angle / 2)
             {
                 float dstToTarget = Vector3.Distance(transform.position, enemy.position);
-                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, walllMask)) 
+                if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z),
+            new Vector3(targetTr.position.x, targetTr.position.y + playerY, targetTr.position.z) - new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z)
+            , out hit))
                 {
-                    Enemies.Add(enemy);
+                    if(hit.transform.tag == "Player")
+                    {
+                        Enemies.Add(enemy);
+                    }
+                    
                 }
             }
         }
@@ -422,26 +438,4 @@ public class MonsterCtrl : MonoBehaviour
             
         }
     }
-
-    /*private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, soundRange);
-
-
-        Handles.DrawWireArc(transform.position, Vector3.up, Vector3.forward, 360, viewRange);
-        float angle = -Angle * 0.5f + transform.eulerAngles.y;
-        float angle2 = Angle * 0.5f + transform.eulerAngles.y;
-        Vector3 AngleLeft = new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
-        Vector3 AngleRight = new Vector3(Mathf.Sin(angle2 * Mathf.Deg2Rad), 0, Mathf.Cos(angle2 * Mathf.Deg2Rad)); // 오른쪽
-
-        Handles.color = Color.green;
-
-        Handles.DrawLine(transform.position, transform.position + AngleLeft * viewRange);
-        Handles.DrawLine(transform.position, transform.position + AngleRight * viewRange);
-        Handles.color = Color.red;
-        foreach (Transform enemy in Enemies)
-        {
-            Handles.DrawLine(transform.position, enemy.position);
-        }
-    }*/
 }

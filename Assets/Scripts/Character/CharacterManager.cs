@@ -1,8 +1,11 @@
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 public partial class CharacterManager : MonoBehaviour
 {
@@ -17,8 +20,10 @@ public partial class CharacterManager : MonoBehaviour
     private float visibleReturnTime = 2.0f;
     private float increaseWillPowerTime = 60.0f;
     public bool isCharacterDie = false;
+    private StarterAssetsInputs _input;
+    public bool isMoving = false;
+    public bool isFire = false;
 
- 
     public List<Transform> Enemies = new List<Transform>();
     public LayerMask targetMask; // 적을 검색하기 위한 레이어마스크
     public LayerMask walllMask; // 장애물 마스크
@@ -40,23 +45,24 @@ public partial class CharacterManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        _input = GetComponent<StarterAssetsInputs>();
     }
 
     private void Update()
     {
         if (hp <= 0) CharacterDie();
 
-        if (Input.GetKeyDown(KeyCode.R) && isVisible && visibleSKillCool <= 0.0f)
+        if (UnityEngine.Input.GetKeyDown(KeyCode.R) && isVisible && visibleSKillCool <= 0.0f)
         {
             OffVisible();
         }
-        if (Input.GetKeyDown(KeyCode.R) && !isVisible && visibleReturnTime <= 0.0f)
+        if (UnityEngine.Input.GetKeyDown(KeyCode.R) && !isVisible && visibleReturnTime <= 0.0f)
         {
             visibleSKillCool = 20.0f;
             OnVisible();
         }
 
-
+        CharacterMoveCheck();
         CheckEnemy();
         SkillUiUpdate();
         VisibleModeChheck();
@@ -72,6 +78,15 @@ public partial class CharacterManager : MonoBehaviour
             willPower += 10.0f;
             increaseWillPowerTime = 60.0f;
         }
+    }
+    private void CharacterMoveCheck()
+    {
+
+        if (_input.move == Vector2.zero)
+        {
+            isMoving = false;
+        }
+        else isMoving = true;
     }
     private void CharacterDie()
     {
