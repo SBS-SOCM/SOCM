@@ -11,6 +11,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private GameObject bulletGO;
     [SerializeField] private Transform bulletSpawnPos;
     [SerializeField] private AudioClip fireSound;
+    [SerializeField] private Transform gunFireSpawnPos;
+    [SerializeField] private GameObject gunFire;
 
     private AudioSource audioSource;
     private float aimingTime = 5.0f;
@@ -18,6 +20,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     private StarterAssets.StarterAssetsInputs starterAssetsInputs;
 
     public bool isForceAim;
+
+    Vector3 mouseWorldPositon;
 
     private void Awake()
     {
@@ -27,6 +31,17 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Update()
     {
+        mouseWorldPositon = Vector3.zero;
+        Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+        if(Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
+        {
+            debugTransform.position = raycastHit.point;
+            mouseWorldPositon = raycastHit.point;
+        }
+
+
+
         if (isForceAim)
         {
             starterAssetsInputs.aim = true;
@@ -49,7 +64,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             aimVirtualCamera.gameObject.SetActive(false);
             aimingTime = 5.0f;
         }
-        AimIK();
+        //AimIK();
 
         if(Input.GetMouseButtonDown(0) && fireTerm <= 0.0f && starterAssetsInputs.aim) StartCoroutine(Shoot());
     }
@@ -62,18 +77,29 @@ public class ThirdPersonShooterController : MonoBehaviour
             debugTransform.position = raycastHit.point;
         }
     }
-    /*private void Shoot()
-    {
-        fireTerm = 0.5f;
-        audioSource.PlayOneShot(fireSound);
-        Instantiate(bulletGO, bulletSpawnPos.position, bulletSpawnPos.rotation);
-    }*/
     private IEnumerator Shoot()
     {
         CharacterManager.instance.isFire = true;
         fireTerm = 0.5f;
         audioSource.PlayOneShot(fireSound);
-        Instantiate(bulletGO, bulletSpawnPos.position, bulletSpawnPos.rotation);
+        Instantiate(gunFire, gunFireSpawnPos.position, Quaternion.identity);
+
+        Vector3 aimDir = (mouseWorldPositon - bulletSpawnPos.position).normalized;
+        //GameObject bullet =  Instantiate(bulletGO, bulletSpawnPos.position, bulletSpawnPos.rotation);
+        GameObject bullet = Instantiate(bulletGO, bulletSpawnPos.position, Quaternion.LookRotation(aimDir, Vector3.up));
+        bullet.GetComponent<BulletRayNew>().SetUp(mouseWorldPositon);
+
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f))
+        {
+            if (raycastHit.collider.gameObject.CompareTag("Enemy"))
+            {
+                raycastHit.collider.gameObject.GetComponent<MonsterCtrl>().monsterHP -= 1;
+            }
+        }
+
+
         yield return new WaitForSeconds(0.1f);
         CharacterManager.instance.isFire = false;
     }

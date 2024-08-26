@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class BulletRay : MonoBehaviour
 {
+    [SerializeField] GameObject bulletHitPrefab;
+
     public float speed = 70.0f;
     public float rayDist = 5f;
 
@@ -39,8 +41,8 @@ public class BulletRay : MonoBehaviour
             {
                 hit.transform.GetComponent<MonsterCtrl>().monsterHP -= 1;
             }
+            Instantiate(bulletHitPrefab, transform.position,Quaternion.identity);
             Destroy(this.gameObject);
-            
         }
 
     }

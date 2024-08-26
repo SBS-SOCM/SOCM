@@ -179,7 +179,7 @@ namespace StarterAssets
                 if (!CharacterManager.instance.isSilence) MoveSpeed = basicSpeed;
                 else MoveSpeed = silenceSpeed;
                 //if (_input.aim) MoveSpeed = silenceSpeed;
-                if (CharacterManager.instance.willPower <= 30.0f) MoveSpeed *= 0.7f;
+                if (CharacterManager.instance.willPower <= 30.0f) MoveSpeed *= 0.7f; 
             }
             
 

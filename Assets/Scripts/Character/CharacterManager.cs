@@ -14,9 +14,10 @@ public partial class CharacterManager : MonoBehaviour
     public float hp = 100.0f;
     public bool isVisible = true;
     public bool isSilence = false;
+    public bool isUsingVisibleSkill = false;
     private float visibleModeTime = 10.0f;
     public float willPower = 100.0f;
-    private float visibleSKillCool = 5.0f;
+    private float visibleSKillCool = 1.0f;
     private float visibleReturnTime = 2.0f;
     private float increaseWillPowerTime = 60.0f;
     public bool isCharacterDie = false;
@@ -52,11 +53,12 @@ public partial class CharacterManager : MonoBehaviour
     {
         if (hp <= 0) CharacterDie();
 
-        if (UnityEngine.Input.GetKeyDown(KeyCode.R) && isVisible && visibleSKillCool <= 0.0f)
+        //스킬 사용
+        if (UnityEngine.Input.GetKeyDown(KeyCode.R) && isUsingVisibleSkill && visibleSKillCool <= 0.0f)
         {
             OffVisible();
         }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.R) && !isVisible && visibleReturnTime <= 0.0f)
+        if (UnityEngine.Input.GetKeyDown(KeyCode.R) && isUsingVisibleSkill && visibleReturnTime <= 0.0f)
         {
             visibleSKillCool = 20.0f;
             OnVisible();
@@ -65,7 +67,7 @@ public partial class CharacterManager : MonoBehaviour
         CharacterMoveCheck();
         CheckEnemy();
         SkillUiUpdate();
-        VisibleModeChheck();
+        VisibleModeCheck();
 
         willPowerText.text = Mathf.RoundToInt(willPower).ToString();
         willPowerImage.fillAmount = (willPower / 100.0f) * 0.75f;
@@ -94,11 +96,13 @@ public partial class CharacterManager : MonoBehaviour
     }
     public void OnVisible()
     {
-        isVisible = true;
+        isUsingVisibleSkill = false;
+        isUsingVisibleSkill = true;
     }
     public void OffVisible()
     {
         isVisible = false;
+        isUsingVisibleSkill = true;
         visibleReturnTime = 2.0f;
     }
     private void SkillUiUpdate()
@@ -107,7 +111,7 @@ public partial class CharacterManager : MonoBehaviour
         if (visibleSKillCool <= 0.0f) visibleSKillCool = 0.0f;
         visibleSkillImage.fillAmount = visibleSKillCool/20.0f;
     }
-    private void VisibleModeChheck()
+    private void VisibleModeCheck()
     {
         visibleReturnTime -= Time.deltaTime;
         if (!isVisible)
@@ -117,8 +121,8 @@ public partial class CharacterManager : MonoBehaviour
         }
         else visibleModeTime = 10.0f;
 
-        if (isVisible) characterGO.GetComponent<SkinnedMeshRenderer>().material = characterMat;
-        else characterGO.GetComponent<SkinnedMeshRenderer>().material = invisibleMat;
+        if (isUsingVisibleSkill) characterGO.GetComponent<SkinnedMeshRenderer>().material = characterMat;
+        else if (isUsingVisibleSkill) characterGO.GetComponent<SkinnedMeshRenderer>().material = invisibleMat;
     }
 
     private void CheckEnemy()
@@ -148,7 +152,20 @@ public partial class CharacterManager : MonoBehaviour
         {
             willPower -= Time.deltaTime * Enemies.Count * 0.5f;
         }
-
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Bush"))
+        {
+            isVisible = false;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Bush"))
+        {
+            isVisible = true;
+        }
     }
 
 
