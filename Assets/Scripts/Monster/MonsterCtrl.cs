@@ -190,12 +190,14 @@ public class MonsterCtrl : MonoBehaviour
         _animator.SetBool("Run", false);
         if (!isLongRange)
         {
+            transform.LookAt(targetTr.transform.position);
             _animator.SetTrigger("Attack");
             yield return new WaitForSeconds(0.2f);
 
             float targetDist = Vector3.Distance(targetTr.position, this.transform.position);
             if (targetDist <= 2.2f)
             {
+                CharacterManager.instance.InstantiateBloodVfx();
                 CharacterManager.instance.hp -= 1;
             }
         }

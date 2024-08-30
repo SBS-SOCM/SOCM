@@ -41,7 +41,8 @@ public partial class CharacterManager : MonoBehaviour
     [SerializeField] private Material characterMat;
     [SerializeField] private Material invisibleMat;
     [SerializeField] private GameObject characterGO;
-     
+    [SerializeField] private Transform bloodVfx;
+    [SerializeField] private Transform bloodPos;
 
     private void Awake()
     {
@@ -80,6 +81,10 @@ public partial class CharacterManager : MonoBehaviour
             willPower += 10.0f;
             increaseWillPowerTime = 60.0f;
         }
+    }
+    public void InstantiateBloodVfx()
+    {
+        Instantiate(bloodVfx, bloodPos.position, Quaternion.identity);
     }
     private void CharacterMoveCheck()
     {

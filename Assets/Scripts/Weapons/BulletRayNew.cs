@@ -5,7 +5,6 @@ using UnityEngine;
 public class BulletRayNew : MonoBehaviour
 {
     [SerializeField] private Transform vfxHit;
-
     public float moveSpeed = 200.0f;
 
     private Vector3 targetPosition;
@@ -24,8 +23,7 @@ public class BulletRayNew : MonoBehaviour
 
         if(distanceBefore < distanceAfter)
         {
-            Instantiate(vfxHit, targetPosition, Quaternion.identity);
-            //transform.Find("Trail").SetParent(null);
+            //Instantiate(vfxHit, targetPosition, Quaternion.identity);
             Destroy(gameObject);
         }
 

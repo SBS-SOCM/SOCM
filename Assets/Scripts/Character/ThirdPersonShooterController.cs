@@ -13,6 +13,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private AudioClip fireSound;
     [SerializeField] private Transform gunFireSpawnPos;
     [SerializeField] private GameObject gunFire;
+    [SerializeField] private Transform vfxBlood;
+    [SerializeField] private Transform vfxGroundHit;
 
     private AudioSource audioSource;
     private float aimingTime = 5.0f;
@@ -96,6 +98,11 @@ public class ThirdPersonShooterController : MonoBehaviour
             if (raycastHit.collider.gameObject.CompareTag("Enemy"))
             {
                 raycastHit.collider.gameObject.GetComponent<MonsterCtrl>().monsterHP -= 1;
+                Instantiate(vfxBlood,raycastHit.point, Quaternion.identity);
+            }
+            if (raycastHit.collider.gameObject.CompareTag("Ground"))
+            {
+                Instantiate(vfxGroundHit, raycastHit.point, Quaternion.identity);
             }
         }
 
