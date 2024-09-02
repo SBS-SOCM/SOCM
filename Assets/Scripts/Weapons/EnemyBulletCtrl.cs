@@ -1,0 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnemyBulletCtrl : MonoBehaviour
+{
+    public int damage = 20;
+    public float speed = 70.0f;
+
+    private Rigidbody bulletRigid;
+
+    private void Awake()
+    {
+        bulletRigid = GetComponent<Rigidbody>();
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        bulletRigid.velocity = transform.forward * speed;
+
+        Destroy(gameObject, 4.0f);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            CharacterManager.instance.hp -= 30.0f;
+        }
+
+        Destroy(this.gameObject);
+    }
+}
