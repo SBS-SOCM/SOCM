@@ -190,12 +190,14 @@ public class MonsterCtrl : MonoBehaviour
         _animator.SetBool("Run", false);
         if (!isLongRange)
         {
+            transform.LookAt(targetTr.transform.position);
             _animator.SetTrigger("Attack");
             yield return new WaitForSeconds(0.2f);
 
             float targetDist = Vector3.Distance(targetTr.position, this.transform.position);
             if (targetDist <= 2.2f)
             {
+                CharacterManager.instance.InstantiateBloodVfx();
                 CharacterManager.instance.hp -= 1;
             }
         }
@@ -298,9 +300,9 @@ public class MonsterCtrl : MonoBehaviour
         float soundCheckRange;
         if (CharacterManager.instance.isSilence) soundCheckRange = 0.0f;
         else if (isSleeping) soundCheckRange = soundRange / 2;
-        else if (CharacterManager.instance.isFire) soundCheckRange = soundRange * 3.0f;
         else soundCheckRange = soundRange;
-        if(isWarning || isPlayerChecked)
+        if (CharacterManager.instance.isFire) soundCheckRange = 30.0f;
+        if (isWarning || isPlayerChecked)
         {
             isSleeping = false;
             soundCheckRange *= 1.3f;
