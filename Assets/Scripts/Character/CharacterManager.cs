@@ -41,7 +41,8 @@ public partial class CharacterManager : MonoBehaviour
     [SerializeField] private Material characterMat;
     [SerializeField] private Material invisibleMat;
     [SerializeField] private GameObject characterGO;
-     
+    [SerializeField] private Transform bloodVfx;
+    [SerializeField] private Transform bloodPos;
 
     private void Awake()
     {
@@ -54,7 +55,7 @@ public partial class CharacterManager : MonoBehaviour
         if (hp <= 0) CharacterDie();
 
         //스킬 사용
-        if (UnityEngine.Input.GetKeyDown(KeyCode.R) && isUsingVisibleSkill && visibleSKillCool <= 0.0f)
+        if (UnityEngine.Input.GetKeyDown(KeyCode.R) && !isUsingVisibleSkill && visibleSKillCool <= 0.0f)
         {
             OffVisible();
         }
@@ -81,6 +82,10 @@ public partial class CharacterManager : MonoBehaviour
             increaseWillPowerTime = 60.0f;
         }
     }
+    public void InstantiateBloodVfx()
+    {
+        Instantiate(bloodVfx, bloodPos.position, Quaternion.identity);
+    }
     private void CharacterMoveCheck()
     {
 
@@ -96,8 +101,8 @@ public partial class CharacterManager : MonoBehaviour
     }
     public void OnVisible()
     {
+        isVisible = true;
         isUsingVisibleSkill = false;
-        isUsingVisibleSkill = true;
     }
     public void OffVisible()
     {
@@ -121,7 +126,7 @@ public partial class CharacterManager : MonoBehaviour
         }
         else visibleModeTime = 10.0f;
 
-        if (isUsingVisibleSkill) characterGO.GetComponent<SkinnedMeshRenderer>().material = characterMat;
+        if (!isUsingVisibleSkill) characterGO.GetComponent<SkinnedMeshRenderer>().material = characterMat;
         else if (isUsingVisibleSkill) characterGO.GetComponent<SkinnedMeshRenderer>().material = invisibleMat;
     }
 

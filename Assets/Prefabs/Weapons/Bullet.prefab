@@ -160,7 +160,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7889268153063928536}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d2700fa8bf01a24cb7e0a15627417b3, type: 3}
   m_Name: 
@@ -173,10 +173,10 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7889268153063928536}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ab0d150630e992419add6d25b610b0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   vfxHit: {fileID: 3413910182350136723, guid: 2b5c502fa78d34342934f44bdfecb985, type: 3}
-  moveSpeed: 500
+  moveSpeed: 2000
