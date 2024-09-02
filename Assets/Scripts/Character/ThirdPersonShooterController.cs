@@ -81,6 +81,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     }
     private IEnumerator Shoot()
     {
+        
         CharacterManager.instance.isFire = true;
         fireTerm = 0.5f;
         audioSource.PlayOneShot(fireSound);
@@ -89,10 +90,10 @@ public class ThirdPersonShooterController : MonoBehaviour
         Vector3 aimDir = (mouseWorldPositon - bulletSpawnPos.position).normalized;
         //GameObject bullet =  Instantiate(bulletGO, bulletSpawnPos.position, bulletSpawnPos.rotation);
         GameObject bullet = Instantiate(bulletGO, bulletSpawnPos.position, Quaternion.LookRotation(aimDir, Vector3.up));
-        bullet.GetComponent<BulletRayNew>().SetUp(mouseWorldPositon);
+        //bullet.GetComponent<BulletRay>().SetUp(mouseWorldPositon);
 
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        /*Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f))
         {
             if (raycastHit.collider.gameObject.CompareTag("Enemy"))
@@ -104,7 +105,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             {
                 Instantiate(vfxGroundHit, raycastHit.point, Quaternion.identity);
             }
-        }
+        }*/
 
 
         yield return new WaitForSeconds(0.1f);

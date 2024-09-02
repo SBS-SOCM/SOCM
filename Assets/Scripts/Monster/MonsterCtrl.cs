@@ -56,6 +56,7 @@ public class MonsterCtrl : MonoBehaviour
     public LayerMask enemyMask;
     private float outRangeTime = 5.0f;
     private float playerY = 1.0f;
+    private float gunFireCheckRange = 30.0f;
 
     //Battle
     public float attackRange = 2.0f;
@@ -301,7 +302,7 @@ public class MonsterCtrl : MonoBehaviour
         if (CharacterManager.instance.isSilence) soundCheckRange = 0.0f;
         else if (isSleeping) soundCheckRange = soundRange / 2;
         else soundCheckRange = soundRange;
-        if (CharacterManager.instance.isFire) soundCheckRange = 30.0f;
+        if (CharacterManager.instance.isFire) soundCheckRange = gunFireCheckRange;
         if (isWarning || isPlayerChecked)
         {
             isSleeping = false;
@@ -312,7 +313,7 @@ public class MonsterCtrl : MonoBehaviour
             new Vector3(targetTr.position.x, targetTr.position.y + playerY, targetTr.position.z) - new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z)
             , out hit))
         {
-            if(hit.transform.CompareTag("Wall"))
+            if(hit.transform.CompareTag("Wall") && soundCheckRange!= gunFireCheckRange)
             {
                 soundCheckRange *= 0.1f;
             }
