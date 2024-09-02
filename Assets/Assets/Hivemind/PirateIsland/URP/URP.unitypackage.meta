@@ -1,5 +1,10 @@
 fileFormatVersion: 2
-guid: 5695ae8bafce1bc4dbbf6ae72334ea16
+<<<<<<<< HEAD:Assets/Another/Test.meta
+guid: 13974c6b5a2129c4c8a9abc9e117e166
+folderAsset: yes
+========
+guid: 4c8146580e96ec540b9bf1f4b3df636b
+>>>>>>>> Monkey:Assets/Hivemind/PirateIsland/URP/URP.unitypackage.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
