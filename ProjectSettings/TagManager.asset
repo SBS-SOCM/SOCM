@@ -8,11 +8,12 @@ TagManager:
   - Wall
   - Enemy
   - Bush
+  - Ground
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - Player

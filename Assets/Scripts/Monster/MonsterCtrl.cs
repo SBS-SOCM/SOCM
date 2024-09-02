@@ -300,9 +300,9 @@ public class MonsterCtrl : MonoBehaviour
         float soundCheckRange;
         if (CharacterManager.instance.isSilence) soundCheckRange = 0.0f;
         else if (isSleeping) soundCheckRange = soundRange / 2;
-        else if (CharacterManager.instance.isFire) soundCheckRange = soundRange * 3.0f;
         else soundCheckRange = soundRange;
-        if(isWarning || isPlayerChecked)
+        if (CharacterManager.instance.isFire) soundCheckRange = 30.0f;
+        if (isWarning || isPlayerChecked)
         {
             isSleeping = false;
             soundCheckRange *= 1.3f;

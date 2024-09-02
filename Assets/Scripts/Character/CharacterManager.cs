@@ -55,7 +55,7 @@ public partial class CharacterManager : MonoBehaviour
         if (hp <= 0) CharacterDie();
 
         //스킬 사용
-        if (UnityEngine.Input.GetKeyDown(KeyCode.R) && isUsingVisibleSkill && visibleSKillCool <= 0.0f)
+        if (UnityEngine.Input.GetKeyDown(KeyCode.R) && !isUsingVisibleSkill && visibleSKillCool <= 0.0f)
         {
             OffVisible();
         }
@@ -101,8 +101,8 @@ public partial class CharacterManager : MonoBehaviour
     }
     public void OnVisible()
     {
+        isVisible = true;
         isUsingVisibleSkill = false;
-        isUsingVisibleSkill = true;
     }
     public void OffVisible()
     {
@@ -126,7 +126,7 @@ public partial class CharacterManager : MonoBehaviour
         }
         else visibleModeTime = 10.0f;
 
-        if (isUsingVisibleSkill) characterGO.GetComponent<SkinnedMeshRenderer>().material = characterMat;
+        if (!isUsingVisibleSkill) characterGO.GetComponent<SkinnedMeshRenderer>().material = characterMat;
         else if (isUsingVisibleSkill) characterGO.GetComponent<SkinnedMeshRenderer>().material = invisibleMat;
     }
 
