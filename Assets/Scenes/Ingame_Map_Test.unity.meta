@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/Ingame_Map_Test.unity.meta
 guid: ddc1d07417e5b0c4dab622b12f634171
+========
+guid: 94f2c536cb5d1e847992819e86561fde
+>>>>>>>> Monkey:Assets/Scenes/TestScene.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

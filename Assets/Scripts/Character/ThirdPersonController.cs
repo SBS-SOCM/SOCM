@@ -104,6 +104,9 @@ namespace StarterAssets
         private int _animIDX;
         private int _animIDY;
 
+        private float footSoundTerm = 0.5f;
+        public static bool isProne = false;
+
 
 #if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
@@ -163,17 +166,24 @@ namespace StarterAssets
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
+            footSoundTerm -= Time.deltaTime;
 
             CharacterDie();
-            JumpAndGravity();
-            GroundedCheck();
-            Move();
+            if (!isDie)
+            {
+                //JumpAndGravity();
+                GroundedCheck();
+                if (Input.GetKeyDown(KeyCode.Space)) Prone();
+                if(!isProne) Move();
+                //if Character in Silence mode
+                if (!CharacterManager.instance.isSilence) MoveSpeed = basicSpeed;
+                else MoveSpeed = silenceSpeed;
+                //if (_input.aim) MoveSpeed = silenceSpeed;
+                if (CharacterManager.instance.willPower <= 30.0f) MoveSpeed *= 0.7f; 
+            }
+            
 
-            //if Character in Silence mode
-            if (!CharacterManager.instance.isSilence) MoveSpeed = basicSpeed;
-            else MoveSpeed = silenceSpeed;
-            //if (_input.aim) MoveSpeed = silenceSpeed;
-            if (CharacterManager.instance.willPower <= 30.0f) MoveSpeed *= 0.7f;
+            
         }
 
         private void LateUpdate()
@@ -191,13 +201,28 @@ namespace StarterAssets
             _animIDX = Animator.StringToHash("X");
             _animIDY = Animator.StringToHash("Y");
         }
+        private bool isDie = false;
         private void CharacterDie()
         {
-            if (CharacterManager.instance.isCharacterDie)
+            if (CharacterManager.instance.isCharacterDie && !isDie)
             {
+                isDie = true;
                 _animator.SetTrigger("Die");
             }
             
+        }
+        private void Prone()
+        {
+            if (isProne)
+            {
+                _animator.SetBool("Prone", false);
+                isProne = false;
+            }
+            else
+            {
+                _animator.SetBool("Prone", true);
+                isProne = true;
+            }
         }
         private void GroundedCheck()
         {
@@ -271,6 +296,15 @@ namespace StarterAssets
             {
                 _speed = targetSpeed;
             }
+            if(_speed >= 3.0f)
+            {
+                if (FootstepAudioClips.Length > 0 && !CharacterManager.instance.isSilence && footSoundTerm <= 0.0f)
+                {
+                    footSoundTerm = 0.5f;
+                    var index = Random.Range(0, FootstepAudioClips.Length);
+                    AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume);
+                }
+            }
 
             _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
             if (_animationBlend < 0.01f) _animationBlend = 0f;
@@ -292,16 +326,12 @@ namespace StarterAssets
             // if there is a move input rotate player when the player is moving
 
             //추후 Alt 누를시 화면만 이동하도록 수정 // 캐릭터 몸체 이동 x 
-            if (!Input.GetKeyDown(KeyCode.LeftAlt))
+            if (!Input.GetKey(KeyCode.LeftAlt) && !isProne)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   _mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
-
-                // rotate to face input direction relative to camera position
-
-                //BackKey 
                 if(_input.move.y == -1)
                 {
                     Vector3 worldAimTarget = mouseWorldPosition;
@@ -314,6 +344,9 @@ namespace StarterAssets
                 {
                     transform.rotation = Quaternion.Euler(0.0f, _cinemachineTargetYaw, 0.0f);
                 }
+            }else if (Input.GetKey(KeyCode.LeftAlt))
+            {
+
             }
 
 
@@ -331,9 +364,9 @@ namespace StarterAssets
                 {
                     _speed = 1.0f;
                 }
-                _animator.SetFloat(_animIDMotionSpeed, _speed  * 0.15f);
-                _animator.SetFloat(_animIDX, _input.move.x);
-                _animator.SetFloat(_animIDY, _input.move.y);
+                _animator.SetFloat(_animIDMotionSpeed, 1.0f);
+                _animator.SetFloat(_animIDX, _input.move.x,0.5f, Time.deltaTime);
+                _animator.SetFloat(_animIDY, _input.move.y, 0.5f, Time.deltaTime);
             }
         }
 
