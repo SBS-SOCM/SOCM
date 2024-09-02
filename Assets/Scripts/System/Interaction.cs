@@ -34,7 +34,7 @@ public class Interaction : MonoBehaviour
             Collider validHit = GetValidHit(hits);
             if (validHit != null)
             {
-                Debug.Log("test");
+                Debug.Log("DO Interaction");
 
                 ReceiveInteraction(validHit);
             }

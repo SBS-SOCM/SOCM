@@ -5,6 +5,7 @@ using DG.Tweening;
 public class DoorTest : MonoBehaviour
 {
     public float rootY;
+    public bool isAction;
 
     // Start is called before the first frame update
     void Start()
@@ -20,17 +21,29 @@ public class DoorTest : MonoBehaviour
 
     public void Open()
     {
+        if (isAction)
+        {
+            return;
+        }
+
         if (transform.rotation.eulerAngles.y == rootY)
         {
-            
-            transform.DORotate(new Vector3(0, rootY + 120, 0), 1f);
+
+            isAction = true;
+            transform.DORotate(new Vector3(0, rootY + 120, 0), 1f).OnComplete(EndAction);
             // transform.GetChild(i).gameObject.SetActive(false);
         }
 
         else
         {
-            transform.DORotate(new Vector3(0, rootY, 0), 1f);
+            isAction = true;
+            transform.DORotate(new Vector3(0, rootY, 0), 1f).OnComplete(EndAction);
         }
         
+    }
+
+    public void EndAction()
+    {
+        isAction = false;
     }
 }
