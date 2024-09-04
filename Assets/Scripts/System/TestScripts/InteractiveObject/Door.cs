@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-public class DoorTest : MonoBehaviour
+public class Door : MonoBehaviour
 {
     public float rootY;
     public bool isAction;

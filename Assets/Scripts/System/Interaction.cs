@@ -85,7 +85,11 @@ public class Interaction : MonoBehaviour
                 break;
 
             case "Door":
-                interactionObject.GetComponent<DoorTest>().Open();
+                interactionObject.GetComponent<Door>().Open();
+                break;
+
+            case "Chest":
+                interactionObject.GetComponent<Chest>().Open();
                 break;
         }
     }
