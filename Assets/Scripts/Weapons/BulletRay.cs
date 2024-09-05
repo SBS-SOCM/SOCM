@@ -34,11 +34,12 @@ public class BulletRay : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, transform.forward, out hit, rayDist))
         {
-            /*if(hit.transform.name == "Head")
+            Debug.Log(hit.transform.name);
+            if(hit.transform.name == "Head")
             {
                 hit.transform.GetComponentInParent<MonsterCtrl>().monsterHP -= 2;
-            }*/ 
-            if (hit.transform.CompareTag("Enemy"))
+            }
+            else if (hit.transform.CompareTag("Enemy"))
             {
                 Instantiate(vfxBlood, hit.point, Quaternion.identity);
                 hit.transform.GetComponent<MonsterCtrl>().monsterHP -= 1;

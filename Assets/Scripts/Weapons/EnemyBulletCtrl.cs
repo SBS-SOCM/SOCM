@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class EnemyBulletCtrl : MonoBehaviour
 {
-    public int damage = 20;
+    [SerializeField] GameObject bulletHitPrefab;
+    [SerializeField] Transform vfxBlood;
+
     public float speed = 70.0f;
+    public float rayDist = 5f;
+    public float damage = 10.0f;
 
     private Rigidbody bulletRigid;
+    private RaycastHit hit;
 
     private void Awake()
     {
@@ -20,14 +25,23 @@ public class EnemyBulletCtrl : MonoBehaviour
 
         Destroy(gameObject, 4.0f);
     }
-
-    private void OnTriggerEnter(Collider other)
+    private void Update()
     {
-        if (other.CompareTag("Player"))
+        CheckRay();
+    }
+
+    private void CheckRay()
+    {
+        if (Physics.Raycast(transform.position, transform.forward, out hit, rayDist))
         {
-            CharacterManager.instance.hp -= 30.0f;
+            if (hit.transform.CompareTag("Player"))
+            {
+                Instantiate(vfxBlood, hit.point, Quaternion.identity);
+                CharacterManager.instance.hp -= damage;
+            }
+
+            Destroy(this.gameObject);
         }
 
-        Destroy(this.gameObject);
     }
 }

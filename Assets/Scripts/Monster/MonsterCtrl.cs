@@ -53,7 +53,6 @@ public class MonsterCtrl : MonoBehaviour
 
     //Check Enemy
     public float enemyCheckRange = 30.0f;
-    public LayerMask enemyMask;
     private float outRangeTime = 5.0f;
     private float playerY = 1.0f;
     private float gunFireCheckRange = 30.0f;
@@ -276,12 +275,14 @@ public class MonsterCtrl : MonoBehaviour
     {
         Allys.Clear();
         Collider[] results = new Collider[100];
-        var size = Physics.OverlapSphereNonAlloc(transform.position, enemyCheckRange, results, enemyMask);
-
+        var size = Physics.OverlapSphereNonAlloc(transform.position, enemyCheckRange, results, allyMask);
         for (int i = 0; i < size; ++i)
         {
             Transform enemy = results[i].transform;
-            enemy.GetComponent<MonsterCtrl>().isWarning = true;
+            if (enemy.GetComponent<MonsterCtrl>() != null)
+            {
+                enemy.GetComponent<MonsterCtrl>().isWarning = true;
+            }
             Allys.Add(enemy);
         }
     }
@@ -386,9 +387,12 @@ public class MonsterCtrl : MonoBehaviour
                 float distToTarget = Vector3.Distance(transform.position, dieAlly.position);
                 if(!Physics.Raycast(transform.position, dirToTarget,distToTarget, walllMask))
                 {
-                    if (dieAlly.GetComponent<MonsterCtrl>().isDie)
+                    if (dieAlly.GetComponent<MonsterCtrl>())
                     {
-                        SpreadWarning();
+                        if (dieAlly.GetComponent<MonsterCtrl>().isDie)
+                        {
+                            SpreadWarning();
+                        }
                     }
                 }
             }
