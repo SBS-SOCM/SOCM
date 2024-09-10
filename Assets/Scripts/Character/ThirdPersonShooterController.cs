@@ -85,7 +85,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         CharacterManager.instance.isFire = true;
         fireTerm = 0.5f;
         audioSource.PlayOneShot(fireSound);
-        Instantiate(gunFire, gunFireSpawnPos.position, Quaternion.identity);
+        Instantiate(gunFire, gunFireSpawnPos.position, Quaternion.LookRotation(gunFireSpawnPos.position));
 
         Vector3 aimDir = (mouseWorldPositon - bulletSpawnPos.position).normalized;
         //GameObject bullet =  Instantiate(bulletGO, bulletSpawnPos.position, bulletSpawnPos.rotation);

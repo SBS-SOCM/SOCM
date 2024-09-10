@@ -64,7 +64,7 @@ public partial class CharacterManager : MonoBehaviour
             visibleSKillCool = 20.0f;
             OnVisible();
         }
-
+        ChangeWeapon();
         CharacterMoveCheck();
         CheckEnemy();
         SkillUiUpdate();
@@ -80,6 +80,18 @@ public partial class CharacterManager : MonoBehaviour
         {
             willPower += 10.0f;
             increaseWillPowerTime = 60.0f;
+        }
+    }
+    public void ChangeWeapon()
+    {
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("Sword");
+            SetItemType(0);
+        }else if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Debug.Log("Gun");
+            SetItemType(1);
         }
     }
     public void InstantiateBloodVfx()
