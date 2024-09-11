@@ -41,7 +41,8 @@ public partial class CharacterManager : MonoBehaviour
     [SerializeField] private Material characterMat;
     [SerializeField] private Material invisibleMat;
     [SerializeField] private GameObject characterGO;
-    [SerializeField] private Transform bloodVfx;
+    [SerializeField] private Transform bloodGunVfx;
+    [SerializeField] private Transform bloodKnifeVfx;
     [SerializeField] private Transform bloodPos;
 
     private void Awake()
@@ -64,7 +65,7 @@ public partial class CharacterManager : MonoBehaviour
             visibleSKillCool = 20.0f;
             OnVisible();
         }
-
+        ChangeWeapon();
         CharacterMoveCheck();
         CheckEnemy();
         SkillUiUpdate();
@@ -82,9 +83,31 @@ public partial class CharacterManager : MonoBehaviour
             increaseWillPowerTime = 60.0f;
         }
     }
-    public void InstantiateBloodVfx()
+    public void ChangeWeapon()
     {
-        Instantiate(bloodVfx, bloodPos.position, Quaternion.identity);
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("Sword");
+            SetItemType(0);
+        }else if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Debug.Log("Gun");
+            SetItemType(1);
+        }
+    }
+    public void InstantiateBloodVfx(int type)
+    {
+        if(type == 0)
+        {
+            Instantiate(bloodKnifeVfx, bloodPos.position, Quaternion.identity);
+        }
+        else if(type == 1)
+        {
+            Instantiate(bloodGunVfx, bloodPos.position, Quaternion.identity);
+        }
+       
+
+        
     }
     private void CharacterMoveCheck()
     {

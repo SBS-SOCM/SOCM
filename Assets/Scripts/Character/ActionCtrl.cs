@@ -17,6 +17,9 @@ public class ActionCtrl : MonoBehaviour
 
     //State
 
+    private float targetAiming = 0f;
+    private float aimingBlend = 0f;
+
     private void Awake()
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
@@ -27,6 +30,7 @@ public class ActionCtrl : MonoBehaviour
     {
         CheckWeaponType();
     }
+
     private void CheckWeaponType()
     {
         if (starterAssetsInputs.aim && CharacterManager.instance.hp > 0)
@@ -34,13 +38,18 @@ public class ActionCtrl : MonoBehaviour
             _animator.runtimeAnimatorController = weaponAnim;
             RigBuilder rigBuilder = GetComponent<RigBuilder>();
             rigBuilder.enabled = true;
+            targetAiming = 1f;
         }
         else
         {
             _animator.runtimeAnimatorController = noWeaponAnim;
             RigBuilder rigBuilder = GetComponent<RigBuilder>();
             rigBuilder.enabled = false;
+            targetAiming = 0f;
         }
+
+        aimingBlend = Mathf.Lerp(aimingBlend, targetAiming, Time.deltaTime * 10f);
+        _animator.SetFloat("Aiming", aimingBlend);
     }
     
 

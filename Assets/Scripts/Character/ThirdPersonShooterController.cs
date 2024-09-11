@@ -9,6 +9,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
     [SerializeField] private Transform debugTransform;
     [SerializeField] private GameObject bulletGO;
+    [SerializeField] private GameObject bulletSpecialGO;
     [SerializeField] private Transform bulletSpawnPos;
     [SerializeField] private AudioClip fireSound;
     [SerializeField] private Transform gunFireSpawnPos;
@@ -20,6 +21,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     private float aimingTime = 5.0f;
     private float fireTerm = 0.5f;
     private StarterAssets.StarterAssetsInputs starterAssetsInputs;
+    private WeaponManager weaponManager;
 
     public bool isForceAim;
 
@@ -27,6 +29,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Awake()
     {
+        weaponManager = GetComponent<WeaponManager>();
         starterAssetsInputs = GetComponent<StarterAssets.StarterAssetsInputs>();
         audioSource = GetComponent<AudioSource>();
     }
@@ -41,9 +44,6 @@ public class ThirdPersonShooterController : MonoBehaviour
             debugTransform.position = raycastHit.point;
             mouseWorldPositon = raycastHit.point;
         }
-
-
-
         if (isForceAim)
         {
             starterAssetsInputs.aim = true;
@@ -68,7 +68,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
         //AimIK();
 
-        if(Input.GetMouseButtonDown(0) && fireTerm <= 0.0f && starterAssetsInputs.aim) StartCoroutine(Shoot());
+        if(Input.GetMouseButtonDown(0) && fireTerm <= 0.0f && starterAssetsInputs.aim) StartCoroutine(Shoot(weaponManager.weaponType));
     }
     private void AimIK()
     {
@@ -79,36 +79,46 @@ public class ThirdPersonShooterController : MonoBehaviour
             debugTransform.position = raycastHit.point;
         }
     }
-    private IEnumerator Shoot()
+    private IEnumerator Shoot(int weaponType)
     {
-        CharacterManager.instance.isFire = true;
-        fireTerm = 0.5f;
-        audioSource.PlayOneShot(fireSound);
-        Instantiate(gunFire, gunFireSpawnPos.position, Quaternion.identity);
-
         Vector3 aimDir = (mouseWorldPositon - bulletSpawnPos.position).normalized;
-        //GameObject bullet =  Instantiate(bulletGO, bulletSpawnPos.position, bulletSpawnPos.rotation);
-        GameObject bullet = Instantiate(bulletGO, bulletSpawnPos.position, Quaternion.LookRotation(aimDir, Vector3.up));
-        bullet.GetComponent<BulletRayNew>().SetUp(mouseWorldPositon);
-
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f))
+        switch (weaponType)
         {
-            if (raycastHit.collider.gameObject.CompareTag("Enemy"))
-            {
-                raycastHit.collider.gameObject.GetComponent<MonsterCtrl>().monsterHP -= 1;
-                Instantiate(vfxBlood,raycastHit.point, Quaternion.identity);
-            }
-            if (raycastHit.collider.gameObject.CompareTag("Ground"))
-            {
-                Instantiate(vfxGroundHit, raycastHit.point, Quaternion.identity);
-            }
+            case 0: // Hand
+                break;
+            case 1: // Knife
+                break;
+            case 2: // Pistol
+                CharacterManager.instance.isFire = true;
+                fireTerm = 0.5f;
+                audioSource.PlayOneShot(fireSound);
+                Instantiate(gunFire, gunFireSpawnPos.position, gunFireSpawnPos.rotation);
+                GameObject bulletPistol = Instantiate(bulletGO, bulletSpawnPos.position, Quaternion.LookRotation(aimDir, Vector3.up));
+
+                yield return new WaitForSeconds(0.1f);
+                CharacterManager.instance.isFire = false;
+                break;
+            case 3: // Rifle
+                CharacterManager.instance.isFire = true;
+                fireTerm = 0.2f;
+                audioSource.PlayOneShot(fireSound);
+                Instantiate(gunFire, gunFireSpawnPos.position, gunFireSpawnPos.rotation);
+                GameObject bulletRifle = Instantiate(bulletGO, bulletSpawnPos.position, Quaternion.LookRotation(aimDir, Vector3.up));
+
+                yield return new WaitForSeconds(0.1f);
+                CharacterManager.instance.isFire = false;
+                break;
+            case 4: // Special
+                CharacterManager.instance.isFire = true;
+                fireTerm = 0.5f;
+                GameObject bulletSpecial = Instantiate(bulletSpecialGO, bulletSpawnPos.position, Quaternion.LookRotation(aimDir, Vector3.up));
+
+                yield return new WaitForSeconds(0.1f);
+                CharacterManager.instance.isFire = false;
+                break;
         }
 
-
-        yield return new WaitForSeconds(0.1f);
-        CharacterManager.instance.isFire = false;
+        
     }
 
 }

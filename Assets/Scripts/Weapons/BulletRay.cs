@@ -6,6 +6,7 @@ using UnityEngine;
 public class BulletRay : MonoBehaviour
 {
     [SerializeField] GameObject bulletHitPrefab;
+    [SerializeField] Transform vfxBlood; 
 
     public float speed = 70.0f;
     public float rayDist = 5f;
@@ -33,15 +34,24 @@ public class BulletRay : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, transform.forward, out hit, rayDist))
         {
+            Debug.Log(hit.transform.name);
             if(hit.transform.name == "Head")
             {
                 hit.transform.GetComponentInParent<MonsterCtrl>().monsterHP -= 2;
             }
-            if (hit.transform.CompareTag("Enemy"))
+            else if (hit.transform.CompareTag("Enemy"))
             {
+                Instantiate(vfxBlood, hit.point, Quaternion.identity);
                 hit.transform.GetComponent<MonsterCtrl>().monsterHP -= 1;
+                Destroy(this.gameObject);
             }
-            Instantiate(bulletHitPrefab, transform.position,Quaternion.identity);
+            else if (hit.transform.CompareTag("Ground"))
+            {
+                //Instantiate(bulletHitPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+                Instantiate(bulletHitPrefab, hit.point, Quaternion.identity);
+                Destroy(this.gameObject);
+            }
+            
             Destroy(this.gameObject);
         }
 

@@ -148,5 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 209d3ba612814e042981df0db70a02ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
-  speed: 70
+  bulletHitPrefab: {fileID: 5002925101360701654, guid: 2b5c502fa78d34342934f44bdfecb985, type: 3}
+  vfxBlood: {fileID: 6362226335122052527, guid: f01e208968f0fd34580b6b0301b773f6, type: 3}
+  speed: 100
+  rayDist: 3
+  damage: 10
