@@ -91,6 +91,10 @@ public class Interaction : MonoBehaviour
             case "Chest":
                 interactionObject.GetComponent<Chest>().Open();
                 break;
+
+            case "HideObject":
+                interactionObject.GetComponent<HideObject>().InteractionSend();
+                break;
         }
     }
 
