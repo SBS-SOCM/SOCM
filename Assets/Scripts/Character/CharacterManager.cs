@@ -41,7 +41,8 @@ public partial class CharacterManager : MonoBehaviour
     [SerializeField] private Material characterMat;
     [SerializeField] private Material invisibleMat;
     [SerializeField] private GameObject characterGO;
-    [SerializeField] private Transform bloodVfx;
+    [SerializeField] private Transform bloodGunVfx;
+    [SerializeField] private Transform bloodKnifeVfx;
     [SerializeField] private Transform bloodPos;
 
     private void Awake()
@@ -94,9 +95,19 @@ public partial class CharacterManager : MonoBehaviour
             SetItemType(1);
         }
     }
-    public void InstantiateBloodVfx()
+    public void InstantiateBloodVfx(int type)
     {
-        Instantiate(bloodVfx, bloodPos.position, Quaternion.identity);
+        if(type == 0)
+        {
+            Instantiate(bloodKnifeVfx, bloodPos.position, Quaternion.identity);
+        }
+        else if(type == 1)
+        {
+            Instantiate(bloodGunVfx, bloodPos.position, Quaternion.identity);
+        }
+       
+
+        
     }
     private void CharacterMoveCheck()
     {

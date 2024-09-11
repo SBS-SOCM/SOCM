@@ -188,7 +188,7 @@ public class MonsterCtrl : MonoBehaviour
         nav.speed = 0.0f;
         _animator.SetBool("Walk", false);
         _animator.SetBool("Run", false);
-        if (!isLongRange)
+        if (!isLongRange) // Short Attack
         {
             transform.LookAt(targetTr.transform.position);
             _animator.SetTrigger("Attack");
@@ -197,7 +197,8 @@ public class MonsterCtrl : MonoBehaviour
             float targetDist = Vector3.Distance(targetTr.position, this.transform.position);
             if (targetDist <= 2.2f)
             {
-                CharacterManager.instance.InstantiateBloodVfx();
+                CharacterManager.instance.InstantiateBloodVfx(0);
+
                 CharacterManager.instance.hp -= 1;
             }
         }
@@ -207,7 +208,8 @@ public class MonsterCtrl : MonoBehaviour
             Vector3 dir = targetTr.position - bulletSpawnPos.position; dir.y = 0f;
             Quaternion rot = Quaternion.LookRotation(dir.normalized);
             Instantiate(bulletPrefab, bulletSpawnPos.position, rot);
-            
+            CharacterManager.instance.InstantiateBloodVfx(1);
+
         }
         
         yield return new WaitForSeconds(2.0f);
