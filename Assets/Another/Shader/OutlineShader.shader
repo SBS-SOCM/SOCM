@@ -2,24 +2,27 @@ Shader "Custom/OutlineShader"
 {
     Properties
     {
-        _OutlineColor ("Outline Color", Color) = (1,0,0,1) // 외곽선 색상 (빨간색)
-        _OutlineWidth ("Outline Width", Range(0.0, 0.3)) = 0.005 // 외곽선 두께
+        _OutlineColor ("Outline Color", Color) = (1,0,0,1) // 외곽선 색상
+        _OutlineWidth ("Outline Width", Range(0.0, 0.03)) = 0.005 // 외곽선 두께
     }
 
     SubShader
     {
-        // 외곽선을 렌더링하는 Pass
+        Tags { "Queue" = "Overlay" }  // 외곽선을 오버레이처럼 마지막에 렌더링
+
+        // 외곽선을 그리는 Pass
         Pass
         {
             Name "Outline"
             Tags { "LightMode" = "UniversalForward" }
 
-            Cull Front  // 앞면을 Cull하여 외곽선만 렌더링
+            // 외곽선이 상자의 외곽에만 그려지도록 앞면을 제거
+            Cull Front
             ZWrite On
             ZTest LEqual
-            ColorMask RGB // 색상만 렌더링
-            Blend SrcAlpha OneMinusSrcAlpha  // 알파 블렌딩
-            
+            ColorMask RGB
+            Blend SrcAlpha OneMinusSrcAlpha
+
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -43,9 +46,12 @@ Shader "Custom/OutlineShader"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-                // 노멀 벡터를 사용하여 외곽선 두께 설정
+                
+                // 노멀 벡터를 사용하여 외곽선 두께만큼 오브젝트 확장
                 float3 normalWS = TransformObjectToWorldNormal(IN.normalOS);
                 float3 positionWS = TransformObjectToWorld(IN.positionOS);
+
+                // 외곽선 두께만큼 오브젝트 외곽을 확장
                 positionWS += normalWS * _OutlineWidth;
 
                 OUT.positionHCS = TransformWorldToHClip(positionWS);
