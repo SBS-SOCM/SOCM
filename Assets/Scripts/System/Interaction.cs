@@ -14,7 +14,7 @@ public class Interaction : MonoBehaviour
 
     public Image interactionImage;
 
-
+    GameObject hitObject;
     private void Update()
     {
         CheckInteraction();
@@ -50,10 +50,33 @@ public class Interaction : MonoBehaviour
         if (validHit != null)
         {
             interactionImage.gameObject.SetActive(true);
+
+            // OutlineController를 찾아서 외곽선 활성화
+            OutlineController outlineController = validHit.GetComponent<OutlineController>();
+
+            if (hitObject != null && hitObject != validHit.gameObject)
+            {
+                hitObject.GetComponent<OutlineController>().RemoveOutline();
+            }
+
+            hitObject = validHit.gameObject;
+            
+            if (outlineController != null)
+            {
+                outlineController.ApplyOutline();  // 외곽선 적용
+            }
         }
         else
         {
             interactionImage.gameObject.SetActive(false);
+
+            if (hitObject != null)
+            {
+                // 이전에 외곽선이 적용된 오브젝트의 외곽선을 제거
+                hitObject.GetComponent<OutlineController>().RemoveOutline();
+
+            }
+
         }
     }
 
@@ -62,6 +85,8 @@ public class Interaction : MonoBehaviour
         string interactionName = interactionObject.name;
 
         Debug.Log("상호작용 : " + interactionName);
+
+
 
         switch (interactionName)
         {

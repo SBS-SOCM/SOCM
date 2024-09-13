@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class OutlineController : MonoBehaviour
 {
-    public Material outlineMaterial;  // 적용할 Outline 머티리얼
-    private Material[][] originalMaterialsArray;  // 원래 머티리얼을 저장할 배열
+    public Material outlineMaterial;  // 외곽선 머티리얼
+    private Material[][] originalMaterialsArray;
     private Renderer[] renderers;
+
+    public bool isOn;
 
     void Start()
     {
@@ -13,39 +15,47 @@ public class OutlineController : MonoBehaviour
 
         // 각 Renderer의 원래 머티리얼을 저장
         originalMaterialsArray = new Material[renderers.Length][];
+
         for (int i = 0; i < renderers.Length; i++)
         {
             originalMaterialsArray[i] = renderers[i].materials;
         }
-
-        ApplyOutline();
     }
 
-    // 외곽선 머티리얼을 기존 머티리얼과 함께 추가
-    void ApplyOutline()
+    // 외곽선 추가 (기존 머티리얼 유지)
+    public void ApplyOutline()
     {
+        if (isOn)
+        {
+            return;
+        }
+
         foreach (Renderer renderer in renderers)
         {
             Material[] newMaterials = new Material[renderer.materials.Length + 1];
-            for (int j = 0; j < renderer.materials.Length; j++)
+            for (int i = 0; i < renderer.materials.Length; i++)
             {
-                Debug.Log(newMaterials.Length);
-
-                newMaterials[j] = renderer.materials[j];  // 기존 머티리얼 유지
+                newMaterials[i] = renderer.materials[i];  // 기존 머티리얼 유지
             }
-            newMaterials[renderer.materials.Length] = outlineMaterial;  // 외곽선 머티리얼 추가
 
-            renderer.materials = newMaterials;  // 새로운 머티리얼 배열 적용
+            newMaterials[renderer.materials.Length] = outlineMaterial;  // 외곽선 머티리얼 추가
+            renderer.materials = newMaterials;
         }
+        isOn = true;
     }
 
-    // 외곽선 머티리얼 제거 함수
+    // 외곽선 제거 함수
     public void RemoveOutline()
     {
+        if (!isOn)
+        {
+            return;
+        }
         for (int i = 0; i < renderers.Length; i++)
         {
             renderers[i].materials = originalMaterialsArray[i];  // 원래 머티리얼로 복구
         }
+
+        isOn = false;
     }
 }
-        
