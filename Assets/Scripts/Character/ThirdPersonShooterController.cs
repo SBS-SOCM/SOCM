@@ -21,15 +21,12 @@ public class ThirdPersonShooterController : MonoBehaviour
     private float aimingTime = 5.0f;
     private float fireTerm = 0.5f;
     private StarterAssets.StarterAssetsInputs starterAssetsInputs;
-    private WeaponManager weaponManager;
-
     public bool isForceAim;
 
     Vector3 mouseWorldPositon;
 
     private void Awake()
     {
-        weaponManager = GetComponent<WeaponManager>();
         starterAssetsInputs = GetComponent<StarterAssets.StarterAssetsInputs>();
         audioSource = GetComponent<AudioSource>();
     }
@@ -68,7 +65,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
         //AimIK();
 
-        if(Input.GetMouseButtonDown(0) && fireTerm <= 0.0f && starterAssetsInputs.aim) StartCoroutine(Shoot(weaponManager.weaponType));
+        if(Input.GetMouseButtonDown(0) && fireTerm <= 0.0f && starterAssetsInputs.aim) StartCoroutine(Shoot(ActionCtrl.weaponType));
     }
     private void AimIK()
     {

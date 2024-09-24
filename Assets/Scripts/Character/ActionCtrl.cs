@@ -7,7 +7,7 @@ using UnityEngine.Animations.Rigging;
 
 public class ActionCtrl : MonoBehaviour
 {
-    [SerializeField] RuntimeAnimatorController noWeaponAnim;
+    //[SerializeField] RuntimeAnimatorController noWeaponAnim;
     [SerializeField] RuntimeAnimatorController weaponAnim;
 
 
@@ -19,6 +19,7 @@ public class ActionCtrl : MonoBehaviour
 
     private float targetAiming = 0f;
     private float aimingBlend = 0f;
+    public static int weaponType = 0;
 
     private void Awake()
     {
@@ -28,6 +29,8 @@ public class ActionCtrl : MonoBehaviour
     }
     private void Update()
     {
+        _animator.runtimeAnimatorController = weaponAnim;
+        WeaponChange();
         CheckWeaponType();
     }
 
@@ -40,17 +43,40 @@ public class ActionCtrl : MonoBehaviour
             rigBuilder.enabled = true;
             targetAiming = 1f;
         }
-        else
+        /*else
         {
             _animator.runtimeAnimatorController = noWeaponAnim;
             RigBuilder rigBuilder = GetComponent<RigBuilder>();
             rigBuilder.enabled = false;
             targetAiming = 0f;
-        }
+        }*/
 
         aimingBlend = Mathf.Lerp(aimingBlend, targetAiming, Time.deltaTime * 10f);
         _animator.SetFloat("Aiming", aimingBlend);
     }
-    
+    private void WeaponChange()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) // Hand
+        {
+            weaponType = 0;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2)) // Knife
+        {
+            weaponType = 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3)) // Pistol
+        {
+            weaponType = 2;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4)) // Rifle
+        {
+            weaponType = 3;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5)) // Special
+        {
+            weaponType = 4;
+        }
+    }
+
 
 }
