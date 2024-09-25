@@ -14,5 +14,27 @@ public partial class CharacterManager
     public void SetItemType(int type)
     {
         itemType = type;
+        
     }
+
+    public void OnMouseActive()
+    {
+        if (_input.cursorLocked == true)
+        {
+            _input.cursorLocked = !_input.cursorLocked;
+            _input.SetCursorState(false);
+        }
+        
+    }
+
+    public void OffMouseActive()
+    {
+        if (_input.cursorLocked == false)
+        {
+            _input.cursorLocked = !_input.cursorLocked;
+            _input.SetCursorState(true);
+        }
+    }
+
+
 }

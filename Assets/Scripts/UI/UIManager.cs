@@ -75,6 +75,14 @@ public class UIManager : SerializedMonoBehaviour
         {
             RenewConditionUI();
         }
+
+
+        /// Only For Test
+        if (Input.GetKeyDown(KeyCode.F12))
+        {
+            Singleton.instance.player.GetComponent<CharacterManager>().OnMouseActive();
+        }
+
     }
 
     public void GetKeyboadInput()
