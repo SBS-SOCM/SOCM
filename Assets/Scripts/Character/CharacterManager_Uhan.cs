@@ -19,21 +19,18 @@ public partial class CharacterManager
 
     public void OnMouseActive()
     {
-        if (_input.cursorLocked == true)
-        {
-            _input.cursorLocked = !_input.cursorLocked;
-            _input.SetCursorState(false);
-        }
-        
+        _input.cursorLocked = false;
+        _input.cursorInputForLook = false;
+        _input.SetCursorState(false);
     }
 
     public void OffMouseActive()
     {
-        if (_input.cursorLocked == false)
-        {
-            _input.cursorLocked = !_input.cursorLocked;
-            _input.SetCursorState(true);
-        }
+        Debug.Log("Mouse Off");
+
+        _input.cursorLocked = true;
+        _input.cursorInputForLook = true;
+        _input.SetCursorState(true);
     }
 
 

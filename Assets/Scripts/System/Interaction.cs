@@ -43,6 +43,11 @@ public class Interaction : MonoBehaviour
 
     public void CheckInteraction()
     {
+        if (Singleton.instance.player == null)
+        {
+            return;
+        }
+
         hits = Physics.OverlapSphere(Singleton.instance.player.transform.position, interactionDistance, 1 << 9);
 
         Collider validHit = GetValidHit(hits);
@@ -51,6 +56,7 @@ public class Interaction : MonoBehaviour
         {
             interactionImage.gameObject.SetActive(true);
 
+            /*
             // OutlineController를 찾아서 외곽선 활성화
             OutlineController outlineController = validHit.GetComponent<OutlineController>();
 
@@ -65,17 +71,20 @@ public class Interaction : MonoBehaviour
             {
                 outlineController.ApplyOutline();  // 외곽선 적용
             }
+            */
         }
         else
         {
             interactionImage.gameObject.SetActive(false);
 
+            /*
             if (hitObject != null)
             {
                 // 이전에 외곽선이 적용된 오브젝트의 외곽선을 제거
                 hitObject.GetComponent<OutlineController>().RemoveOutline();
 
             }
+            */
 
         }
     }

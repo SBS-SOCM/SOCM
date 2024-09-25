@@ -11,7 +11,7 @@ public class Password : MonoBehaviour
 
     public void ClickBtn(int num)
     {
-        if (nowSlot > 2)
+        if (nowSlot > 4)
         {
             return;
         }
@@ -19,7 +19,7 @@ public class Password : MonoBehaviour
         pressedNumText[nowSlot].text = num.ToString();
         nowSlot++;
 
-        if (nowSlot >= 3)
+        if (nowSlot >= 5)
         {
             Invoke("CheckPassword",1f);
         }
@@ -30,7 +30,9 @@ public class Password : MonoBehaviour
     {
         if (pressedNumText[0].text == 0.ToString() &&
             pressedNumText[1].text == 0.ToString() &&
-            pressedNumText[2].text == 0.ToString())
+            pressedNumText[2].text == 0.ToString() &&
+            pressedNumText[3].text == 0.ToString() &&
+            pressedNumText[4].text == 0.ToString())
         {
             Debug.Log("Right");
         }

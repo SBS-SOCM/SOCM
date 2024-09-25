@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -40,28 +41,7 @@ public class UIManager : SerializedMonoBehaviour
 
     
 
-    void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name.StartsWith("Ingame"))
-        {
-            for (int i = 0; i < ingameUIPanels.Length; i++)
-            {
-                ingameUIPanels[i].SetActive(true);
-            }
-        }
-        else
-        {
-            for (int i = 0; i < ingameUIPanels.Length; i++)
-            {
-                ingameUIPanels[i].SetActive(false);
-            }
-        }
-    }
 
     void Start()
     {
@@ -71,20 +51,51 @@ public class UIManager : SerializedMonoBehaviour
     {
         GetKeyboadInput();
 
+        /// Only For Test
         if (SceneManager.GetActiveScene().name.StartsWith("Ingame"))
         {
             RenewConditionUI();
         }
-
-
-        /// Only For Test
         if (Input.GetKeyDown(KeyCode.F12))
         {
-            Singleton.instance.player.GetComponent<CharacterManager>().OnMouseActive();
+            OpenPuzzle();
+        }
+
+        if (Singleton.instance.player == null)
+        {
+            ingameUIObjects[8].GetComponent<Image>().color = Color.red;
+
+        }
+        else
+        {
+            ingameUIObjects[8].GetComponent<Image>().color = Color.blue;
         }
 
     }
 
+    public void IngameUIPanelCntl()
+    {
+        /*
+        Scene scene = SceneManager.GetActiveScene();
+        if (scene.name.StartsWith("Ingame"))
+        {
+            for (int i = 0; i < ingameUIPanels.Length; i++)
+            {
+                ingameUIPanels[i].SetActive(true);
+            }
+
+            Debug.Log("Mouse Off with Scene Load");
+            Singleton.instance.player.GetComponent<CharacterManager>().OffMouseActive();
+        }
+        else
+        {
+            for (int i = 0; i < ingameUIPanels.Length; i++)
+            {
+                ingameUIPanels[i].SetActive(false);
+            }
+        }
+        */
+    }
     public void GetKeyboadInput()
     {
         float wheelValue = Input.GetAxis("Mouse ScrollWheel") * 10;
@@ -129,13 +140,13 @@ public class UIManager : SerializedMonoBehaviour
             UIPanels[2].SetActive(true);
             OpenUI();
             UIStack.Push(2);
+            
         }
         else
         {
-            if (UIStack.Count == 1)
+            if (UIStack.Count == 1 && Singleton.instance.player != null)
             {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
+                Singleton.instance.player.GetComponent<CharacterManager>().OffMouseActive();
             }
 
             UIPanels[UIStack.Pop()].SetActive(false);
@@ -153,8 +164,14 @@ public class UIManager : SerializedMonoBehaviour
 
     public void OpenUI()
     {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        if (Singleton.instance.player == null)
+        {
+            
+            return;
+        }
+
+        Debug.Log("Mouse On in Open UI");
+        Singleton.instance.player.GetComponent<CharacterManager>().OnMouseActive();
     }
 
     int mod(int x, int m)
@@ -176,6 +193,7 @@ public class UIManager : SerializedMonoBehaviour
             UIPanels[1].SetActive(true);
             OpenUI();
             UIStack.Push(1);
+            Singleton.instance.player.GetComponent<CharacterManager>().OnMouseActive();
         }
     }
 
@@ -255,5 +273,12 @@ public class UIManager : SerializedMonoBehaviour
         {
             ingameUIObjects[4].GetComponent<Image>().color = new Color(255 / 255f, 212 / 255f, 0);
         }
+    }
+
+    public void OpenPuzzle()
+    {
+        UIPanels[3].SetActive(true);
+        UIStack.Push(3);
+        OpenUI();
     }
 }

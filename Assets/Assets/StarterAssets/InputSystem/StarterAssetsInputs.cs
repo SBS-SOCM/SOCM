@@ -84,8 +84,6 @@ namespace StarterAssets
 
 		public void SetCursorState(bool newState)
 		{
-			Debug.Log("Test");
-
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
 	}
