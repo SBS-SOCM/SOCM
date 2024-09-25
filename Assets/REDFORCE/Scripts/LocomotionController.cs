@@ -36,20 +36,20 @@ namespace redforce01
             {
                 if (inputVec.x > 0 || inputVec.x < 0)
                 {
-                    lastInputDirection.x = inputVec.x > 0f ? 1 : -1;
+                    lastInputDirection.x = Mathf.Lerp(lastInputDirection.x, inputVec.x > 0f? 1f:-1f, Time.deltaTime * 2f);
                 }
                 else
                 {
-                    lastInputDirection.x = 0f;
+                    lastInputDirection.x = Mathf.Lerp(lastInputDirection.x, 0.0f, Time.deltaTime * 2f);
                 }
 
                 if (inputVec.y > 0 || inputVec.y < 0)
                 {
-                    lastInputDirection.y = inputVec.y > 0f ? 1 : -1;
+                    lastInputDirection.y = Mathf.Lerp(lastInputDirection.y, inputVec.y > 0f ? 1f : -1f, Time.deltaTime * 2f);
                 }
                 else
                 {
-                    lastInputDirection.y = 0f;
+                    lastInputDirection.y = Mathf.Lerp(lastInputDirection.y, 0.0f, Time.deltaTime * 2f);
                 }
             }
             blendAiming = Mathf.Lerp(blendAiming, inputAim ? 1 : 0, Time.deltaTime * 10);
