@@ -142,7 +142,7 @@ namespace StarterAssets
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
         }
-
+        
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
@@ -174,11 +174,9 @@ namespace StarterAssets
                 JumpAndGravity();
                 GroundedCheck();
                 if (Input.GetKeyDown(KeyCode.Space)) Prone();
-                if(!isProne) Move();
-                //if Character in Silence mode
+                if(!isProne && CharacterManager.instance.canMove) Move();
                 if (!CharacterManager.instance.isSilence) MoveSpeed = basicSpeed;
                 else MoveSpeed = silenceSpeed;
-                //if (_input.aim) MoveSpeed = silenceSpeed;
                 if (CharacterManager.instance.willPower <= 30.0f) MoveSpeed *= 0.7f; 
             }
             
@@ -225,6 +223,7 @@ namespace StarterAssets
                 isProne = true;
             }
         }
+        
         private void GroundedCheck()
         {
             // set sphere position, with offset

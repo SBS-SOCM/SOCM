@@ -23,7 +23,7 @@ public class MonsterCtrl : MonoBehaviour
     public bool isWarning = false;
     public bool isSleeping = false;
     public bool canRandomMove = true;
-    private bool isDie = false;
+    public bool isDie = false;
     public int monsterHP = 2;
     private bool isMoveing = false;
     public bool courseMove = false;

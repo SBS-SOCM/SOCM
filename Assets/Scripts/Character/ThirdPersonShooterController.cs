@@ -16,6 +16,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private GameObject gunFire;
     [SerializeField] private Transform vfxBlood;
     [SerializeField] private Transform vfxGroundHit;
+    [SerializeField] private Transform crossHairImg;
 
     private AudioSource audioSource;
     private float aimingTime = 5.0f;
@@ -64,8 +65,15 @@ public class ThirdPersonShooterController : MonoBehaviour
             aimingTime = 5.0f;
         }
         //AimIK();
+        CrossHairChange();
 
-        if(Input.GetMouseButtonDown(0) && fireTerm <= 0.0f && starterAssetsInputs.aim) StartCoroutine(Shoot(ActionCtrl.weaponType));
+        if(Input.GetMouseButtonDown(0) && fireTerm <= 0.0f && starterAssetsInputs.aim) 
+            StartCoroutine(Shoot(ActionCtrl.weaponType));
+    }
+    private void CrossHairChange()
+    {
+        crossHairImg.localScale = Vector2.Lerp(crossHairImg.localScale,
+            starterAssetsInputs.aim? new Vector2(0.5f,0.5f) : new Vector2(1f,1f), Time.deltaTime * 5f);
     }
     private void AimIK()
     {
@@ -81,11 +89,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         Vector3 aimDir = (mouseWorldPositon - bulletSpawnPos.position).normalized;
         switch (weaponType)
         {
-            case 0: // Hand
-                break;
-            case 1: // Knife
-                break;
-            case 2: // Pistol
+            case 0: // Pistol
                 CharacterManager.instance.isFire = true;
                 fireTerm = 0.5f;
                 audioSource.PlayOneShot(fireSound);
@@ -95,7 +99,7 @@ public class ThirdPersonShooterController : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
                 CharacterManager.instance.isFire = false;
                 break;
-            case 3: // Rifle
+            case 1: // Rifle
                 CharacterManager.instance.isFire = true;
                 fireTerm = 0.2f;
                 audioSource.PlayOneShot(fireSound);
