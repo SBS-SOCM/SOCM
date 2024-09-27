@@ -36,13 +36,13 @@ public class HideObject : MonoBehaviour
     {
         hideCamera.SetActive(true);
         isInteracion = true;
-        Singleton.instance.player.SetActive(false);
+        CharacterManager.instance.gameObject.SetActive(false);
     }
 
     public void InteractionOff()
     {
         hideCamera.SetActive(false);
         isInteracion = false;
-        Singleton.instance.player.SetActive(true);
+        CharacterManager.instance.gameObject.SetActive(true);
     }
 }

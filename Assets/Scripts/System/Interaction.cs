@@ -27,7 +27,7 @@ public class Interaction : MonoBehaviour
 
     public void SendInteraction()
     {
-        hits = Physics.OverlapSphere(Singleton.instance.player.transform.position, interactionDistance, 1 << 9);
+        hits = Physics.OverlapSphere(CharacterManager.instance.gameObject.transform.position, interactionDistance, 1 << 9);
 
         if (hits.Length > 0)
         {
@@ -43,12 +43,12 @@ public class Interaction : MonoBehaviour
 
     public void CheckInteraction()
     {
-        if (Singleton.instance.player == null)
+        if (CharacterManager.instance.gameObject == null)
         {
             return;
         }
 
-        hits = Physics.OverlapSphere(Singleton.instance.player.transform.position, interactionDistance, 1 << 9);
+        hits = Physics.OverlapSphere(CharacterManager.instance.gameObject.transform.position, interactionDistance, 1 << 9);
 
         Collider validHit = GetValidHit(hits);
 
@@ -136,8 +136,8 @@ public class Interaction : MonoBehaviour
     {
         foreach (var hit in hitsColl)
         {
-            Vector3 directionToTarget = (hit.transform.position - Singleton.instance.player.transform.position).normalized;
-            float angle = Vector3.Angle(Singleton.instance.player.transform.forward, directionToTarget);
+            Vector3 directionToTarget = (hit.transform.position - CharacterManager.instance.gameObject.transform.position).normalized;
+            float angle = Vector3.Angle(CharacterManager.instance.gameObject.transform.forward, directionToTarget);
 
             if (angle < interactionAngle)
             {

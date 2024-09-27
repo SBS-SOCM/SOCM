@@ -22,6 +22,7 @@ public partial class CharacterManager
         _input.cursorLocked = false;
         _input.cursorInputForLook = false;
         _input.SetCursorState(false);
+        _input.LookInput(Vector2.zero);
     }
 
     public void OffMouseActive()

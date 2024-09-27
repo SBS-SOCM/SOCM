@@ -3,8 +3,6 @@ using Sirenix.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -21,6 +19,7 @@ public class UIManager : SerializedMonoBehaviour
     [TabGroup("System")] public Inventory inventory;
 
     [TabGroup("System"), OdinSerialize] public Stack<int> UIStack = new Stack<int>();
+    [TabGroup("System"), ReadOnly] public string nowSceneName;
 
     /// <summary>
     /// 인게임 내의 UI / 0 : now Item / 1 : before Item / 2 : next Item / 3 : HP Image / 4 : MP Image / 5 : MP Text / 6 : before 2 item / 7 : after 2 item
@@ -39,8 +38,35 @@ public class UIManager : SerializedMonoBehaviour
     [Range(0.0f, 0.75f), TabGroup("Ingame")] public float hpTest;
     [Range(0.0f, 0.75f), TabGroup("Ingame")] public float mpTest;
 
-    
 
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    // 체인을 걸어서 이 함수는 매 씬마다 호출된다.
+    void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
+    {
+        nowSceneName = scene.name;
+
+        if (nowSceneName.StartsWith("Ingame"))
+        {
+            for (int i = 0; i < ingameUIPanels.Length; i++)
+            {
+                ingameUIPanels[i].SetActive(true);
+            }
+
+            Debug.Log("Mouse Off with Scene Load");
+            CharacterManager.instance.OffMouseActive();
+        }
+        else
+        {
+            for (int i = 0; i < ingameUIPanels.Length; i++)
+            {
+                ingameUIPanels[i].SetActive(false);
+            }
+        }
+    }
 
 
     void Start()
@@ -61,7 +87,7 @@ public class UIManager : SerializedMonoBehaviour
             OpenPuzzle();
         }
 
-        if (Singleton.instance.player == null)
+        if (CharacterManager.instance.gameObject == null)
         {
             ingameUIObjects[8].GetComponent<Image>().color = Color.red;
 
@@ -73,29 +99,6 @@ public class UIManager : SerializedMonoBehaviour
 
     }
 
-    public void IngameUIPanelCntl()
-    {
-        /*
-        Scene scene = SceneManager.GetActiveScene();
-        if (scene.name.StartsWith("Ingame"))
-        {
-            for (int i = 0; i < ingameUIPanels.Length; i++)
-            {
-                ingameUIPanels[i].SetActive(true);
-            }
-
-            Debug.Log("Mouse Off with Scene Load");
-            Singleton.instance.player.GetComponent<CharacterManager>().OffMouseActive();
-        }
-        else
-        {
-            for (int i = 0; i < ingameUIPanels.Length; i++)
-            {
-                ingameUIPanels[i].SetActive(false);
-            }
-        }
-        */
-    }
     public void GetKeyboadInput()
     {
         float wheelValue = Input.GetAxis("Mouse ScrollWheel") * 10;
@@ -123,7 +126,7 @@ public class UIManager : SerializedMonoBehaviour
                 inventory.RenewInventoryUI();
             }
 
-            Singleton.instance.player.GetComponent<CharacterManager>().SetItemType(inventory.inventory[inventory.nowItem].id);
+            CharacterManager.instance.SetItemType(inventory.inventory[inventory.nowItem].id);
             RenewItemUI();
         }
     }
@@ -144,9 +147,9 @@ public class UIManager : SerializedMonoBehaviour
         }
         else
         {
-            if (UIStack.Count == 1 && Singleton.instance.player != null)
+            if (UIStack.Count == 1 && CharacterManager.instance.gameObject != null)
             {
-                Singleton.instance.player.GetComponent<CharacterManager>().OffMouseActive();
+                CharacterManager.instance.gameObject.GetComponent<CharacterManager>().OffMouseActive();
             }
 
             UIPanels[UIStack.Pop()].SetActive(false);
@@ -164,14 +167,14 @@ public class UIManager : SerializedMonoBehaviour
 
     public void OpenUI()
     {
-        if (Singleton.instance.player == null)
+        if (CharacterManager.instance.gameObject == null)
         {
             
             return;
         }
 
         Debug.Log("Mouse On in Open UI");
-        Singleton.instance.player.GetComponent<CharacterManager>().OnMouseActive();
+        CharacterManager.instance.gameObject.GetComponent<CharacterManager>().OnMouseActive();
     }
 
     int mod(int x, int m)
@@ -182,8 +185,6 @@ public class UIManager : SerializedMonoBehaviour
 
     public void OpenInventory()
     {
-        Debug.Log(1);
-
         if (UIPanels[1].activeSelf)
         {
             ESC();
@@ -193,7 +194,6 @@ public class UIManager : SerializedMonoBehaviour
             UIPanels[1].SetActive(true);
             OpenUI();
             UIStack.Push(1);
-            Singleton.instance.player.GetComponent<CharacterManager>().OnMouseActive();
         }
     }
 

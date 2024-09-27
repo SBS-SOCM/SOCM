@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class Singleton : MonoBehaviour
 {
     public static Singleton instance;
-    public CharacterManager player;
 
     private void Awake()
     {
