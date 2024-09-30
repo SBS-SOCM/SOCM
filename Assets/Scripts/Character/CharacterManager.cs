@@ -24,6 +24,7 @@ public partial class CharacterManager : MonoBehaviour
     private StarterAssetsInputs _input;
     public bool isMoving = false;
     public bool isFire = false;
+    public bool canMove = true;
 
     public List<Transform> Enemies = new List<Transform>();
     public LayerMask targetMask; // 적을 검색하기 위한 레이어마스크
@@ -65,7 +66,6 @@ public partial class CharacterManager : MonoBehaviour
             visibleSKillCool = 20.0f;
             OnVisible();
         }
-        ChangeWeapon();
         CharacterMoveCheck();
         CheckEnemy();
         SkillUiUpdate();
@@ -83,18 +83,6 @@ public partial class CharacterManager : MonoBehaviour
             increaseWillPowerTime = 60.0f;
         }
     }
-    public void ChangeWeapon()
-    {
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            Debug.Log("Sword");
-            SetItemType(0);
-        }else if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            Debug.Log("Gun");
-            SetItemType(1);
-        }
-    }
     public void InstantiateBloodVfx(int type)
     {
         if(type == 0)
@@ -104,10 +92,7 @@ public partial class CharacterManager : MonoBehaviour
         else if(type == 1)
         {
             Instantiate(bloodGunVfx, bloodPos.position, Quaternion.identity);
-        }
-       
-
-        
+        }  
     }
     private void CharacterMoveCheck()
     {

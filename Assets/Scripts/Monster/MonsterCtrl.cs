@@ -23,7 +23,7 @@ public class MonsterCtrl : MonoBehaviour
     public bool isWarning = false;
     public bool isSleeping = false;
     public bool canRandomMove = true;
-    private bool isDie = false;
+    public bool isDie = false;
     public int monsterHP = 2;
     private bool isMoveing = false;
     public bool courseMove = false;
@@ -35,7 +35,7 @@ public class MonsterCtrl : MonoBehaviour
     [SerializeField] private Text stateText;
     [SerializeField] private Transform movePos1;
     [SerializeField] private Transform movePos2;
-
+    [SerializeField] private Text stabbingText;
 
     //Search Player
     [Range(0, 360)]
@@ -48,7 +48,6 @@ public class MonsterCtrl : MonoBehaviour
     public List<Transform> Allys = new List<Transform>();
     public float notInViewTime = 3.0f;
     private float playerChaseTime = 0.5f;
-    
 
 
     //Check Enemy
@@ -126,7 +125,16 @@ public class MonsterCtrl : MonoBehaviour
         
         CheckSleeping();
         CheckDie();
-
+    }
+    private IEnumerator Stabbing()
+    {
+        stabbingText.text = "Q";
+        yield return new WaitForSeconds(2f);
+        stabbingText.text = "";
+    }
+    public void StabbingCtrl()
+    {
+        StartCoroutine(Stabbing());
     }
     IEnumerator CourseMove()
     {
