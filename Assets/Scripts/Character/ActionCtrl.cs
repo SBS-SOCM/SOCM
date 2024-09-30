@@ -36,10 +36,9 @@ public class ActionCtrl : MonoBehaviour
         WeaponChange();
         CheckWeaponType();
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            CheckEnemy();
-        }
+        CheckEnemy();
+
+        
 
 
 
@@ -66,12 +65,14 @@ public class ActionCtrl : MonoBehaviour
         }
         if(Enemies.Count != 0)
         {
-            if(Enemies[0].GetComponent<MonsterCtrl>() != null && !Enemies[0].GetComponent<MonsterCtrl>().isDie)
+            Enemies[0].GetComponent<MonsterCtrl>().StabbingTextCtrl(true);
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                StartCoroutine(Assasinate(Enemies[0].GetComponent<MonsterCtrl>()));
+                if (Enemies[0].GetComponent<MonsterCtrl>() != null && !Enemies[0].GetComponent<MonsterCtrl>().isDie)
+                {
+                    StartCoroutine(Assasinate(Enemies[0].GetComponent<MonsterCtrl>()));
+                }
             }
-            
-            
         }
     }
 
@@ -102,8 +103,6 @@ public class ActionCtrl : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         monster.monsterHP = 0;
         CharacterManager.instance.canMove = true;
-
-
     }
     private void WeaponChange()
     {

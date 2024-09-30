@@ -35,7 +35,7 @@ public class MonsterCtrl : MonoBehaviour
     [SerializeField] private Text stateText;
     [SerializeField] private Transform movePos1;
     [SerializeField] private Transform movePos2;
-
+    [SerializeField] private Text stabbingText;
 
     //Search Player
     [Range(0, 360)]
@@ -48,7 +48,6 @@ public class MonsterCtrl : MonoBehaviour
     public List<Transform> Allys = new List<Transform>();
     public float notInViewTime = 3.0f;
     private float playerChaseTime = 0.5f;
-    
 
 
     //Check Enemy
@@ -126,7 +125,11 @@ public class MonsterCtrl : MonoBehaviour
         
         CheckSleeping();
         CheckDie();
-
+    }
+    public void StabbingTextCtrl(bool canStabbing)
+    {
+        if (canStabbing) stabbingText.text = "Q";
+        else stabbingText.text = "";
     }
     IEnumerator CourseMove()
     {
