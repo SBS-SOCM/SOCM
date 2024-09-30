@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,16 +13,24 @@ public class WatchTowerLight : MonoBehaviour
     // 감지 범위 변수 추가
     public float detectionRadius = 100f;
 
+    public float angle;
+
+    public float normalSpeed;
     // Start is called before the first frame update
     void Start()
     {
-
+        rotateLeft();
     }
 
     // Update is called once per frame
     void Update()
     {
         FindPlayer();
+
+        if (isPlayer)
+        {
+
+        }
     }
 
     public void FindPlayer()
@@ -44,8 +53,8 @@ public class WatchTowerLight : MonoBehaviour
     {
         foreach (var hit in hitsColl)
         {
-            Vector3 directionToTarget = (hit.transform.position - CharacterManager.instance.gameObject.transform.position).normalized;
-            float angle = Vector3.Angle(gameObject.transform.forward, directionToTarget);
+            Vector3 directionToTarget = (hit.transform.position - gameObject.transform.position).normalized;
+            angle = Vector3.Angle(gameObject.transform.forward, directionToTarget);
 
             if (angle < interactionAngle)
             {
@@ -83,5 +92,19 @@ public class WatchTowerLight : MonoBehaviour
         // 상하 경계선 그리기
         Gizmos.DrawLine(transform.position, transform.position + upBoundary);
         Gizmos.DrawLine(transform.position, transform.position + downBoundary);
+    }
+
+    public void rotateLeft()
+    {
+        transform.DORotate(transform.rotation.eulerAngles + new Vector3(0,90,0), normalSpeed);
+
+        Invoke("rotateRight", normalSpeed + 1);
+    }
+
+    public void rotateRight()
+    {
+        transform.DORotate(transform.rotation.eulerAngles + new Vector3(0, -90, 0), normalSpeed);
+
+        Invoke("rotateLeft", normalSpeed + 1);
     }
 }
