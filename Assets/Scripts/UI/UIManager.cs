@@ -82,19 +82,10 @@ public class UIManager : SerializedMonoBehaviour
         {
             RenewConditionUI();
         }
+        
         if (Input.GetKeyDown(KeyCode.F12))
         {
             OpenPuzzle();
-        }
-
-        if (CharacterManager.instance.gameObject == null)
-        {
-            ingameUIObjects[8].GetComponent<Image>().color = Color.red;
-
-        }
-        else
-        {
-            ingameUIObjects[8].GetComponent<Image>().color = Color.blue;
         }
 
     }
