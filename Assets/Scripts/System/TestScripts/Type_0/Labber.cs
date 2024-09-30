@@ -68,7 +68,7 @@ public class Labber : MonoBehaviour
     {
         Collider[] hits;
 
-        hits = Physics.OverlapSphere(Singleton.instance.player.transform.position, findEnemyRange, LayerMask.NameToLayer("Enemy"));
+        hits = Physics.OverlapSphere(CharacterManager.instance.gameObject.transform.position, findEnemyRange, LayerMask.NameToLayer("Enemy"));
 
         return(hits);
     }

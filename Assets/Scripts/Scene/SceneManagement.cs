@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class SceneManagement : MonoBehaviour
 {
     /// <summary>
-    /// 0 : SampleScene / 1 : TitleScene / 2 : MainScene / 3 : LoadingScene / 4 : IntroScene / 5 : Ingame_test
+    /// 0 : TitleScene / 1 : IntroScene / 2 : MainScene / 3 : LoadingScene / 4 : Ingame / 5 : SampleScene
     /// </summary>
 
     public static int nextScene;
