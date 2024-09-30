@@ -65,7 +65,7 @@ public class ActionCtrl : MonoBehaviour
         }
         if(Enemies.Count != 0)
         {
-            Enemies[0].GetComponent<MonsterCtrl>().StabbingTextCtrl(true);
+            Enemies[0].GetComponent<MonsterCtrl>().StabbingCtrl();
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 if (Enemies[0].GetComponent<MonsterCtrl>() != null && !Enemies[0].GetComponent<MonsterCtrl>().isDie)

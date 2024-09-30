@@ -126,10 +126,15 @@ public class MonsterCtrl : MonoBehaviour
         CheckSleeping();
         CheckDie();
     }
-    public void StabbingTextCtrl(bool canStabbing)
+    private IEnumerator Stabbing()
     {
-        if (canStabbing) stabbingText.text = "Q";
-        else stabbingText.text = "";
+        stabbingText.text = "Q";
+        yield return new WaitForSeconds(2f);
+        stabbingText.text = "";
+    }
+    public void StabbingCtrl()
+    {
+        StartCoroutine(Stabbing());
     }
     IEnumerator CourseMove()
     {
