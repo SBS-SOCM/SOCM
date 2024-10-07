@@ -1,6 +1,7 @@
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -65,15 +66,31 @@ public class ActionCtrl : MonoBehaviour
         }
         if(Enemies.Count != 0)
         {
-            Enemies[0].GetComponent<MonsterCtrl>().StabbingCtrl();
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Enemies[0].GetComponent<MonsterCtrl>() != null && !Enemies[0].GetComponent<MonsterCtrl>().isDie)
             {
-                if (Enemies[0].GetComponent<MonsterCtrl>() != null && !Enemies[0].GetComponent<MonsterCtrl>().isDie)
+                Enemies[0].GetComponent<MonsterCtrl>().StabbingCtrl();
+                if (Input.GetKeyDown(KeyCode.Q))
                 {
-                    StartCoroutine(Assasinate(Enemies[0].GetComponent<MonsterCtrl>()));
+                    if (Enemies[0].GetComponent<MonsterCtrl>() != null && !Enemies[0].GetComponent<MonsterCtrl>().isDie)
+                    {
+                        _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+                        _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
+
+                        _animator.SetIKPosition(AvatarIKGoal.RightHand, Enemies[0].GetComponent<MonsterCtrl>().neckPos.position);
+                        _animator.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.LookRotation(transform.forward));
+
+                        StartCoroutine(Assasinate(Enemies[0].GetComponent<MonsterCtrl>()));
+                    }
                 }
             }
+            
         }
+    }
+    private void StabbingHandIK()
+    {
+        
+
+
     }
 
     private void CheckWeaponType()
@@ -102,6 +119,7 @@ public class ActionCtrl : MonoBehaviour
         _animator.SetTrigger("Stabbing");
         yield return new WaitForSeconds(1.0f);
         monster.monsterHP = 0;
+        yield return new WaitForSeconds(0.5f);
         CharacterManager.instance.canMove = true;
     }
     private void WeaponChange()

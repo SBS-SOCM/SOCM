@@ -36,6 +36,7 @@ public class MonsterCtrl : MonoBehaviour
     [SerializeField] private Transform movePos1;
     [SerializeField] private Transform movePos2;
     [SerializeField] private Text stabbingText;
+    [SerializeField] public Transform neckPos;
 
     //Search Player
     [Range(0, 360)]
@@ -128,13 +129,14 @@ public class MonsterCtrl : MonoBehaviour
     }
     private IEnumerator Stabbing()
     {
+        nav.ResetPath();
         stabbingText.text = "Q";
         yield return new WaitForSeconds(2f);
         stabbingText.text = "";
     }
     public void StabbingCtrl()
     {
-        StartCoroutine(Stabbing());
+        if(!isDie) StartCoroutine(Stabbing());
     }
     IEnumerator CourseMove()
     {
@@ -180,6 +182,7 @@ public class MonsterCtrl : MonoBehaviour
             _animator.SetBool("Run", false);
             _animator.SetTrigger("Die");
         }
+
     }
     void CheckAttack()
     {
