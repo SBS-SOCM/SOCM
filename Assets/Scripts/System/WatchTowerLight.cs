@@ -16,21 +16,31 @@ public class WatchTowerLight : MonoBehaviour
     public float angle;
 
     public float normalSpeed;
+
+    GameObject player;
+
+    public float maxAngleSpeed;
+
+    float rotateX;
+    float rotateY;
+    float rotateZ;
+
+    public bool isCoroutine; 
+
     // Start is called before the first frame update
     void Start()
     {
         rotateLeft();
+
+        rotateX = transform.rotation.eulerAngles.x;
+        rotateY = transform.rotation.eulerAngles.y;
+        rotateZ = transform.rotation.eulerAngles.z;
     }
 
     // Update is called once per frame
     void Update()
     {
         FindPlayer();
-
-        if (isPlayer)
-        {
-
-        }
     }
 
     public void FindPlayer()
@@ -41,13 +51,76 @@ public class WatchTowerLight : MonoBehaviour
 
         if (validHit != null)
         {
-            isPlayer = true;
+            // 감지범위 내에 플레이어 존재
+            if (!isCoroutine)
+            {
+                player = validHit.gameObject;
+
+                Debug.Log("플레이터 발견");
+                isPlayer = true;
+               
+                DOTween.KillAll();
+                CancelInvoke("rotateRight");
+                CancelInvoke("rotateLeft");
+                StopCoroutine(TracePlayer());
+                StartCoroutine(TracePlayer());
+            }
+
+            
         }
         else
         {
+            // 감지범위 내에 플레이어 부재
             isPlayer = false;
         }
     }
+
+    IEnumerator TracePlayer()
+    {
+        isCoroutine = true;
+
+        float remainTime = 2;
+        
+
+        // player가 탐지되는 동안
+        while (remainTime > 0)
+        {
+            if (isPlayer)
+            {
+                remainTime = 2;
+            }
+
+            Vector3 targetVec = player.transform.position - transform.position; // playerTransform 사용
+
+            // 목표 회전 계산
+            Quaternion targetRotation = Quaternion.LookRotation(targetVec);
+
+            // 현재 회전과 목표 회전 간의 각도 차이 계산
+            float angleDifference = Quaternion.Angle(transform.rotation, targetRotation);
+
+            // 최대 회전 속도를 적용하여 각도 변경
+            float rotationSpeed = Mathf.Min(maxAngleSpeed * Time.deltaTime, angleDifference);
+
+            // 회전 적용
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed);
+
+            remainTime -= Time.deltaTime;
+            yield return null; // 다음 프레임까지 대기
+        }
+
+        isCoroutine = false;
+
+        yield return new WaitForSeconds(1);
+
+        transform.DORotate(new Vector3(rotateX, rotateY, rotateZ) , normalSpeed);
+
+        yield return new WaitForSeconds(normalSpeed);
+
+        rotateLeft();
+
+        
+    }
+
 
     private Collider GetValidHit(Collider[] hitsColl)
     {
