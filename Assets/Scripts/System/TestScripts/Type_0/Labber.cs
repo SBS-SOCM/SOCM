@@ -18,6 +18,7 @@ public class Labber : MonoBehaviour
 
     public float findEnemyRange;
 
+    public GameObject[] watchTowerLights;
     public void InteractionOn()
     {
         StartCoroutine(Interaction());
@@ -38,7 +39,16 @@ public class Labber : MonoBehaviour
         gauge.gameObject.SetActive(false);
         gaugeBackGround.gameObject.SetActive(false);
 
-        
+        for (int i = 0; i < watchTowerLights.Length; i++)
+        {
+            watchTowerLights[i].SetActive(false);
+        }    
+
+
+
+
+        /*
+
         // 주변 적에게 전달 (위치 유도)
 
         // 주변 어둡게
@@ -62,6 +72,7 @@ public class Labber : MonoBehaviour
 
         // 주변 ENPC 시야 복구
         rollbackSight(hits);
+        */
     }
 
     public Collider[] FindEnemy()

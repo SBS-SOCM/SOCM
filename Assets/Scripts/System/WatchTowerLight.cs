@@ -51,12 +51,18 @@ public class WatchTowerLight : MonoBehaviour
 
         if (validHit != null)
         {
+            
+
             // 감지범위 내에 플레이어 존재
             if (!isCoroutine)
             {
+                if (!CharacterManager.instance.isVisible)
+                {
+                    return;
+                }
+
                 player = validHit.gameObject;
 
-                Debug.Log("플레이터 발견");
                 isPlayer = true;
                
                 DOTween.KillAll();
