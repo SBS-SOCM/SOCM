@@ -25,7 +25,6 @@ public class MonsterCtrl : MonoBehaviour
     public bool canRandomMove = true;
     public bool isDie = false;
     public int monsterHP = 2;
-    private bool isMoveing = false;
     public bool courseMove = false;
     private float courMoveTiem = 5.0f;
 
@@ -176,7 +175,9 @@ public class MonsterCtrl : MonoBehaviour
         if(monsterHP <= 0 && !isDie)
         {
             isDie = true;
+            stabbingText.text = "";
             nav.ResetPath();
+            this.gameObject.GetComponent<CapsuleCollider>().enabled = false;
             StopAllCoroutines();
             _animator.SetBool("Walk", false);
             _animator.SetBool("Run", false);

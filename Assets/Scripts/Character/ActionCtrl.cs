@@ -2,6 +2,7 @@ using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -10,6 +11,7 @@ public class ActionCtrl : MonoBehaviour
 {
     //[SerializeField] RuntimeAnimatorController noWeaponAnim;
     [SerializeField] RuntimeAnimatorController weaponAnim;
+    [SerializeField] private Transform vfxBlood;
     public LayerMask enemyMask;
     public LayerMask wallMask;
 
@@ -39,9 +41,8 @@ public class ActionCtrl : MonoBehaviour
 
         CheckEnemy();
 
-        
-
-
+        //stabbingWeightBlend = Mathf.Lerp(stabbingWeightBlend, isActiveStabbing ? 1f : 0f, Time.deltaTime * 100f);
+        stabbingWeightBlend = isActiveStabbing ? 0.5f : 0f;
 
     }
     private void CheckEnemy()
@@ -64,31 +65,58 @@ public class ActionCtrl : MonoBehaviour
                 }
             }
         }
-        if(Enemies.Count != 0)
+        if (Enemies.Count != 0)
         {
             if (Enemies[0].GetComponent<MonsterCtrl>() != null && !Enemies[0].GetComponent<MonsterCtrl>().isDie)
             {
                 Enemies[0].GetComponent<MonsterCtrl>().StabbingCtrl();
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
+                    //Stabbing Hand IK
                     if (Enemies[0].GetComponent<MonsterCtrl>() != null && !Enemies[0].GetComponent<MonsterCtrl>().isDie)
                     {
-                        _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
-                        _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
-
-                        _animator.SetIKPosition(AvatarIKGoal.RightHand, Enemies[0].GetComponent<MonsterCtrl>().neckPos.position);
-                        _animator.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.LookRotation(transform.forward));
-
-                        StartCoroutine(Assasinate(Enemies[0].GetComponent<MonsterCtrl>()));
+                        isActiveStabbing = true;
+                        var monster = Enemies[0].GetComponent<MonsterCtrl>();
+                        stabbingTarget = monster.neckPos;
+                        StartCoroutine(StabbingHandIK(monster));
                     }
                 }
             }
-            
         }
     }
-    private void StabbingHandIK()
+
+    bool isActiveStabbing = false;
+    private Transform stabbingTarget;
+    private float stabbingWeightBlend = 0f;
+
+    private void OnAnimatorIK(int layerIndex)
     {
-        
+        if (isActiveStabbing)
+        {
+            _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, stabbingWeightBlend);
+            _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, stabbingWeightBlend);
+
+            _animator.SetIKPosition(AvatarIKGoal.RightHand, stabbingTarget.position);
+            _animator.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.LookRotation(transform.forward));
+        }
+    }
+
+    private IEnumerator StabbingHandIK(MonsterCtrl monster)
+    {
+        //_animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+        //_animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
+
+        //_animator.SetIKPosition(AvatarIKGoal.RightHand, monster.neckPos.position);
+        //_animator.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.LookRotation(transform.forward));
+
+        StartCoroutine(Assasinate(monster));
+        yield return new WaitForSeconds(0.4f);
+        Instantiate(vfxBlood, monster.neckPos);
+
+        yield return new WaitForSeconds(1.2f);
+        isActiveStabbing = false;
+        _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
+        _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0);
 
 
     }
@@ -117,9 +145,9 @@ public class ActionCtrl : MonoBehaviour
     {
         CharacterManager.instance.canMove = false;
         _animator.SetTrigger("Stabbing");
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.2f);
         monster.monsterHP = 0;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
         CharacterManager.instance.canMove = true;
     }
     private void WeaponChange()
