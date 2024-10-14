@@ -1,9 +1,11 @@
 using StarterAssets;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Threading;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -27,6 +29,9 @@ public class ActionCtrl : MonoBehaviour
     private float aimingBlend = 0f;
     public static int weaponType = 0;
 
+    //Mission
+    [SerializeField] private LayerMask missionLayer;
+
     private void Awake()
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
@@ -40,10 +45,32 @@ public class ActionCtrl : MonoBehaviour
         CheckWeaponType();
 
         CheckEnemy();
+        CheckMission();
 
         //stabbingWeightBlend = Mathf.Lerp(stabbingWeightBlend, isActiveStabbing ? 1f : 0f, Time.deltaTime * 100f);
         stabbingWeightBlend = isActiveStabbing ? 0.5f : 0f;
 
+    }
+    private void CheckMission()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+            Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+            if (Physics.Raycast(ray, out RaycastHit hit, 5f))
+            {
+                if(hit.collider.gameObject.CompareTag("Mission"))
+                {
+                    Mission mission = hit.collider.gameObject.GetComponent<Mission>();
+                    if (mission.active)
+                    {
+                        MissionManager.instance.clearMissionNum = mission.missionNum;
+                        mission.active = false;
+                    }
+                    
+                }
+            }
+        }
     }
     private void CheckEnemy()
     {
@@ -91,14 +118,14 @@ public class ActionCtrl : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-        if (isActiveStabbing)
+        /*if (isActiveStabbing)
         {
-            _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, stabbingWeightBlend);
-            _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, stabbingWeightBlend);
+            _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.2f);
+            _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0.2f);
 
             _animator.SetIKPosition(AvatarIKGoal.RightHand, stabbingTarget.position);
             _animator.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.LookRotation(transform.forward));
-        }
+        }*/
     }
 
     private IEnumerator StabbingHandIK(MonsterCtrl monster)
@@ -129,6 +156,12 @@ public class ActionCtrl : MonoBehaviour
             RigBuilder rigBuilder = GetComponent<RigBuilder>();
             rigBuilder.enabled = true;
             targetAiming = 1f;
+        }
+        else
+        {
+            RigBuilder rigBuilder = GetComponent<RigBuilder>();
+            rigBuilder.enabled = false;
+            targetAiming = 0f;
         }
         /*else
         {
