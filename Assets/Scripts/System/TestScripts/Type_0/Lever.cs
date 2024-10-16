@@ -1,24 +1,39 @@
+using DG.Tweening;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Labber : MonoBehaviour
+public class Lever : MonoBehaviour
 {
-    public float interactionTime;
-    public float needTime;
+    // 몇초째 진행중인지 나타내는 시간
+    [TabGroup("Global")] public float interactionTime;
+    
+    // 필요한 시간
+    [TabGroup("Global")] public float needTime;
 
-    public Image gauge;
-    public Image gaugeBackGround;
-    public Image darkBG;
+    // 게이지 UI
+    [TabGroup("Inagame")] public Image gauge;
+    [TabGroup("Inagame")] public Image gaugeBackGround;
 
-    public GameObject[] traps;
+    // 분전반 복구에 걸리는 시간
+    // [TabGroup("Global")] public float holdingTime;
 
-    public float holdingTime;
+    // 주변 ENPC 한테 Warning 주는 거리
+    // [TabGroup("Global")] public float findEnemyRange;
 
-    public float findEnemyRange;
+    // 현재 상태
+    [TabGroup("Global")] public bool isOn;
 
-    public GameObject[] watchTowerLights;
+    // 래버
+    [TabGroup("Global")]
+    public GameObject switchLever;
+
+    // 래버가 내려졌을 떄 , 없어져야 하는 타워
+    [TabGroup("Inagame")] public GameObject[] watchTowerLights;
+
+
     public void InteractionOn()
     {
         StartCoroutine(Interaction());
@@ -26,6 +41,9 @@ public class Labber : MonoBehaviour
 
     IEnumerator Interaction()
     {
+        interactionTime = 0;
+        isOn = false;
+
         gauge.gameObject.SetActive(true);
         gaugeBackGround.gameObject.SetActive(true);
 
@@ -35,6 +53,9 @@ public class Labber : MonoBehaviour
             gauge.fillAmount = interactionTime / needTime;
             yield return null;
         }
+
+        switchLever.transform.DORotate(new Vector3(23.967f, 177.146f, -1.16f),0.2f);
+
 
         gauge.gameObject.SetActive(false);
         gaugeBackGround.gameObject.SetActive(false);
@@ -75,6 +96,7 @@ public class Labber : MonoBehaviour
         */
     }
 
+    /*
     public Collider[] FindEnemy()
     {
         Collider[] hits;
@@ -84,17 +106,7 @@ public class Labber : MonoBehaviour
         return(hits);
     }
 
-    public void DecreaseSight(Collider[] hits)
-    {
-        foreach (Collider hit in hits)
-        {
-            if (hit != null)
-            {
-                // hit.GetComponent<MonsterCtrl>().SetViewRange();
-                // hit.GetComponent<MonsterCtrl>().isWarning = true;
-            }
-        }
-    }
+    */
 
     public void rollbackSight(Collider[] hits)
     {

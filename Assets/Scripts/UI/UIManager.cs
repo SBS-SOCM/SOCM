@@ -272,4 +272,16 @@ public class UIManager : SerializedMonoBehaviour
         UIStack.Push(3);
         OpenUI();
     }
+
+    public IEnumerator OpenEnd()
+    {
+        UIPanels[4].SetActive(true);
+        UIStack.Push(4);
+        OpenUI();
+
+        yield return new WaitForSeconds(2f);
+
+        Singleton.instance.GetComponentInChildren<SceneManagement>().LoadSceneDirect(0);
+        Singleton.instance.DistroySIngleton();
+    }
 }

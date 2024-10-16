@@ -21,6 +21,11 @@ public class Singleton : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void DistroySIngleton()
+    {
+        Destroy(gameObject);
+    }
 }
 
 

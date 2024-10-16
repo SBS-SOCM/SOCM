@@ -41,6 +41,36 @@ public class Interaction : MonoBehaviour
         }
     }
 
+    public string Translate(string name)
+    {
+        switch (name)
+        {
+            case "StartItem":
+                return "시작 아이템";
+
+            case "Map":
+                return "지도";
+
+            case "Lever":
+                return "래버";
+
+            case "Door":
+                return "문";
+
+            case "Chest":
+                return "보물 상자";
+
+            case "HideObject":
+                return "은신처";
+
+            case "EndObject":
+                return "탈출 아이템";
+        }
+
+        return "";
+
+    }
+
     public void CheckInteraction()
     {
         if (CharacterManager.instance.gameObject == null)
@@ -55,8 +85,8 @@ public class Interaction : MonoBehaviour
         if (validHit != null)
         {
             interactionImage.gameObject.SetActive(true);
+            interactionImage.transform.GetChild(1).GetComponent<Text>().text = Translate(validHit.name); 
 
-            
             // OutlineController를 찾아서 외곽선 활성화
             OutlineController outlineController = validHit.GetComponent<OutlineController>();
 
@@ -78,7 +108,7 @@ public class Interaction : MonoBehaviour
             interactionImage.gameObject.SetActive(false);
 
             
-            if (hitObject != null)
+            if (hitObject != null && hitObject.GetComponent<OutlineController>() != null)
             {
                 // 이전에 외곽선이 적용된 오브젝트의 외곽선을 제거
                 hitObject.GetComponent<OutlineController>().RemoveOutline();
@@ -114,8 +144,8 @@ public class Interaction : MonoBehaviour
                 interactionObject.GetComponent<Clue>().ClueOn();
                 break;
 
-            case "Labber":
-                interactionObject.GetComponent<Labber>().InteractionOn();
+            case "Lever":
+                interactionObject.GetComponent<Lever>().InteractionOn();
                 break;
 
             case "Door":
@@ -128,6 +158,10 @@ public class Interaction : MonoBehaviour
 
             case "HideObject":
                 interactionObject.GetComponent<HideObject>().InteractionSend();
+                break;
+
+            case "EndObject":
+                interactionObject.GetComponent<EndObject>().DelEndBlock();
                 break;
         }
     }
