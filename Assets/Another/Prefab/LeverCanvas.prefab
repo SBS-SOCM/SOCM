@@ -243,7 +243,7 @@ GameObject:
   - component: {fileID: 9007542925653760553}
   - component: {fileID: 509430181193505397}
   m_Layer: 5
-  m_Name: Canvas_Test_1
+  m_Name: LeverCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
