@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.InputSystem;
 
 namespace redforce01
 {
@@ -32,6 +33,7 @@ namespace redforce01
             isCroching = Input.GetKey(KeyCode.LeftShift);
 
             Vector2 inputVec = new Vector2(inputX, inputY);
+            
             if (inputVec.magnitude > 0f)
             {
                 if (inputVec.x > 0 || inputVec.x < 0)
@@ -40,7 +42,8 @@ namespace redforce01
                 }
                 else
                 {
-                    lastInputDirection.x = Mathf.Lerp(lastInputDirection.x, 0.0f, Time.deltaTime * 2f);
+                    //lastInputDirection.x = Mathf.Lerp(lastInputDirection.x, 0.0f, Time.deltaTime * 2f);
+                    lastInputDirection.x = 0.0f;
                 }
 
                 if (inputVec.y > 0 || inputVec.y < 0)
@@ -49,12 +52,15 @@ namespace redforce01
                 }
                 else
                 {
-                    lastInputDirection.y = Mathf.Lerp(lastInputDirection.y, 0.0f, Time.deltaTime * 2f);
+                    //lastInputDirection.y = Mathf.Lerp(lastInputDirection.y, 0.0f, Time.deltaTime * 2f);
+                    lastInputDirection.y = 0.0f;
                 }
             }
-            blendAiming = Mathf.Lerp(blendAiming, inputAim ? 1 : 0, Time.deltaTime * 10);
+            //blendAiming = Mathf.Lerp(blendAiming, inputAim ? 1 : 0, Time.deltaTime * 10);
+            blendAiming = inputAim ? 1 : 0;
             AimingRig.weight = blendAiming;
-            blendSpeed = Mathf.Lerp(blendSpeed, inputVec.magnitude > 0f ? (isCroching ? 1f : 3f) : 0f, Time.deltaTime * 10f);
+            //blendSpeed = Mathf.Lerp(blendSpeed, inputVec.magnitude > 0f ? (isCroching ? 1f : 3f) : 0f, Time.deltaTime * 10f);
+            blendSpeed = inputVec.magnitude > 0.1f ? (isCroching ? 1f : 3f) : 0f;
 
             characterAnimator.SetFloat(hashKeyOfSpeed, blendSpeed);
             characterAnimator.SetFloat(hashKeyOfHorizontal, lastInputDirection.x);

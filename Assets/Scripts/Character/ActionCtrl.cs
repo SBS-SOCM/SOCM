@@ -1,7 +1,11 @@
 using StarterAssets;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
+using System.Threading;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -9,6 +13,7 @@ public class ActionCtrl : MonoBehaviour
 {
     //[SerializeField] RuntimeAnimatorController noWeaponAnim;
     [SerializeField] RuntimeAnimatorController weaponAnim;
+    [SerializeField] private Transform vfxBlood;
     public LayerMask enemyMask;
     public LayerMask wallMask;
 
@@ -24,6 +29,9 @@ public class ActionCtrl : MonoBehaviour
     private float aimingBlend = 0f;
     public static int weaponType = 0;
 
+    //Mission
+    [SerializeField] private LayerMask missionLayer;
+
     private void Awake()
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
@@ -37,11 +45,32 @@ public class ActionCtrl : MonoBehaviour
         CheckWeaponType();
 
         CheckEnemy();
+        CheckMission();
 
-        
+        //stabbingWeightBlend = Mathf.Lerp(stabbingWeightBlend, isActiveStabbing ? 1f : 0f, Time.deltaTime * 100f);
+        stabbingWeightBlend = isActiveStabbing ? 0.5f : 0f;
 
-
-
+    }
+    private void CheckMission()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+            Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+            if (Physics.Raycast(ray, out RaycastHit hit, 5f))
+            {
+                if(hit.collider.gameObject.CompareTag("Mission"))
+                {
+                    Mission mission = hit.collider.gameObject.GetComponent<Mission>();
+                    if (mission.active)
+                    {
+                        MissionManager.instance.clearMissionNum = mission.missionNum;
+                        mission.active = false;
+                    }
+                    
+                }
+            }
+        }
     }
     private void CheckEnemy()
     {
@@ -63,17 +92,61 @@ public class ActionCtrl : MonoBehaviour
                 }
             }
         }
-        if(Enemies.Count != 0)
+        if (Enemies.Count != 0)
         {
-            Enemies[0].GetComponent<MonsterCtrl>().StabbingCtrl();
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Enemies[0].GetComponent<MonsterCtrl>() != null && !Enemies[0].GetComponent<MonsterCtrl>().isDie)
             {
-                if (Enemies[0].GetComponent<MonsterCtrl>() != null && !Enemies[0].GetComponent<MonsterCtrl>().isDie)
+                Enemies[0].GetComponent<MonsterCtrl>().StabbingCtrl();
+                if (Input.GetKeyDown(KeyCode.Q))
                 {
-                    StartCoroutine(Assasinate(Enemies[0].GetComponent<MonsterCtrl>()));
+                    //Stabbing Hand IK
+                    if (Enemies[0].GetComponent<MonsterCtrl>() != null && !Enemies[0].GetComponent<MonsterCtrl>().isDie)
+                    {
+                        isActiveStabbing = true;
+                        var monster = Enemies[0].GetComponent<MonsterCtrl>();
+                        stabbingTarget = monster.neckPos;
+                        StartCoroutine(StabbingHandIK(monster));
+                    }
                 }
             }
         }
+    }
+
+    bool isActiveStabbing = false;
+    private Transform stabbingTarget;
+    private float stabbingWeightBlend = 0f;
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+        /*if (isActiveStabbing)
+        {
+            _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.2f);
+            _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0.2f);
+
+            _animator.SetIKPosition(AvatarIKGoal.RightHand, stabbingTarget.position);
+            _animator.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.LookRotation(transform.forward));
+        }*/
+    }
+
+    private IEnumerator StabbingHandIK(MonsterCtrl monster)
+    {
+        //_animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+        //_animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
+
+        //_animator.SetIKPosition(AvatarIKGoal.RightHand, monster.neckPos.position);
+        //_animator.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.LookRotation(transform.forward));
+
+        CharacterManager.instance.willPower -= 5.0f;
+        StartCoroutine(Assasinate(monster));
+        yield return new WaitForSeconds(0.4f);
+        Instantiate(vfxBlood, monster.neckPos);
+
+        yield return new WaitForSeconds(1.2f);
+        isActiveStabbing = false;
+        _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
+        _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0);
+
+
     }
 
     private void CheckWeaponType()
@@ -84,6 +157,12 @@ public class ActionCtrl : MonoBehaviour
             RigBuilder rigBuilder = GetComponent<RigBuilder>();
             rigBuilder.enabled = true;
             targetAiming = 1f;
+        }
+        else
+        {
+            RigBuilder rigBuilder = GetComponent<RigBuilder>();
+            rigBuilder.enabled = false;
+            targetAiming = 0f;
         }
         /*else
         {
@@ -100,8 +179,9 @@ public class ActionCtrl : MonoBehaviour
     {
         CharacterManager.instance.canMove = false;
         _animator.SetTrigger("Stabbing");
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.2f);
         monster.monsterHP = 0;
+        yield return new WaitForSeconds(1.0f);
         CharacterManager.instance.canMove = true;
     }
     private void WeaponChange()

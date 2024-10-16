@@ -25,9 +25,9 @@ public class MonsterCtrl : MonoBehaviour
     public bool canRandomMove = true;
     public bool isDie = false;
     public int monsterHP = 2;
-    private bool isMoveing = false;
     public bool courseMove = false;
     private float courMoveTiem = 5.0f;
+    public float courseMoveTerm = 8.0f;
 
     private Transform targetTr;
     [SerializeField] private float soundRange;
@@ -36,6 +36,7 @@ public class MonsterCtrl : MonoBehaviour
     [SerializeField] private Transform movePos1;
     [SerializeField] private Transform movePos2;
     [SerializeField] private Text stabbingText;
+    [SerializeField] public Transform neckPos;
 
     //Search Player
     [Range(0, 360)]
@@ -118,34 +119,38 @@ public class MonsterCtrl : MonoBehaviour
         {
             stateText.text = "";
         }
-        if (courseMove)
+        /*if (courseMove)
         {
             StopCourseMove();
-        }
+        }*/
         
         CheckSleeping();
         CheckDie();
     }
     private IEnumerator Stabbing()
     {
+        nav.ResetPath();
         stabbingText.text = "Q";
         yield return new WaitForSeconds(2f);
         stabbingText.text = "";
     }
     public void StabbingCtrl()
     {
-        StartCoroutine(Stabbing());
+        if(!isDie) StartCoroutine(Stabbing());
     }
     IEnumerator CourseMove()
     {
-        nav.SetDestination(movePos1.position);
-        _animator.SetBool("Walk", true);
-        yield return new WaitForSeconds(5.0f);
-
-
-        yield return new WaitForSeconds(5.0f);
+        Debug.Log("CourseMove");
         nav.SetDestination(movePos2.position);
         _animator.SetBool("Walk", true);
+
+        yield return new WaitForSeconds(courseMoveTerm);
+        nav.SetDestination(movePos1.position);
+        _animator.SetBool("Walk", true);
+
+        yield return new WaitForSeconds(courseMoveTerm + 2.0f);
+        nav.SetDestination(movePos1.position);
+        _animator.SetBool("Walk", false);
 
 
     }
@@ -174,12 +179,15 @@ public class MonsterCtrl : MonoBehaviour
         if(monsterHP <= 0 && !isDie)
         {
             isDie = true;
+            stabbingText.text = "";
             nav.ResetPath();
+            this.gameObject.GetComponent<CapsuleCollider>().enabled = false;
             StopAllCoroutines();
             _animator.SetBool("Walk", false);
             _animator.SetBool("Run", false);
             _animator.SetTrigger("Die");
         }
+
     }
     void CheckAttack()
     {
