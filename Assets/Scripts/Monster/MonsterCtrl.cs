@@ -27,6 +27,7 @@ public class MonsterCtrl : MonoBehaviour
     public int monsterHP = 2;
     public bool courseMove = false;
     private float courMoveTiem = 5.0f;
+    public float courseMoveTerm = 8.0f;
 
     private Transform targetTr;
     [SerializeField] private float soundRange;
@@ -118,10 +119,10 @@ public class MonsterCtrl : MonoBehaviour
         {
             stateText.text = "";
         }
-        if (courseMove)
+        /*if (courseMove)
         {
             StopCourseMove();
-        }
+        }*/
         
         CheckSleeping();
         CheckDie();
@@ -139,14 +140,17 @@ public class MonsterCtrl : MonoBehaviour
     }
     IEnumerator CourseMove()
     {
-        nav.SetDestination(movePos1.position);
-        _animator.SetBool("Walk", true);
-        yield return new WaitForSeconds(5.0f);
-
-
-        yield return new WaitForSeconds(5.0f);
+        Debug.Log("CourseMove");
         nav.SetDestination(movePos2.position);
         _animator.SetBool("Walk", true);
+
+        yield return new WaitForSeconds(courseMoveTerm);
+        nav.SetDestination(movePos1.position);
+        _animator.SetBool("Walk", true);
+
+        yield return new WaitForSeconds(courseMoveTerm + 2.0f);
+        nav.SetDestination(movePos1.position);
+        _animator.SetBool("Walk", false);
 
 
     }

@@ -136,6 +136,7 @@ public class ActionCtrl : MonoBehaviour
         //_animator.SetIKPosition(AvatarIKGoal.RightHand, monster.neckPos.position);
         //_animator.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.LookRotation(transform.forward));
 
+        CharacterManager.instance.willPower -= 5.0f;
         StartCoroutine(Assasinate(monster));
         yield return new WaitForSeconds(0.4f);
         Instantiate(vfxBlood, monster.neckPos);
