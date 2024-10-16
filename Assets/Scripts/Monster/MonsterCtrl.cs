@@ -115,10 +115,6 @@ public class MonsterCtrl : MonoBehaviour
         {
             CheckSound();
         }
-        else
-        {
-            stateText.text = "";
-        }
         /*if (courseMove)
         {
             StopCourseMove();
@@ -220,7 +216,8 @@ public class MonsterCtrl : MonoBehaviour
         }
         else //Long Range Attack
         {
-            _animator.SetTrigger("");
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(targetTr.transform.position), Time.deltaTime * 2.0f);
+
             Vector3 dir = targetTr.position - bulletSpawnPos.position; dir.y = 0f;
             Quaternion rot = Quaternion.LookRotation(dir.normalized);
             Instantiate(bulletPrefab, bulletSpawnPos.position, rot);
@@ -275,16 +272,19 @@ public class MonsterCtrl : MonoBehaviour
     {
         if (isPlayerChecked)
         {
+            _animator.SetBool("Aiming",true);
             stateText.text = "!";
             stateText.color = Color.red;
         }
         else if (isWarning)
         {
+            _animator.SetBool("Aiming", true);
             stateText.text = "?";
             stateText.color = Color.yellow;
         }
         else if(!isPlayerChecked && !isWarning)
         {
+            _animator.SetBool("Aiming", false);
             stateText.text = "";
         }
     }
@@ -415,10 +415,6 @@ public class MonsterCtrl : MonoBehaviour
                 }
             }
         }
-
-
-
-
         // 3 State
         if (Enemies.Count > 0) //Player in View Range
         {

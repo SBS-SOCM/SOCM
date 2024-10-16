@@ -134,8 +134,8 @@ public partial class CharacterManager : MonoBehaviour
         }
         else visibleModeTime = 10.0f;
 
-        if (!isUsingVisibleSkill) characterGO.GetComponent<SkinnedMeshRenderer>().material = characterMat;
-        else if (isUsingVisibleSkill) characterGO.GetComponent<SkinnedMeshRenderer>().material = invisibleMat;
+        //if (!isUsingVisibleSkill) characterGO.GetComponent<SkinnedMeshRenderer>().material = characterMat;
+        //else if (isUsingVisibleSkill) characterGO.GetComponent<SkinnedMeshRenderer>().material = invisibleMat;
     }
 
     private void CheckEnemy()
