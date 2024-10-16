@@ -78,7 +78,7 @@ public class Interaction : MonoBehaviour
             interactionImage.gameObject.SetActive(false);
 
             
-            if (hitObject != null)
+            if (hitObject != null && hitObject.GetComponent<OutlineController>() != null)
             {
                 // 이전에 외곽선이 적용된 오브젝트의 외곽선을 제거
                 hitObject.GetComponent<OutlineController>().RemoveOutline();
@@ -128,6 +128,10 @@ public class Interaction : MonoBehaviour
 
             case "HideObject":
                 interactionObject.GetComponent<HideObject>().InteractionSend();
+                break;
+
+            case "EndObject":
+                interactionObject.GetComponent<EndObject>().DelEndBlock();
                 break;
         }
     }
