@@ -282,6 +282,6 @@ public class UIManager : SerializedMonoBehaviour
         yield return new WaitForSeconds(2f);
 
         Singleton.instance.GetComponentInChildren<SceneManagement>().LoadSceneDirect(0);
-        Destroy(Singleton.instance);
+        Singleton.instance.DistroySIngleton();
     }
 }
