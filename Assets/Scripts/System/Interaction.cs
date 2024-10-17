@@ -60,8 +60,8 @@ public class Interaction : MonoBehaviour
             case "Chest":
                 return "보물 상자";
 
-            case "HideObject":
-                return "은신처";
+            case "Barrel":
+                return "은신용 통";
 
             case "EndObject":
                 return "탈출 아이템";
@@ -156,8 +156,8 @@ public class Interaction : MonoBehaviour
                 interactionObject.GetComponent<Chest>().Open();
                 break;
 
-            case "HideObject":
-                interactionObject.GetComponent<HideObject>().InteractionSend();
+            case "Barrel":
+                interactionObject.GetComponent<Barrel>().InteractionSend();
                 break;
 
             case "EndObject":

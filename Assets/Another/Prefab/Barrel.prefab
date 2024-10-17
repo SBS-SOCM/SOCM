@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 285708848147837884}
   - component: {fileID: 6883568616634343180}
   m_Layer: 9
-  m_Name: HideObject
+  m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +36,6 @@ Transform:
   m_Children:
   - {fileID: 3849515947007639493}
   - {fileID: 9087955551127524925}
-  - {fileID: 310983033005938664}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &5003583318557207659
@@ -96,7 +95,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 901500570024788754}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49645685672b80542beecc7b3db0c743, type: 3}
   m_Name: 
@@ -138,7 +137,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hideCamera: {fileID: 4621744785310662283}
   isInteracion: 0
-  hidePlayerPos: {fileID: 310983033005938664}
+  CameraAngleOverride: 0
+  LockCameraPosition: 0
 --- !u!1 &2206090234742398813
 GameObject:
   m_ObjectHideFlags: 0
@@ -163,8 +163,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2206090234742398813}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -4.656613e-10, w: 1}
-  m_LocalPosition: {x: -0.30000585, y: 0, z: 2.710031}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -231,7 +231,7 @@ MonoBehaviour:
   ShoulderOffset: {x: 1.5, y: 0.25, z: 0}
   VerticalArmLength: 0
   CameraSide: 0.6
-  CameraDistance: 2.5
+  CameraDistance: 2
   CameraCollisionFilter:
     serializedVersion: 2
     m_Bits: 129
@@ -265,7 +265,7 @@ Transform:
   m_GameObject: {fileID: 4621744785310662283}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0072477204, y: 0.7990862, z: -0.00646736, w: 0.601138}
-  m_LocalPosition: {x: 0.004770577, y: 0.24415207, z: 0.20960271}
+  m_LocalPosition: {x: -0.19, y: 2, z: 0.89}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -311,34 +311,3 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1961932030072116803}
---- !u!1 &8878403206934155604
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 310983033005938664}
-  m_Layer: 9
-  m_Name: HidePlayerPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &310983033005938664
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8878403206934155604}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.01, y: 0.38, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1269244091905333180}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
