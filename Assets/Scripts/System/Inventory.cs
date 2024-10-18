@@ -15,6 +15,7 @@ public class Inventory : MonoBehaviour
         public int count;
         public string explain;
 
+        
         public Item(string name)
         {
             this.name = name;
@@ -49,6 +50,10 @@ public class Inventory : MonoBehaviour
     public int itemCount;
 
     public float diameter;
+
+    // 단서 이미지
+    public Image clueImage;
+
 
     private void Start()
     {
@@ -242,6 +247,22 @@ public class Inventory : MonoBehaviour
             {
                 itemImages[i].gameObject.SetActive(false);
             }
+        }
+
+        switch (inventory[nowItem].name)
+        {
+            case "Knife":
+                clueImage.sprite = Resources.Load<Sprite>("Item/Knife");
+                break;
+            case "Pistol":
+                clueImage.sprite = Resources.Load<Sprite>("Item/Pistol");
+                break;
+            case "Coin":
+                clueImage.sprite = Resources.Load<Sprite>("Item/Coin");
+                break;
+            default:
+                clueImage.sprite = null;
+                break;
         }
     }
 

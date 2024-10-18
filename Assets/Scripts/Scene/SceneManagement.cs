@@ -29,6 +29,12 @@ public class SceneManagement : MonoBehaviour
     /// <param name="scene"></param>
     public void LoadScene(int scene)
     {
+        Debug.Log("Scene Move");
+
+        // 마우스 커서를 해제하고 자유롭게 움직이게 함
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         nextScene = scene;
 
         SceneManager.LoadScene(3);
@@ -40,6 +46,12 @@ public class SceneManagement : MonoBehaviour
     /// <param name="scene"></param>
     public void LoadSceneDirect(int scene)
     {
+        Debug.Log("Scene Direct Move");
+
+        // 마우스 커서를 해제하고 자유롭게 움직이게 함
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         SceneManager.LoadScene(scene);
     }
 }

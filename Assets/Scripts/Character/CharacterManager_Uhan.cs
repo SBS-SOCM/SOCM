@@ -10,6 +10,9 @@ public partial class CharacterManager
     /// 0 : 단검 / 1 : 권총 / 2 : 동전
     /// </summary>
     [TabGroup("Uhan")] [ReadOnly] public int itemType;
+    [TabGroup("Uhan")]  public bool isHide;
+
+
 
     public void SetItemType(int type)
     {

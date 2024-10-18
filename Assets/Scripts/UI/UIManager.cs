@@ -176,6 +176,7 @@ public class UIManager : SerializedMonoBehaviour
 
     public void OpenInventory()
     {
+
         if (UIPanels[1].activeSelf)
         {
             ESC();
@@ -230,10 +231,12 @@ public class UIManager : SerializedMonoBehaviour
         Debug.Log("now : " + nowItem.ToString() + " before : " + beforeItem.ToString() + " after : " + afterItem.ToString());
 
         Debug.Log("Item/" + inventory.inventory[nowItem].name);
-
+     
+        /*
         ingameUIObjects[0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[nowItem].name);
         ingameUIObjects[2].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[afterItem].name);
         ingameUIObjects[1].GetComponent<Image>().sprite = Resources.Load<Sprite>("Item/" + inventory.inventory[beforeItem].name);
+        */
 
         if (inventory.itemCount > 3)
         {

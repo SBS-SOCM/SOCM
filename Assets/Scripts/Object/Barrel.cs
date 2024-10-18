@@ -55,7 +55,9 @@ public class Barrel : MonoBehaviour
         isInteracion = true;
 
         // 플레이어 비활성화 (숨기기)
+        CharacterManager.instance.isHide = true;
         CharacterManager.instance.gameObject.SetActive(false);
+        
     }
 
     public void InteractionOff()
@@ -67,6 +69,7 @@ public class Barrel : MonoBehaviour
         isInteracion = false;
 
         // 플레이어 다시 활성화 (보이기)
+        CharacterManager.instance.isHide = false;
         CharacterManager.instance.gameObject.SetActive(true);
     }
 

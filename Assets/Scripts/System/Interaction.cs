@@ -61,7 +61,15 @@ public class Interaction : MonoBehaviour
                 return "보물 상자";
 
             case "Barrel":
-                return "은신용 통";
+                if (CharacterManager.instance.isHide)
+                {
+                    return "나가기";
+                }
+                else
+                {
+                    return "은신용 통";
+                }
+               
 
             case "EndObject":
                 return "탈출 아이템";
@@ -73,7 +81,7 @@ public class Interaction : MonoBehaviour
 
     public void CheckInteraction()
     {
-        if (CharacterManager.instance.gameObject == null)
+        if (CharacterManager.instance == null || CharacterManager.instance.gameObject == null)
         {
             return;
         }
