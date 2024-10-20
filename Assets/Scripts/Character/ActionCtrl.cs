@@ -158,15 +158,8 @@ public class ActionCtrl : MonoBehaviour
             rigBuilder.enabled = true;
             targetAiming = 1f;
         }
-        else
-        {
-            RigBuilder rigBuilder = GetComponent<RigBuilder>();
-            rigBuilder.enabled = false;
-            targetAiming = 0f;
-        }
         /*else
         {
-            _animator.runtimeAnimatorController = noWeaponAnim;
             RigBuilder rigBuilder = GetComponent<RigBuilder>();
             rigBuilder.enabled = false;
             targetAiming = 0f;

@@ -34,7 +34,6 @@ public class BulletRay : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, transform.forward, out hit, rayDist))
         {
-            Debug.Log(hit.transform.name);
             if(hit.transform.name == "Head")
             {
                 hit.transform.GetComponentInParent<MonsterCtrl>().monsterHP -= 2;

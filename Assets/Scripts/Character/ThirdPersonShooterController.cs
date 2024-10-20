@@ -11,7 +11,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private GameObject bulletGO;
     [SerializeField] private GameObject bulletSpecialGO;
     [SerializeField] private Transform bulletSpawnPos;
-    [SerializeField] private AudioClip fireSound;
+    [SerializeField] private AudioClip[] fireSound;
     [SerializeField] private Transform gunFireSpawnPos;
     [SerializeField] private GameObject gunFire;
     [SerializeField] private Transform vfxBlood;
@@ -92,7 +92,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             case 0: // Pistol
                 CharacterManager.instance.isFire = true;
                 fireTerm = 0.5f;
-                audioSource.PlayOneShot(fireSound);
+                audioSource.PlayOneShot(fireSound[0],0.7f);
                 Instantiate(gunFire, gunFireSpawnPos.position, gunFireSpawnPos.rotation);
                 GameObject bulletPistol = Instantiate(bulletGO, bulletSpawnPos.position, Quaternion.LookRotation(aimDir, Vector3.up));
 
@@ -102,7 +102,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             case 1: // Rifle
                 CharacterManager.instance.isFire = true;
                 fireTerm = 0.2f;
-                audioSource.PlayOneShot(fireSound);
+                audioSource.PlayOneShot(fireSound[1],0.7f);
                 Instantiate(gunFire, gunFireSpawnPos.position, gunFireSpawnPos.rotation);
                 GameObject bulletRifle = Instantiate(bulletGO, bulletSpawnPos.position, Quaternion.LookRotation(aimDir, Vector3.up));
 
