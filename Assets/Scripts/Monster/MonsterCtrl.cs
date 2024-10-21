@@ -54,7 +54,7 @@ public class MonsterCtrl : MonoBehaviour
     public float enemyCheckRange = 30.0f;
     private float outRangeTime = 10.0f;
     private float playerY = 1.0f;
-    private float gunFireCheckRange = 30.0f;
+    private float gunFireCheckRange = 40.0f;
     private float voiceTerm = 0.0f;
 
     //Battle
@@ -107,7 +107,7 @@ public class MonsterCtrl : MonoBehaviour
                 {
                     if (courMoveTiem <= 0.0f && courseMove)
                     {
-                        courMoveTiem = 60.0f;
+                        courMoveTiem = Random.Range(60.0f,100.0f);
                         StartCoroutine(CourseMove());
                     }
                 }
@@ -123,7 +123,12 @@ public class MonsterCtrl : MonoBehaviour
         {
             StopCourseMove();
         }*/
-        
+        if (isPlayerChecked)
+        {
+            this.transform.LookAt(targetTr.transform.position);
+        }
+
+
         CheckSleeping();
         CheckDie();
     }
@@ -196,6 +201,7 @@ public class MonsterCtrl : MonoBehaviour
             isWarning = false;
             isPlayerChecked = false;
             stabbingText.text = "";
+            stateText.text = "";
             nav.ResetPath();
             this.gameObject.GetComponent<CapsuleCollider>().enabled = false;
             StopAllCoroutines();
@@ -293,11 +299,6 @@ public class MonsterCtrl : MonoBehaviour
             stateText.color = Color.yellow;
         }
         else if(!isPlayerChecked && !isWarning)
-        {
-            _animator.SetBool("Aiming", false);
-            stateText.text = "";
-        }
-        else if (isDie)
         {
             _animator.SetBool("Aiming", false);
             stateText.text = "";
@@ -406,7 +407,7 @@ public class MonsterCtrl : MonoBehaviour
             new Vector3(targetTr.position.x, targetTr.position.y + playerY, targetTr.position.z) - new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z)
             , out hit))
                 {
-                    if(hit.transform.tag == "Player")
+                    if(hit.transform.CompareTag("Player"))
                     {
                         Enemies.Add(enemy);
                     }

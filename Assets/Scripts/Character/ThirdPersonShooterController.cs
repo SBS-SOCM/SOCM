@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEditor.Rendering;
 
 public class ThirdPersonShooterController : MonoBehaviour
 {
@@ -18,11 +19,15 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private Transform vfxGroundHit;
     [SerializeField] private Transform crossHairImg;
 
+    //Recoil Power
+    [SerializeField] private float recoilPower;
+
     private AudioSource audioSource;
     private float aimingTime = 5.0f;
     private float fireTerm = 0.5f;
     private StarterAssets.StarterAssetsInputs starterAssetsInputs;
     public bool isForceAim;
+    private Vector3 targetRot;
 
     Vector3 mouseWorldPositon;
 
@@ -67,7 +72,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         //AimIK();
         CrossHairChange();
 
-        if(Input.GetMouseButtonDown(0) && fireTerm <= 0.0f && starterAssetsInputs.aim) 
+        if(Input.GetMouseButton(0) && fireTerm <= 0.0f && starterAssetsInputs.aim) 
             StartCoroutine(Shoot(ActionCtrl.weaponType));
     }
     private void CrossHairChange()
@@ -87,13 +92,17 @@ public class ThirdPersonShooterController : MonoBehaviour
     private IEnumerator Shoot(int weaponType)
     {
         Vector3 aimDir = (mouseWorldPositon - bulletSpawnPos.position).normalized;
+        float ranX = Random.Range(-recoilPower, recoilPower);
+        float rany = Random.Range(-recoilPower, recoilPower);
+        float ranz = Random.Range(-recoilPower, recoilPower);
         switch (weaponType)
         {
             case 0: // Pistol
                 CharacterManager.instance.isFire = true;
                 fireTerm = 0.5f;
                 audioSource.PlayOneShot(fireSound[0],0.7f);
-                Instantiate(gunFire, gunFireSpawnPos.position, gunFireSpawnPos.rotation);
+                Instantiate(gunFire, gunFireSpawnPos.position, Quaternion.Euler(gunFireSpawnPos.rotation.x+ranX, gunFireSpawnPos.rotation.y + rany,
+                    gunFireSpawnPos.rotation.z+ ranz));
                 GameObject bulletPistol = Instantiate(bulletGO, bulletSpawnPos.position, Quaternion.LookRotation(aimDir, Vector3.up));
 
                 yield return new WaitForSeconds(0.1f);
@@ -103,7 +112,8 @@ public class ThirdPersonShooterController : MonoBehaviour
                 CharacterManager.instance.isFire = true;
                 fireTerm = 0.2f;
                 audioSource.PlayOneShot(fireSound[1],0.7f);
-                Instantiate(gunFire, gunFireSpawnPos.position, gunFireSpawnPos.rotation);
+                Instantiate(gunFire, gunFireSpawnPos.position, Quaternion.Euler(gunFireSpawnPos.rotation.x + ranX, gunFireSpawnPos.rotation.y + rany,
+                    gunFireSpawnPos.rotation.z + ranz));
                 GameObject bulletRifle = Instantiate(bulletGO, bulletSpawnPos.position, Quaternion.LookRotation(aimDir, Vector3.up));
 
                 yield return new WaitForSeconds(0.1f);
